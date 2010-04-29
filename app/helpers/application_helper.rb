@@ -1,5 +1,11 @@
 module ApplicationHelper
 
+  def title
+    base_title = "VG Timeline"
+    return "#{@title} | #{base_title}" if @title
+    return base_title
+  end
+
   def pop_up(text, path, lev = { :level => 1 })
     lev[:level] = 1 if lev[:level].to_i < 1 or lev[:level].to_i > 4
     #    path = "#{path}&lv=#{lev[:level]}"
@@ -20,15 +26,23 @@ module ApplicationHelper
   end
 
   def cur_date_year(year)
-    Date.parse(year.to_s+"-#{Date.today.month.to_s}"+"-#{Date.today.day.to_s}")
+    Date.parse(year.to_s+"-#{Date.today.month.to_s}"+"-#{Date.today.day.to_s}") # TODO fix wrong dates
   end
 
   def cur_date_year_month(year, month)
-    Date.parse(year.to_s+"-"+month.to_s+"-#{Date.today.day.to_s}")
+    if Date.valid_civil?(year, month, Date.today.day)
+      Date.parse(year.to_s+"-"+month.to_s+"-#{Date.today.day.to_s}")
+    else
+      i = Date.today.day - 1
+      while not Date.valid_civil?(year, month, i)
+        i -= 1
+      end
+      Date.parse(year.to_s+"-"+month.to_s+"-"+i.to_s)
+    end
   end
 
   def cur_date_month(month)
-    Date.parse("#{Date.today.year.to_s}"+"-"+month.to_s+"-#{Date.today.day.to_s}")
+    Date.parse("#{Date.today.year.to_s}"+"-"+month.to_s+"-#{Date.today.day.to_s}") # TODO fix wrong dates
   end
 
   def cur_date_day(day)
