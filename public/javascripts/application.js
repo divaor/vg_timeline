@@ -168,7 +168,7 @@ function getCheckedYear(cls) {
 
 function getCheckedPlatformsYear(year) {
     var filters = $$('.'+year);
-    params = "";
+    var params = "";
     var i = 1;
     filters.each(function(filter) {
         if (filter.checked == true) {
@@ -289,18 +289,18 @@ function paneselect1(div) {
     var nh_div1;
     var nh_div2;
     if(div == 'platforms_general_filters') {
-        nh_div1 = document.getElementById('developers_general_filters');
-        nh_div2 = document.getElementById('publishers_general_filters');
+        nh_div1 = $('developers_general_filters');
+        nh_div2 = $('publishers_general_filters');
     } else if(div == 'publishers_general_filters') {
-        nh_div1 = document.getElementById('developers_general_filters');
-        nh_div2 = document.getElementById('platforms_general_filters');
+        nh_div1 = $('developers_general_filters');
+        nh_div2 = $('platforms_general_filters');
     } else if(div == 'developers_general_filters') {
-        nh_div1 = document.getElementById('publishers_general_filters');
-        nh_div2 = document.getElementById('platforms_general_filters');
+        nh_div1 = $('publishers_general_filters');
+        nh_div2 = $('platforms_general_filters');
     } else {
 
     }
-    hidden_div = document.getElementById(div);
+    hidden_div = $(div);
     nh_div1.style.display = "none";
     nh_div2.style.display = "none";
     hidden_div.style.display = "block";

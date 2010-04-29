@@ -11,7 +11,7 @@ module ApplicationHelper
   end
 
   def pop_up_controller(text, path, controller, lev)
-    lev[:level] = lev[:level] ? leve[:level] : 1
+    lev[:level] = lev[:level] ? lev[:level] : 1
     link_to text, { :action => path, :controller => controller, :lv => lev[:level], :game => lev[:game_id] }, :remote => true
   end
 

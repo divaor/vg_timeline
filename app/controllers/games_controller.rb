@@ -219,6 +219,7 @@ class GamesController < ApplicationController
     @publishers = Publisher.order("name asc").all
     @multi_modes = MultiplayerMode.all
     @types = Type.all
+    @genres = Genre.all
     respond_to do |format|
       format.js { render :action => 'pop_up' }
     end

@@ -158,6 +158,7 @@
         <%= genre.name %>
       <% end %>
     <% end %>
+    <%= pop_up "Genre(s)", '/edit?id=' + @game.id.to_s + '&view=add_genre' if user_signed_in? %><br />
     <% if @game.local_players %>
       Local:<br />
       <%= @game.local_players %> Player(s)<br />

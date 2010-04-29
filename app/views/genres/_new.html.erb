@@ -1,0 +1,12 @@
+<h2>New Genre</h2>
+
+<%= form_for @genre do |f| %>
+  <div class="field">
+    <%= hidden_field_tag 'game', @game.id %>
+  </div>
+  <div class="field">
+    <%= f.label :name, "Name(s): " %>
+    <%= f.text_field :name %>
+  </div>
+  <%= f.submit "Submit" %>
+<% end %>
