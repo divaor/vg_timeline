@@ -10,9 +10,9 @@ class GamesController < ApplicationController
         format.js
       end
     else
-      @title = "Year View"
       @game = Game.new
-      @year = params[:year] ? params[:year].to_i : Date.today.year;
+      @year = params[:year] ? params[:year].to_i : Date.today.year
+      @title = @year
       @id = params[:game_id] if params[:game_id]
       @enter_year = true
       @games = Game.where('release_date >= ? and release_date <= ?', "#{@year}-01-01", "#{@year}-12-31").order("release_date asc, hits desc, main_title asc").all
@@ -298,8 +298,20 @@ class GamesController < ApplicationController
       end
     }
     @games = search_games_by_checked_platforms(params)
+    @applied_filters = []; platforms = ["Platforms"]; publishers = ["Publishers"]; developers = ["Developers"];
+    params.each_pair { |key, value|
+      if key.to_i > 0 and value.to_i > 0
+        platforms << Platform.find(value)
+      elsif value[0,1] == 'p'
+        publishers << Publisher.find(value.delete('p').to_i)
+      elsif value[0,1] == 'd'
+        developers << Developer.find(value.delete('d').to_i)
+      end
+    }
+    @applied_filters = [platforms,publishers,developers]
     if @games.empty?
-      flash[:notice] = "No games"
+      @months = []
+      @no_games = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
     else
       games = make_games_array(@games, params[:l].to_i, true)
       @months = games['games']

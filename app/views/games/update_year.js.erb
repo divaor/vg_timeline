@@ -1,8 +1,10 @@
 <% ignore = false %>
+$('<%= 'filters'+@year %>').show()
+$('<%= 'filters'+@year %>').update("<%= escape_javascript(render 'applied_year_filters') %>")
 <% for @month in @months %>
   <% if @month.class == Array and ignore == false %>
     <% if @limit > 0 %>
-      $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view') %>");
+      $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view_filtered') %>");
     <% else %>
       $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view_all') %>");
     <% end %>

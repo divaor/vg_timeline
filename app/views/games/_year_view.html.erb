@@ -5,7 +5,8 @@
     <%= "Show All" %>
   </span>
   <span class="platforms_month">
-    <%= link_to 'Year Filters', "#general_filters" %>
+    <span id="filters<%= @year %>" class="current_filters" style="display:none"></span>
+    <%= link_to 'Change Filters', "#general_filters" %>
   </span>
 </div>
 <% @developers_year = []; @publishers_year = [] %>
@@ -30,6 +31,7 @@
             <%= check_box_tag "month_show_all"+@month.to_s, 1, false, :class => @month.to_s, :onclick => "monthShowAll(this, #{@year.to_s}, 0)"  %>
             <%= "Show All" %>
           </span>
+          <span id="filters<%= @month.to_s %>" class="current_filters" style="display:none">Filtered</span>
           <span class="platforms_month">
             <% p_m = (@platforms_month.rindex(@month) + 1) %>
             Only:
@@ -52,11 +54,11 @@
               <span id="missing_platforms<%= @month.to_i.to_s %>" class="missing_platforms" style="display:none">
                 <% i = 0 %>
                 <table><tr>
-                  <% for platform in missing_platforms %>
-                    <td><%= check_box_tag platform.id, 1, false, :class => @month.to_s, :onclick => "monthFilterPlatform(this, #{@year.to_s}, 3)" %>
-                    <%= platform.name %></td>
-                    <% i +=1 %><% if i == 3 %></tr><tr><% i = 0 %><% end %>
-                  <% end %></tr>
+                    <% for platform in missing_platforms %>
+                      <td><%= check_box_tag platform.id, 1, false, :class => @month.to_s, :onclick => "monthFilterPlatform(this, #{@year.to_s}, 3)" %>
+                        <%= platform.name %></td>
+                      <% i +=1 %><% if i == 3 %></tr><tr><% i = 0 %><% end %>
+                    <% end %></tr>
                 </table>
               </span>
             <% end %>
@@ -85,55 +87,57 @@
 <%#*</div><br />%>
 
 <div id="general_filters">  
-  <span class="general_links"><%= link_to 'Go Up', "#top_nav" %><br />
+  <span class="general_links">
+    <%= link_to 'Go Up', "#top_nav" %><br />
     <br />
-<%# link_to "Add Developer", new_developer_path if user_signed_in? %>
     <%= pop_up "Developers list", developers_path %><br />
-<%# link_to "Add Publisher", new_publisher_path if user_signed_in? %>
     <%= pop_up "Publishers list", publishers_path %><br />
     <%= pop_up "Recently Added Games", games_recent_path %><br />
-    <%= pop_up "All Games list", games_list_path %></span>
-  <div id="first_filter_cat">
-    <ul id="tabcontrol1">
-      <li class="current_show_filter" id="platforms_tab"><%= link_to_function('Platforms', "tabselect1($('platforms_tab')); paneselect1('platforms_general_filters')") %></li>
-      <li class="nc_show_filter" id="publishers_tab"><%= link_to_function('Publishers', "tabselect1($('publishers_tab')); paneselect1('publishers_general_filters')") %></li>
-      <li class="nc_show_filter" id="developers_tab"><%= link_to_function('Developers', "tabselect1($('developers_tab')); paneselect1('developers_general_filters')") %></li>
-    </ul>
-  </div>
+    <%= pop_up "All Games list", games_list_path %>
+  </span>
+  <% if @platforms_year %>
+    <div id="first_filter_cat">
+      <ul id="tabcontrol1">
+        <li class="current_show_filter" id="platforms_tab"><%= link_to_function('Platforms', "tabselect1($('platforms_tab')); paneselect1('platforms_general_filters')") %></li>
+        <li class="nc_show_filter" id="publishers_tab"><%= link_to_function('Publishers', "tabselect1($('publishers_tab')); paneselect1('publishers_general_filters')") %></li>
+        <li class="nc_show_filter" id="developers_tab"><%= link_to_function('Developers', "tabselect1($('developers_tab')); paneselect1('developers_general_filters')") %></li>
+      </ul>
+    </div>
 
-  <div id="platforms_general_filters">
-    <span class="title_top_filter"><%= "Current Year" %></span>
-    <span id="spinner<%= @year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-    <span class="check_top_filter"><%= check_box_tag "y_plat_all", 1, true, :class => @year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-    <br />
-    <% @platforms_year.sort! { |a,b| a.name <=> b.name } %>
-    <% for platform in @platforms_year %>
-      <%= check_box_tag platform.id, 1, false, :class => @year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_plat_all')" %>
-      <%= platform.name %><br />
-    <% end %>
-  </div>
+    <div id="platforms_general_filters">
+      <span class="title_top_filter"><%= "Current Year" %></span>
+      <span id="spinner<%= @year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag "y_plat_all", 1, true, :class => @year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <br />
+      <% @platforms_year.sort! { |a,b| a.name <=> b.name } %>
+      <% for platform in @platforms_year %>
+        <%= check_box_tag platform.id, 1, false, :class => @year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_plat_all')" %>
+        <%= platform.name %><br />
+      <% end %>
+    </div>
 
-  <div id="publishers_general_filters" style="display:none">
-    <span class="title_top_filter"><%= "Current Year" %></span>
-    <span id="spinner<%= 'p'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-    <span class="check_top_filter"><%= check_box_tag 'y_pub_all', 1, true, :class => 'p'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-    <br />
-    <% @publishers_year.sort! { |a,b| a.name <=> b.name } %>
-    <% for publisher in @publishers_year %>
-      <%= check_box_tag 'p'+publisher.id.to_s, 1, false, :class => 'p'+@year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_pub_all')" %>
-      <%= publisher.name %><br />
-    <% end %>
-  </div>
-  
-  <div id="developers_general_filters" style="display:none">
-    <span class="title_top_filter"><%= "Current Year" %></span>
-    <span id="spinner<%= 'd'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-    <span class="check_top_filter"><%= check_box_tag 'y_dev_all', 1, true, :class => 'd'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-    <br />
-    <% @developers_year.sort! { |a,b| a.name <=> b.name } %>
-    <% for developer in @developers_year %>
-      <%= check_box_tag 'd'+developer.id.to_s, 1, false, :class => 'd'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_dev_all')" %>
-      <%= developer.name %><br />
-    <% end %>
-  </div>
+    <div id="publishers_general_filters" style="display:none">
+      <span class="title_top_filter"><%= "Current Year" %></span>
+      <span id="spinner<%= 'p'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag 'y_pub_all', 1, true, :class => 'p'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <br />
+      <% @publishers_year.sort! { |a,b| a.name <=> b.name } %>
+      <% for publisher in @publishers_year %>
+        <%= check_box_tag 'p'+publisher.id.to_s, 1, false, :class => 'p'+@year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_pub_all')" %>
+        <%= publisher.name %><br />
+      <% end %>
+    </div>
+
+    <div id="developers_general_filters" style="display:none">
+      <span class="title_top_filter"><%= "Current Year" %></span>
+      <span id="spinner<%= 'd'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag 'y_dev_all', 1, true, :class => 'd'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <br />
+      <% @developers_year.sort! { |a,b| a.name <=> b.name } %>
+      <% for developer in @developers_year %>
+        <%= check_box_tag 'd'+developer.id.to_s, 1, false, :class => 'd'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_dev_all')" %>
+        <%= developer.name %><br />
+      <% end %>
+    </div>
+  <% end %>
 </div>

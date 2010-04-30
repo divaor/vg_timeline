@@ -375,6 +375,16 @@ td.unreleased {
     background-color: #DBDBDB;
 }
 
+span.current_filters {
+    margin-right: 10px;
+}
+
+span.filtered_title {
+    font-size: 14px;
+    font-style: italic;
+    margin-right: 10px;
+}
+
 div.current_month {
     background-color: #eeffcf;
 }

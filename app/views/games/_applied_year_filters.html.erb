@@ -1,0 +1,16 @@
+<span class="filtered_title">Filtered</span>
+<%= link_to_function "Applied Filters", {}, :onmouseover => "showMorePlatforms(this, $('applied_filters'));" %>
+<div id="applied_filters" style="display:none">
+  <% for filter_type in @applied_filters %>
+    <% for filter in filter_type %>
+      <% if filter.class == String %>
+        <strong><%= filter %></strong><br />
+      <% else %>
+        <%= filter.name + (filter == filter_type.last ? "" : ", ") %>
+        <% if filter == filter_type.last %>
+          <br />
+        <% end %>
+      <% end %>
+    <% end if filter_type.length > 1 %>
+  <% end %>
+</div>
