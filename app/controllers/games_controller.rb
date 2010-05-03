@@ -46,11 +46,6 @@ class GamesController < ApplicationController
     end
   end
 
-  def search_results
-    @game = Game.where("LOWER(main_title) LIKE ?", "%#{params[:game][:main_title].downcase}%").first
-    redirect_to :action => 'show', :id => @game.id
-  end
-
   def list
     @level = params[:lv]
     @view = params[:action]

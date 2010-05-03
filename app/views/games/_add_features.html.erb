@@ -1,0 +1,11 @@
+<h2>Features</h2>
+
+<%= form_for @game do |f| %>
+  <div class="field">
+    <%= f.label :feature_descriptions %>
+    <%= f.text_field :feature_descriptions %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Submit" %>
+  </div>
+<% end %>

@@ -139,13 +139,43 @@ class Game < ActiveRecord::Base
     coop + also + vs
   end
 
-  #  def different_platforms
-  #    different_platforms
-  #  end
-  #
-  #  def different_platforms=(game)
-  #    self.different_platforms << game
-  #  end
+  def feature_descriptions
+    feats = []
+    if features
+      for feature in features
+        feats << feature.description
+      end
+    end
+    feats.split.join(", ")
+  end
+
+  def feature_descriptions=(descriptions)
+    feat_desc = descriptions.split(",")
+    temp_features = []
+    for description in feat_desc
+      temp_features << Feature.find_or_create_by_description(description.strip) unless description.blank?
+    end
+    self.features = temp_features unless temp_features.empty?
+  end
+
+  def specification_descriptions
+    specs = []
+    if specifications
+      for specification in specifications
+        specs << specification.description
+      end
+    end
+    specs.split.join(", ")
+  end
+
+  def specification_descriptions=(descriptions)
+    spec_desc = descriptions.split(",")
+    temp_specifications = []
+    for description in spec_desc
+      temp_specifications << Specification.find_or_create_by_description(description.strip) unless description.blank?
+    end
+    self.specifications = temp_specifications unless temp_specifications.empty?
+  end
 
   def developer_names
     devs = []
@@ -158,7 +188,6 @@ class Game < ActiveRecord::Base
   end
 
   def developer_names=(names)
-    devs = []
     dev_names = names.split(",")
     temp_developers = []
     for name in dev_names
@@ -178,7 +207,6 @@ class Game < ActiveRecord::Base
   end
 
   def publisher_names=(names)
-    pbs = []
     pb_names = names.split(",")
     temp_publishers = []
     for name in pb_names

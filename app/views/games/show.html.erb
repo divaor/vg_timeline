@@ -5,7 +5,9 @@
     </div>
     <div id="basic_info_container">
       <h3 class="game_show_title"><%= @game.main_title %></h3>
-      <h2 class="game_show_title"><%= @game.sub_title %></h2>
+      <% if @game.sub_title != "" %>
+        <h2 class="game_show_title"><%= @game.sub_title %></h2>
+      <% end %>
       <table cellpadding="0">
         <tr>
           <td class="label">Platform:</td>
@@ -26,13 +28,15 @@
                   </tr>
                   <tr>
                     <td colspan="2">
-                      <%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) %>
+                      <%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) if user_signed_in? %>
                     </td>
                   </tr>
                 </table>
               </div>
             <% else %>
-              (<%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) %>)
+              <% if user_signed_in? %>
+                (<%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) %>)
+              <% end %>
             <% end %>
           </td>
         </tr>
@@ -42,11 +46,7 @@
         </tr>
         <tr>
           <td class="label">Developed by:</td>
-          <% if @game.different_platforms.empty? %>
-            <td>
-            <% else %>
-            <td class="lab_info">
-            <% end %>
+          <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
             <% @game.developers.each do |d| %>
               <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
             <% end %>
@@ -54,11 +54,7 @@
         </tr>
         <tr>
           <td class="label">Published by:</td>
-          <% if @game.different_platforms.empty? %>
-            <td>
-            <% else %>
-            <td class="lab_info">
-            <% end %>
+          <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
             <% @game.publishers.each do |p| %>
               <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
             <% end %>
@@ -201,12 +197,14 @@
         <%= feature.description %><br />
       <% end %>
     <% end %>
+    <%= pop_up "Features", '/edit?id=' + @game.id.to_s + '&view=add_features' if user_signed_in? %><br />
     <% unless @game.specifications.empty? %>
       Specs:<br />
       <% for specification in @game.specifications %>
         <%= specification.description %><br />
       <% end %>
     <% end %>
+    <%= pop_up "Specs", '/edit?id=' + @game.id.to_s + '&view=add_specs' if user_signed_in? %><br />
     <% unless @game.peripherals.empty? %>
       Compatible with:<br />
       <% for peripheral in @game.peripherals %>

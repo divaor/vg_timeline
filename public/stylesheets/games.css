@@ -385,6 +385,37 @@ span.filtered_title {
     margin-right: 10px;
 }
 
+div.image_links {
+    max-height:108px;
+    max-width:101px;
+    overflow:hidden;
+}
+
+div.boxart_links {
+    height:0px;
+}
+
+span.bottom_right_image_link {
+    background-color:white;
+    top:80px;
+    left:65px;
+    position:relative;
+}
+
+span.top_right_image_link {
+    background-color:white;
+    top:2px;
+    left:2px;
+    position:relative;
+}
+
+span.bottom_left_image_link {
+    background-color:white;
+    top:80px;
+    position:relative;
+    right:32px;
+}
+
 div.current_month {
     background-color: #eeffcf;
 }
@@ -462,7 +493,7 @@ div.tooltip_boxart.right {
     background-color: #E5E5E5;
     border: 2px solid black;
     display: table;
-    width: 99.6%;
+    width: 1196px;
     margin: 0 auto;
     height: 100%;
 }
@@ -477,13 +508,13 @@ div.tooltip_boxart.right {
 }
 
 #right_column {
-    width: 15%;
-    height: 93%;
-    display: table;
-    margin: 10px 55px 10px 10px;
     background-color: white;
-    border: 2px solid white;
+    display: table;
     float: right;
+    height: 93%;
+    margin: 10px 55px 10px 10px;
+    padding: 2px;
+    width: 200px;
 }
 
 #right_column img {

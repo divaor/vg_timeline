@@ -24,13 +24,14 @@ VgTimeline::Application.routes.draw do |map|
   devise_for :users
 
   #  constraints :host => /localhost/ do
-  resources :games, :platforms, :developers, :publishers, :series, :press, :scores, :awards, :genres
+  resources :games, :platforms, :developers, :publishers, :series, :press, :scores, :awards, :genres, :features, :specifications
   match "/:year" => "games#index", :as => :year, :constraints => { :year => /\d{4}/ }
   match "/list" => "games#list", :as => :games_list
   match "/recent" => "games#recent", :as => :games_recent
   match ":action" => "games#index"
   match "publishers(/:action)" => "publishers#action"
   match "games/new" => "games#create"
+  match "/search_results" => "application#search_results", :as => :search_results
   #  match "application" => "games#index"
   root :to => "games#index"
   #  end

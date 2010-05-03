@@ -22,6 +22,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def search_results
+    @game = Game.where("LOWER(main_title) LIKE ?", "%#{params[:game][:main_title].downcase}%").first
+    if @game
+      redirect_to game_path(@game)
+    else
+      flash[:alert] = "Game not found."
+      redirect_to year_path(Date.today.year)
+    end
+  end
+
   private
 
   def create_log_entry(table, id, description, parameters)

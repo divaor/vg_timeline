@@ -271,6 +271,68 @@ function tooltipAjax(e, element, id) {
     });
 }
 
+function setTooltipPosition(element, e, id) {
+    var middle = screen.availWidth / 2;
+    var x = e.screenX;
+    var pos = 'left';
+    if (x < middle) {
+        pos = 'right';
+    }
+    var tooltipInfo = $('tooltip_info'+id)
+    tooltipInfo.firstDescendant().addClassName(pos)
+    tooltipInfo.firstDescendant().childElements().each( function(elem) {
+        elem.addClassName(pos)
+    })
+    element.onmouseover = null;
+}
+
+function fullTooltipGameInfo(e, element, id) {
+    var middle = screen.availWidth / 2;
+    var x = e.screenX;
+    var toolTip = 'topRight';
+    var toolXOff = 5;
+    var pos = 'left';
+    var width = 'auto';
+    if (element.name.length > 40)
+        width = 335;
+    if (x < middle) {
+        pos = 'right';
+        toolTip = 'topLeft';
+        toolXOff = -72;
+    }
+    var tooltipInfo = $('tooltip_info'+id)
+    tooltipInfo.firstDescendant().addClassName(pos)
+    tooltipInfo.firstDescendant().childElements().each( function(elem) {
+        elem.addClassName(pos)
+    })
+    new Tip(element, tooltipInfo, {
+        title: element.name,
+        style: 'custom',
+        fixed: true,
+        showOn: 'click',
+        closeButton: true,
+        width: width,
+        hideOn: 'click',
+        hideOthers: true,
+        hideAfter: false,
+        hook: {
+            target: toolTip,
+            tip: toolTip
+        },
+        offset: {
+            x: toolXOff,
+            y: -120
+        }
+    });
+    element.onmouseover = null;
+}
+
+function tooltipGameInfo(element) {
+    element.onmouseover = new Tip(element, element.name, {
+        style: 'custom'
+    })
+}
+
 function tabselect1(tab) {
     var tablist = $('tabcontrol1').getElementsByTagName('li');
     var nodes = $A(tablist);
@@ -282,6 +344,17 @@ function tabselect1(tab) {
             node.className='nc_show_filter';
         }
     });
+}
+
+function showImageLinks(id) {
+    var hover = $('boxart_links'+id)
+    Effect.Appear(hover, {
+        duration: 0.4
+    })
+    $$('.boxart_links').each(function(element){
+        if (element != hover)
+            element.hide()
+    })
 }
 
 function paneselect1(div) {
@@ -322,8 +395,12 @@ function showMorePlatforms(elem, content) {
         hideOn: 'click',
         hook: {
             tip: 'bottomRight'
-        }, stem: 'bottomRight',
-        offset: {x: 20, y: 0}
+        },
+        stem: 'bottomRight',
+        offset: {
+            x: 20,
+            y: 0
+        }
     });
     elem.onmouseover=null;
 }

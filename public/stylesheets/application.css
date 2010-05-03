@@ -40,6 +40,10 @@ a:hover, a:visited:hover {
     margin: 0 auto 30px;
 }
 
+div#nav {
+    clear: both;
+}
+
 #display_tab {
     padding:0px;
     width: 50%;
