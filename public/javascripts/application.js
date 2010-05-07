@@ -290,24 +290,22 @@ function fullTooltipGameInfo(e, element, id) {
     var middle = screen.availWidth / 2;
     var x = e.screenX;
     var toolTip = 'topRight';
-    var toolXOff = 5;
-    var pos = 'left';
+    var toolXOff = 15;
+    var pos = 'right';
     var width = 'auto';
-    if (element.name.length > 40)
-        width = 335;
+    if (element.id.length > 40)
+        width = 355;
     if (x < middle) {
-        pos = 'right';
+        pos = 'left';
         toolTip = 'topLeft';
-        toolXOff = -72;
+        toolXOff = -15;
     }
     var tooltipInfo = $('tooltip_info'+id)
     tooltipInfo.firstDescendant().addClassName(pos)
-    tooltipInfo.firstDescendant().childElements().each( function(elem) {
-        elem.addClassName(pos)
-    })
+    tooltipInfo.firstDescendant().firstDescendant().setStyle({'float': pos})
     new Tip(element, tooltipInfo, {
-        title: element.name,
-        style: 'custom',
+        title: element.id,
+        style: 'protogrey',
         fixed: true,
         showOn: 'click',
         closeButton: true,
@@ -321,15 +319,27 @@ function fullTooltipGameInfo(e, element, id) {
         },
         offset: {
             x: toolXOff,
-            y: -120
+            y: -40
         }
     });
     element.onmouseover = null;
 }
 
-function tooltipGameInfo(element) {
-    element.onmouseover = new Tip(element, element.name, {
-        style: 'custom'
+function tooltipGameInfo(element, content) {
+    new Tip(element, content, {
+        style: 'protogrey',
+        fixed: true,
+        border: 1,
+        radius: 1,
+        hideAfter: 2,
+        hideOn: false,
+        hideOthers: true,
+        showOn: 'mousemove',
+        width: 'auto',
+        hook: {
+            target: 'bottomLeft',
+            tip: 'topLeft'
+        }
     })
 }
 
@@ -349,12 +359,15 @@ function tabselect1(tab) {
 function showImageLinks(id) {
     var hover = $('boxart_links'+id)
     Effect.Appear(hover, {
-        duration: 0.4
+        duration: 0.5
     })
     $$('.boxart_links').each(function(element){
         if (element != hover)
             element.hide()
     })
+    setTimeout(function(){
+        Effect.Fade(hover)
+    }, 5000)
 }
 
 function paneselect1(div) {

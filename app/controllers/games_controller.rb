@@ -5,7 +5,8 @@ class GamesController < ApplicationController
 
   def index
     if params[:search]
-      @games = Game.where("LOWER(main_title) LIKE ?", "%#{params[:search].downcase}%").limit(14)
+      @games = Game.where("LOWER(CONCAT_WS(' ',main_title,sub_title)) LIKE ?", "%#{params[:search].downcase}%").limit(14)
+      @search = params[:search]
       respond_to do |format|
         format.js
       end
@@ -233,10 +234,6 @@ class GamesController < ApplicationController
         game.update_attribute('series_id', @game.series_id)
       end
       for style in styles
-        #        FileUtils.mkdir "#{Rails.root}/public/images/#{@game.r_y}" unless File.exist?("#{Rails.root}/public/images/#{@game.r_y}")
-        #        FileUtils.mkdir "#{Rails.root}/public/images/#{@game.r_y}/#{@game.r_m}" unless File.exist?("#{Rails.root}/public/images/#{@game.r_y}/#{@game.r_m}")
-        #        FileUtils.mkdir "#{Rails.root}/public/images/#{@game.r_y}/#{@game.r_m}/#{style}" unless File.exist?("#{Rails.root}/public/images/#{@game.r_y}/#{@game.r_m}/#{style}")
-        #        FileUtils.mv "#{Rails.root}/public/images/#{old_r_y}/#{old_r_m}/#{style}/#{old_box}", "#{Rails.root}/public/images/#{@game.r_y}/#{@game.r_m}/#{style}/#{@game.make_boxart_path}" if File.exist?("#{Rails.root}/public/images/#{old_r_y}/#{old_r_m}/#{style}/#{old_box}")
         AWS::S3::Base.establish_connection!(:access_key_id => 'AKIAIMXJ77QKTJ3QN27Q', :secret_access_key => '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')
         bucket = 'vg-timeline'
         old_file_path = "images/#{old_r_y}/#{old_r_m}/#{style}/#{old_box}"

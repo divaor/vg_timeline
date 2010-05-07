@@ -1,215 +1,224 @@
-<div id="game_display" class="round_bottom">
-  <div id="left_column">
-    <div id="boxart_medium_container">
-      <%= box_logo(@game, :medium) %>
-    </div>
-    <div id="basic_info_container">
-      <h3 class="game_show_title"><%= @game.main_title %></h3>
-      <% if @game.sub_title != "" %>
-        <h2 class="game_show_title"><%= @game.sub_title %></h2>
-      <% end %>
-      <table cellpadding="0">
-        <tr>
-          <td class="label">Platform:</td>
-          <td>
-            <%= link_to @game.platform.name, '#' %>
-            <% unless @game.different_platforms.empty? %>
-              <div id="diff_platforms" class="round">
-                <table>
-                  <tr>
-                    <td class="subtitle">
-                      Also on:
-                    </td>
-                    <td class="platforms">
-                      <% for diff_platform in @game.different_platforms %>
-                        <%= link_to(diff_platform.platform.short_name.upcase, game_path(diff_platform)) + (diff_platform == @game.different_platforms.last ? "" : ", ") %>
-                      <% end %>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="2">
-                      <%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) if user_signed_in? %>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            <% else %>
-              <% if user_signed_in? %>
-                (<%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) %>)
+<div id="game_wrapper">
+  <div id="game_display" class="round_bottom">
+    <div id="left_column">
+      <div id="boxart_medium_container">
+        <%= box_logo(@game, :medium) %>
+      </div>
+      <div id="basic_info_container">
+        <h3 class="game_show_title"><%= @game.main_title %></h3>
+        <% if @game.sub_title != "" %>
+          <h2 class="game_show_title"><%= @game.sub_title %></h2>
+        <% end %>
+        <table cellpadding="0">
+          <tr>
+            <td class="label">Platform:</td>
+            <td>
+              <%= link_to @game.platform.name, '#' %>
+              <% unless @game.different_platforms.empty? %>
+                <div id="diff_platforms" class="round">
+                  <table>
+                    <tr>
+                      <td class="subtitle">
+                        Also on:
+                      </td>
+                      <td class="platforms">
+                        <% for diff_platform in @game.different_platforms %>
+                          <%= link_to(diff_platform.platform.short_name.upcase, game_path(diff_platform)) + (diff_platform == @game.different_platforms.last ? "" : ", ") %>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        <%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) if user_signed_in? %>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              <% else %>
+                <%=raw "(#{pop_up "Add to another platform", new_game_path(:id_diff => @game.id)})" if user_signed_in? %>
               <% end %>
-            <% end %>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">Release Date:</td>
-          <td><%= link_to @game.release_date, year_path(@game.r_y) %></td>
-        </tr>
-        <tr>
-          <td class="label">Developed by:</td>
-          <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
-            <% @game.developers.each do |d| %>
-              <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
-            <% end %>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">Published by:</td>
-          <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
-            <% @game.publishers.each do |p| %>
-              <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
-            <% end %>
-          </td>
-        </tr>
-      </table>
-      <span class="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %></span>
-      <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
-    </div>
-    <div id="game_info_description">
-      <h4>Description</h4>
-      <% if @game.description %>
-        <%= @game.description %>
-      <% else %>
-        No description has been added for this game.
-        <%= pop_up "Add Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
-      <% end %>
-    </div>
-    <div id="game_series" class="round">
-      <% series = @game.series %>
-      <% unless series.nil? %>
-        <% games_in_series = series.games.sort { |a,b| a.release_date <=> b.release_date } %>
-        <h4><%= series.name %> series</h4>
-        <%= pop_up "Edit Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
-        <div id="prequel_sequel_cont">
-          <div id="prequel">
-            <% if @game.prequel %>
-              <span>Prev</span><br />
-              <%= link_to(box_logo(@game.prequel, :thumb, :tooltip => true), game_path(@game.prequel)) %>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Release Date:</td>
+            <td><%= link_to @game.release_date, year_path(@game.r_y) %></td>
+          </tr>
+          <tr>
+            <td class="label">Developed by:</td>
+            <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
+              <% @game.developers.each do |d| %>
+                <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Published by:</td>
+            <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
+              <% @game.publishers.each do |p| %>
+                <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+        <span class="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %></span>
+        <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
+      </div>
+      <div id="game_info_description">
+        <h4>Description</h4>
+        <% if @game.description %>
+          <%= @game.description %>
+        <% else %>
+          No description has been added for this game.
+          <%= pop_up "Add Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
+        <% end %>
+      </div>
+      <div id="game_series" class="round">
+        <% series = @game.series %>
+        <% unless series.nil? %>
+          <% games_in_series = series.games.sort { |a,b| a.release_date <=> b.release_date } %>
+          <h4><%= series.name %> series</h4>
+          <%= pop_up "Edit Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
+          <div id="prequel_sequel_cont">
+            <div id="prequel">
+              <% if @game.prequel %>
+                <span>Prev</span><br />
+                <%= link_to(box_logo(@game.prequel, :thumb, :tooltip => true), game_path(@game.prequel)) %>
+              <% end %>
+              <%= pop_up "Add sequel", "/edit?id=#{@game.id.to_s}&view=add_sequel" if user_signed_in? %>
+            </div>
+            <div id="sequel">
+              <% if @game.sequel %>
+                <span>Next</span><br />
+                <%= link_to(box_logo(@game.sequel, :thumb, :tooltip => true), game_path(@game.sequel)) %>
+              <% end %>
+            </div>
+          </div>
+          <div id="series_list">
+            <h5>Full List:</h5>
+            <% for game in games_in_series %>
+              <%= game.r_y %> -
+              <span<%= " class=showing" if game == @game %>><%= link_to_unless(game == @game, game.full_title_limit, game_path(game)) %></span>
+              <%= "(#{game.platform.short_name.upcase})" %>
+              <%= "(unreleased)" if game.release_date > Date.today %><br />
             <% end %>
           </div>
-          <div id="sequel">
-            <% if @game.sequel %>
-              <span>Next</span><br />
-              <%= link_to(box_logo(@game.sequel, :thumb, :tooltip => true), game_path(@game.sequel)) %>
+        <% else %>
+          <h4>Series</h4>
+          <%= pop_up "Add Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
+        <% end %>
+      </div>
+      <div id="game_info_scores" class="round">
+        <h4>Scores</h4>
+        <% scores = @game.scores %>
+        <% unless scores.empty? %>
+          <table cellspacing="0">
+            <% for score in scores %>
+              <tr>
+                <td><%= link_to score.press.name, score.press.url, :target => '_blank' %></td>
+                <td><%= link_to score.score, score.url, :target => '_blank' %></td>
+              </tr>
             <% end %>
-          </div>
-        </div>
-        <div id="series_list">
-          <h5>Full List:</h5>
-          <% for game in games_in_series %>
-            <%= game.r_y %> -
-            <span<%= " class=showing" if game == @game %>><%= link_to_unless(game == @game, game.full_title_limit, game_path(game)) %></span>
-            <%= "(#{game.platform.short_name.upcase})" %>
-            <%= "(unreleased)" if game.release_date > Date.today %><br />
-          <% end %>
-        </div>
-      <% else %>
-        <h4>Series</h4>
-        <%= pop_up "Add Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
-      <% end %>
+          </table>
+        <% end %>
+        <%= pop_up_controller "Add scores", 'new', 'scores', :game_id => @game.id if user_signed_in? %>
+        <br />
+        <h4>Awards</h4>
+        <% awards = @game.awards %>
+        <% unless awards.empty? %>
+          <table cellspacing="0">
+            <% for award in awards %>
+              <tr>
+                <td><%= link_to award.press.name, award.press.url %></td>
+                <td><%= award.description %></td>
+              </tr>
+            <% end %>
+          </table>
+        <% end %>
+        <%= pop_up_controller "Add awards", 'new', 'awards', :game_id => @game.id if user_signed_in? %>
+      </div>
     </div>
-    <div id="game_info_scores" class="round">
-      <h4>Scores</h4>
-      <% scores = @game.scores %>
-      <% unless scores.empty? %>
-        <table cellspacing="0">
-          <% for score in scores %>
-            <tr>
-              <td><%= link_to score.press.name, score.press.url, :target => '_blank' %></td>
-              <td><%= link_to score.score, score.url, :target => '_blank' %></td>
-            </tr>
+    <div id="right_column">
+      <div id="right_column_info" class="round">
+        <% if @game.rating %>
+          <%= rating_logo(@game.rating) %><br />
+        <% end %>
+        <% unless @game.types.empty? %>
+          <% for type in @game.types %>
+            <%= type.name %><%= ", " unless type == @game.types.last %>
+          <% end %><br />
+        <% end %>
+        <%= pop_up "Add type", '/edit?id=' + @game.id.to_s + '&view=add_type' if user_signed_in? %><br />
+        <% unless @game.genres.empty? %>
+          Genre(s):
+          <% for genre in @game.genres %>
+            <%= genre.name %>
           <% end %>
-        </table>
-      <% end %>
-      <%= pop_up_controller "Add scores", 'new', 'scores', :game_id => @game.id if user_signed_in? %>
-      <br />
-      <h4>Awards</h4>
-      <% awards = @game.awards %>
-      <% unless awards.empty? %>
-        <table cellspacing="0">
-          <% for award in awards %>
-            <tr>
-              <td><%= link_to award.press.name, award.press.url %></td>
-              <td><%= award.description %></td>
-            </tr>
+        <% end %>
+        <%= pop_up "Genre(s)", '/edit?id=' + @game.id.to_s + '&view=add_genre' if user_signed_in? %><br />
+        <% if @game.local_players %>
+          Local:<br />
+          <%= @game.local_players %> Player(s)<br />
+          <% if @game.local_multi_modes %>
+            <% if @game.local_multi_modes.coop %>
+              Co-op<br />
+            <% end %>
+            <% if @game.local_multi_modes.vs %>
+              Vs<br />
+            <% end %>
           <% end %>
-        </table>
-      <% end %>
-      <%= pop_up_controller "Add awards", 'new', 'awards', :game_id => @game.id if user_signed_in? %>
+        <% end %>
+        <% if @game.online_players %>
+          Online:<br />
+          <% if @game.online_players > 0 %>
+            <%= @game.online_players %> Players<br />
+          <% else %>
+            This game has no online play.<br />
+          <% end %>
+          <% if @game.online_multi_modes %>
+            <% if @game.online_multi_modes.coop %>
+              Co-op<br />
+            <% end %>
+            <% if @game.online_multi_modes.vs %>
+              Vs<br />
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= pop_up "online/local players", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
+        <%= @game.achievements %>
+        <% unless @game.project_leaders.empty? %>
+          Key People:<br />
+          <% for person in @game.industry_people %>
+            <%= person.name %>: <%= person.position %><br />
+          <% end %>
+        <% end %>
+        <% unless @game.features.empty? %>
+          Features:<br />
+          <% for feature in @game.features %>
+            <%= feature.description %><br />
+          <% end %>
+        <% end %>
+        <%= pop_up "Features", '/edit?id=' + @game.id.to_s + '&view=add_features' if user_signed_in? %><br />
+        <% unless @game.specifications.empty? %>
+          Specs:<br />
+          <% for specification in @game.specifications %>
+            <%= specification.description %><br />
+          <% end %>
+        <% end %>
+        <%= pop_up "Specs", '/edit?id=' + @game.id.to_s + '&view=add_specs' if user_signed_in? %><br />
+        <% unless @game.peripherals.empty? %>
+          Compatible with:<br />
+          <% for peripheral in @game.peripherals %>
+            <%= peripheral.name %><br />
+          <% end %>
+        <% end %>
+      </div>
     </div>
-  </div>
-
-  <div id="right_column" class="round">
-    <% if @game.rating %>
-      <%= rating_logo(@game.rating) %><br />
-    <% end %>
-    <% unless @game.types.empty? %>
-      <% for type in @game.types %>
-        <%= type.name %><%= ", " unless type == @game.types.last %>
-      <% end %><br />
-    <% end %>
-    <%= pop_up "Add type", '/edit?id=' + @game.id.to_s + '&view=add_type' if user_signed_in? %><br />
-    <% unless @game.genres.empty? %>
-      Genre(s):
-      <% for genre in @game.genres %>
-        <%= genre.name %>
-      <% end %>
-    <% end %>
-    <%= pop_up "Genre(s)", '/edit?id=' + @game.id.to_s + '&view=add_genre' if user_signed_in? %><br />
-    <% if @game.local_players %>
-      Local:<br />
-      <%= @game.local_players %> Player(s)<br />
-      <% if @game.local_multi_modes %>
-        <% if @game.local_multi_modes.coop %>
-          Co-op<br />
-        <% end %>
-        <% if @game.local_multi_modes.vs %>
-          Vs<br />
-        <% end %>
-      <% end %>
-    <% end %>
-    <% if @game.online_players %>
-      Online:<br />
-      <% if @game.online_players > 0 %>
-        <%= @game.online_players %> Players<br />
-      <% else %>
-        This game has no online play.<br />
-      <% end %>
-      <% if @game.online_multi_modes %>
-        <% if @game.online_multi_modes.coop %>
-          Co-op<br />
-        <% end %>
-        <% if @game.online_multi_modes.vs %>
-          Vs<br />
-        <% end %>
-      <% end %>
-    <% end %>
-    <%= pop_up "online/local players", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
-    <%= @game.achievements %>
-    <% unless @game.project_leaders.empty? %>
-      Key People:<br />
-      <% for person in @game.industry_people %>
-        <%= person.name %>: <%= person.position %><br />
-      <% end %>
-    <% end %>
-    <% unless @game.features.empty? %>
-      Features:<br />
-      <% for feature in @game.features %>
-        <%= feature.description %><br />
-      <% end %>
-    <% end %>
-    <%= pop_up "Features", '/edit?id=' + @game.id.to_s + '&view=add_features' if user_signed_in? %><br />
-    <% unless @game.specifications.empty? %>
-      Specs:<br />
-      <% for specification in @game.specifications %>
-        <%= specification.description %><br />
-      <% end %>
-    <% end %>
-    <%= pop_up "Specs", '/edit?id=' + @game.id.to_s + '&view=add_specs' if user_signed_in? %><br />
-    <% unless @game.peripherals.empty? %>
-      Compatible with:<br />
-      <% for peripheral in @game.peripherals %>
-        <%= peripheral.name %><br />
-      <% end %>
-    <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+  window.onload = function() {
+    var height = $('game_display').clientHeight
+    $('right_column_info').setStyle({ 'height':(height-24)+'px' })
+  };
+</script>

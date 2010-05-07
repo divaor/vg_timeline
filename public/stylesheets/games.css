@@ -395,25 +395,13 @@ div.boxart_links {
     height:0px;
 }
 
-span.bottom_right_image_link {
-    background-color:white;
-    top:80px;
-    left:65px;
-    position:relative;
+span.boxart_tooltip_link {
+    font-size: 10px;
 }
 
-span.top_right_image_link {
-    background-color:white;
-    top:2px;
-    left:2px;
-    position:relative;
-}
-
-span.bottom_left_image_link {
-    background-color:white;
-    top:80px;
-    position:relative;
-    right:32px;
+span.game_view_tooltip_link {
+    font-size: 10px;
+    margin-right: 10px;
 }
 
 div.current_month {
@@ -459,14 +447,27 @@ div.table_div {
     overflow: auto;
 }
 
-div.tooltip_boxart.left {
-    float:right;
-    margin-left: 5px;
+div.tooltip_boxart_wrapper {
+    height: 108px;
+    width: 101px;
+    margin: 5px;
 }
 
-div.tooltip_boxart.right {
-    float:left;
-    margin-right: 5px;
+div.tooltip_boxart {
+    height: 108px;
+    text-align: center;
+    vertical-align: middle;
+    width: 101px;
+    display: table-cell;
+}
+
+div.tooltip_boxart img {
+    cursor: pointer;
+}
+
+div.tooltip_text {
+    float: left;
+    margin-top: 8px;
 }
 
 #month_view_all {
@@ -489,13 +490,17 @@ div.tooltip_boxart.right {
     /*border: 1px solid black;*/
 }
 
+#game_wrapper {
+    overflow: hidden;
+    width: 1200px;
+    margin: 0 auto;
+}
+
 #game_display {
     background-color: #E5E5E5;
     border: 2px solid black;
-    display: table;
-    width: 1196px;
-    margin: 0 auto;
-    height: 100%;
+    width: auto;
+    overflow: hidden;
 }
 
 /* Columns */
@@ -504,17 +509,17 @@ div.tooltip_boxart.right {
     border-right: 0px solid black;
     width: 75%;
     float: left;
-    clear: both;
 }
 
 #right_column {
-    background-color: white;
-    display: table;
     float: right;
-    height: 93%;
-    margin: 10px 55px 10px 10px;
+    width: 25%;
+}
+
+#right_column_info {
+    background-color: white;
+    margin: 10px 35px;
     padding: 2px;
-    width: 200px;
 }
 
 #right_column img {
@@ -540,6 +545,7 @@ div.tooltip_boxart.right {
 /* Game Info */
 
 #basic_info_container {
+    display: table-caption;
     padding: 7px 8px 10px 10px;
     width: 72%; /*40%;*/
     float: left;
@@ -560,7 +566,7 @@ h2.game_show_title {
 td.label {
     font-weight: bold;
     padding-right: 10px;
-    width: 105px;
+    width: 108px;
     vertical-align: top;
 }
 

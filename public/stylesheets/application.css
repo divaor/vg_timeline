@@ -2,7 +2,7 @@ body {
     background-color: #C3D9FF;
     background-image: url("/images/lbluegraygrad.png");
     background-repeat: repeat-x;
-    font-family: "DejaVu Sans", "Arial";
+    font-family: sans-serif, "DejaVu Sans";
 }
 
 img {
@@ -126,6 +126,7 @@ input {
 
 input[type=text], select, input[type=file] {
     border: 1px solid #C3D9FF;
+    padding-right: 5px;
 }
 
 input[type=text]:focus, select:focus, input[type=file]:focus {

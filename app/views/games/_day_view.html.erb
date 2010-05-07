@@ -19,37 +19,55 @@
               <% @developers_year << developer unless @developers_year.include?(developer) %>
             <% end %>
           <% end %>
-          <td class="boxart_block" onmouseover="showImageLinks(<%= game.id %>)">
-            <div id="boxart_links<%= game.id %>" class="boxart_links" style="display:none;">
-              <span id="link_tooltip_image<%= game.id %>" class="bottom_right_image_link">
-                <%= link_to_function("Tool", "", :onmouseover => "fullTooltipGameInfo(event, this, #{game.id})") %>
+          <td class="boxart_block" id="<%= game.full_title_limit+"("+game.platform.short_name.upcase+")" %>" onmouseover="fullTooltipGameInfo(event, this, <%= game.id %>)">
+            <div id="boxart_links<%= game.id %>" style="display:none;width:auto;">
+              <%= game.full_title_limit+"("+game.platform.short_name.upcase+")" %><br />
+              <span class="game_view_tooltip_link">
+                <%= link_to "View Game", game_path(game.id) %>
               </span>
-              <span id="link_boxart_image<%= game.id %>" class="bottom_left_image_link">
-                <%= link_to "Box" %>
-              </span>
-              <span id="link_game_info_image<%= game.id %>" class="top_right_image_link">
-                <%= link_to "Game", game_path(game.id) %>
+              <span class="boxart_tooltip_link">
+                <%= link_to "Boxart", "#" %>
               </span>
             </div>
-            <%= box_logo(game, :thumb, :prototip => true, :tooltip => false, :hover => false) %>
+            <%= box_logo(game, :thumb, :prototip => true, :tooltip => false, :hover => true) %>
+            <script type="text/javascript">
+              tooltipGameInfo($('tooltip<%= game.id %>'), $('boxart_links<%= game.id %>'))
+            </script>
             <div id="tooltip_info<%= game.id %>" style="display:none">
               <div class="tooltip_game_info">
-                <div class="tooltip_boxart">
-                  <%= box_logo(game) %>
+                <div class="tooltip_boxart_wrapper">
+                  <div class="tooltip_boxart">
+                    <%= box_logo(game) %>
+                  </div>
                 </div>
                 <div class="tooltip_text">
-                  <strong>Platform</strong>: <%= game.platform.name %><br />
-                  <strong>Release Date</strong>: <%= game.release_date %><br />
-                  <strong>Developer</strong>:
-                  <% game.developers.each do |d| %>
-                    <%= d.name + (d == game.developers.last ? "" : ", ") %>
-                  <% end %><br />
-                  <strong>Publisher</strong>:
-                  <% game.publishers.each do |p| %>
-                    <%= p.name + (p == game.publishers.last ? "" : ", ") %>
-                  <% end %><br />
-                  <%= pop_up "Edit game", '/edit?id=' + game.id.to_s if user_signed_in? %>
-                  <%= link_to "More Info", game_path(game) %>
+                  <table cellspacing="0">
+                    <tr>
+                      <td><strong>Platform</strong>: </td><td><%= game.platform.name %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Release Date</strong>: </td><td><%= game.release_date %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Developed by</strong>: </td><td><% game.developers.each do |d| %>
+                          <%= d.name + (d == game.developers.last ? "" : ", ") %>
+                        <% end %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Published by</strong>: </td><td><% game.publishers.each do |p| %>
+                          <%= p.name + (p == game.publishers.last ? "" : ", ") %>
+                        <% end %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Genre</strong>: </td><td><% game.genres.each do |g| %>
+                          <%= g.name + (g == game.genres.last ? "" : ", ") %>
+                        <% end %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Rating</strong>: </td><td><%= game.rating.name if game.rating %></td>
+                    </tr>
+                  </table>
+                  <%= link_to "View Game", game_path(game) %>
                 </div>
               </div>
             </div>

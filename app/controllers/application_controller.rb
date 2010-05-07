@@ -23,7 +23,9 @@ class ApplicationController < ActionController::Base
   end
 
   def search_results
-    @game = Game.where("LOWER(main_title) LIKE ?", "%#{params[:game][:main_title].downcase}%").first
+    title = params[:game][:main_title].split(':')
+    title[1] = "" unless title[1]
+    @game = Game.where("LOWER(CONCAT_WS(' ', main_title, sub_title)) LIKE ?", "%#{title[0].downcase.strip} #{title[1].downcase.strip}%").first
     if @game
       redirect_to game_path(@game)
     else

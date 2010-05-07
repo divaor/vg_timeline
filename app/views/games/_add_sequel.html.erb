@@ -1,0 +1,15 @@
+<h2>Sequel & Prequel</h2>
+
+<%= form_for @game do |f| %>
+  <div class="field">
+    <%= f.label :sequel %><br />
+    <%= text_field_with_auto_complete :game, :sequel, {}, { :url => games_path(), :method => :get, :param_name => 'search' } %>
+  </div>
+  <div class="field">
+    <%= f.label :prequel %><br />
+    <%= text_field_with_auto_complete :game, :prequel, {}, { :url => games_path(), :method => :get, :param_name => 'search' } %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Submit" %>
+  </div>
+<% end %>
