@@ -126,7 +126,7 @@ class GamesController < ApplicationController
     end
   end
 
-  def create
+  def create # TODO have different platforms be assigned in model instead of controller
     platform = Platform.find_by_name(params[:game][:platform_name])
     @game_exists = Game.where("main_title = ? and sub_title = ? and platform_id = ?", params[:game][:main_title], params[:game][:sub_title], platform.id).first if platform
     @game_diff = Game.find(params[:diff_platform_id]) if params[:diff_platform_id]
@@ -176,6 +176,8 @@ class GamesController < ApplicationController
       end
       @developers = []; @publishers = []
       if @game.save
+        @game.prequel.update_attribute(:sequel, @game) if @game.prequel
+        @game.sequel.update_attribute(:prequel, @game) if @game.sequel
         create_log_entry('games', @game.id, "Added game #{@game.full_title_limit}", :add => true)
         if @game_diff
           @game_diff.different_platforms << @game
@@ -223,29 +225,38 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    old_r_y = @game.r_y
-    old_r_m = @game.r_m
-    old_box = @game.make_boxart_path
-    styles = %w(thumb mini medium original)
+    old_game_info = { :year => @game.r_y, :month => @game.r_m, :path => @game.make_boxart_path }
     if @game.update_attributes(params[:game])
+      if (params[:game][:prequel_name] or params[:game][:sequel_name]) and not @game.sequel and not @game.prequel
+        unless params[:game][:sequel_name].empty?
+          pre_seq = params[:game][:sequel_name]
+          update = :prequel_name
+          with = @game.full_title_colon
+          series_id = @game.series_id
+        end
+        unless params[:game][:prequel_name].empty? and pre_seq
+          pre_seq = params[:game][:prequel_name]
+          update = :sequel_name
+          with = @game.full_title_colon
+          series_id = @game.series_id
+        end
+        @game = Game.new(:full_title_colon => pre_seq, update => with, :series_id => series_id)
+        @title = "Add New Game"
+        @markets = Market.all
+        @platforms = Platform.all
+        @developers = Developer.order("name asc").all
+        @publishers = Publisher.order("name asc").all
+        @ratings = Rating.all
+        flash[:notice] = "Game not found, fill in form to add game"
+        render :template => 'games/_new', :layout => 'application'
+        return
+      end
       create_log_entry('games', @game.id, "Modified game #{@game.full_title_limit}", :mod => true)
       for game in @game.different_platforms
         create_log_entry('games', @game.id, "Modified #{@game.full_title_limit}", :mod => true)
         game.update_attribute('series_id', @game.series_id)
       end
-      for style in styles
-        AWS::S3::Base.establish_connection!(:access_key_id => 'AKIAIMXJ77QKTJ3QN27Q', :secret_access_key => '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')
-        bucket = 'vg-timeline'
-        old_file_path = "images/#{old_r_y}/#{old_r_m}/#{style}/#{old_box}"
-        new_file_path = "images/#{@game.r_y}/#{@game.r_m}/#{style}/#{@game.make_boxart_path}"
-        if AWS::S3::S3Object.exists?(old_file_path, bucket) and old_file_path != new_file_path
-          AWS::S3::S3Object.copy old_file_path, new_file_path, bucket
-          AWS::S3::S3Object.delete old_file_path, bucket
-          policy = AWS::S3::S3Object.acl(new_file_path, bucket)
-          policy.grants << AWS::S3::ACL::Grant.grant(:public_read)
-          AWS::S3::S3Object.acl(new_file_path, bucket, policy)
-        end
-      end
+      move_boxart(old_game_info, @game)
       add_flash = experience_user(5)
       flash[:notice] = "Game succesfully updated." + add_flash
       redirect_to game_path(@game)
@@ -540,5 +551,22 @@ class GamesController < ApplicationController
       end
     end
     return games
+  end
+
+  def move_boxart old_info, game
+    styles = %w(thumb mini medium original)
+    bucket = 'vg-timeline'
+    AWS::S3::Base.establish_connection!(:access_key_id => 'AKIAIMXJ77QKTJ3QN27Q', :secret_access_key => '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')
+    for style in styles
+      old_file_path = "images/#{old_info[:year]}/#{old_info[:month]}/#{style}/#{old_info[:path]}"
+      new_file_path = "images/#{game.r_y}/#{game.r_m}/#{style}/#{game.make_boxart_path}"
+      if AWS::S3::S3Object.exists?(old_file_path, bucket) and old_file_path != new_file_path
+        AWS::S3::S3Object.copy old_file_path, new_file_path, bucket
+        AWS::S3::S3Object.delete old_file_path, bucket
+        policy = AWS::S3::S3Object.acl(new_file_path, bucket)
+        policy.grants << AWS::S3::ACL::Grant.grant(:public_read)
+        AWS::S3::S3Object.acl(new_file_path, bucket, policy)
+      end
+    end
   end
 end

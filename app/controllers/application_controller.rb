@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   def search_results
     title = params[:game][:main_title].split(':')
     title[1] = "" unless title[1]
-    @game = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", "#{title[1].downcase.strip}").first
+    @game = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", title[1].downcase.strip).first
     unless @game
       @game = Game.where("LOWER(sub_title) LIKE ?", "%#{title[0].downcase.strip}%").first
     end

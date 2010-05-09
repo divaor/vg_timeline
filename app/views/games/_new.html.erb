@@ -45,6 +45,9 @@
       <%= f.file_field :boxart %>
     </div>
     <div class="actions">
+      <%= f.hidden_field :sequel_name %>
+      <%= f.hidden_field :prequel_name %>
+      <%= f.hidden_field :series_id %>
       <%= f.submit "Submit" %>
     </div>
     <%= link_to "Add new developer", new_developer_path %>

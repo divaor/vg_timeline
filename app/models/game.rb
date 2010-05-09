@@ -34,30 +34,30 @@ class Game < ActiveRecord::Base
     main_title + " " + sub_title
   end
 
+  def full_title_limit
+    return "#{full_title.slice(0,49)}..." if full_title.length > 50
+    full_title
+  end
+
   def full_title_colon
     f_t = main_title
-    if sub_title.empty?
-      f_t
-    else
-      f_t = "#{f_t}:" if main_title.rindex(':').nil? and sub_title.rindex(':').nil?
-      f_t = "#{f_t} #{sub_title}"
+    return f_t if sub_title.empty?
+    f_t = "#{f_t}:" if main_title.rindex(':').nil? and sub_title.rindex(':').nil?
+    "#{f_t} #{sub_title}"
+  end
+
+  def full_title_colon=(name)
+    unless name.empty?
+      title = name.split(':')
+      title[1] = "" unless title[1]
+      self.main_title = title[0].strip
+      self.sub_title = title[1].strip
     end
   end
 
   def full_title_colon_limit
-    if full_title_colon.length > 50
-      "#{full_title_colon.slice(0, 49)}..."
-    else
-      full_title_colon
-    end
-  end
-
-  def full_title_limit
-    if full_title.length > 50
-      "#{full_title.slice(0,49)}..."
-    else
-      full_title
-    end
+    return "#{full_title_colon.slice(0, 49)}..." if full_title_colon.length > 50
+    full_title_colon
   end
 
   def added_by
@@ -213,6 +213,40 @@ class Game < ActiveRecord::Base
       temp_publishers << Publisher.find_or_create_by_name(name.strip) unless name.blank?
     end
     self.publishers = temp_publishers unless temp_publishers.empty?
+  end
+
+  def prequel_name
+    prequel.full_title_colon if prequel
+  end
+
+  def prequel_name=(name)
+    unless name.empty?
+      title = name.split(':')
+      title[1] = "" unless title[1]
+      preq = Game.where("LOWER(main_title) = ? AND LOWER(sub_title) = ?", title[0].downcase.strip, title[1].downcase.strip).first
+      if preq
+        preq.update_attribute(:sequel, self)
+        preq.update_attribute(:series_id, series_id) if series_id
+        self.prequel = preq # TODO have game be assigned to prequel as sequel
+      end
+    end
+  end
+
+  def sequel_name
+    sequel.full_title_colon if sequel
+  end
+
+  def sequel_name=(name)
+    unless name.empty?
+      title = name.split(':')
+      title[1] = "" unless title[1]
+      seq = Game.where("LOWER(main_title) = ? AND LOWER(sub_title) = ?", title[0].downcase.strip, title[1].downcase.strip).first
+      if seq
+        seq.update_attribute(:prequel, self)
+        seq.update_attribute(:series_id, series_id) if series_id
+        self.sequel = seq # TODO have game be assigned to sequel as prequel
+      end
+    end
   end
 
   def make_boxart_path
