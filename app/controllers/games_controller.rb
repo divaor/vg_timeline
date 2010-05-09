@@ -5,7 +5,7 @@ class GamesController < ApplicationController
 
   def index
     if params[:search]
-      @games = Game.where("LOWER(CONCAT_WS(' ',main_title,sub_title)) LIKE ?", "%#{params[:search].downcase}%").limit(14)
+      @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(14)
       @search = params[:search]
       respond_to do |format|
         format.js
