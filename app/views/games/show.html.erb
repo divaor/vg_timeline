@@ -98,7 +98,7 @@
             <h5>Full List:</h5>
             <% for game in games_in_series %>
               <%= game.r_y %> -
-              <span<%= " class=showing" if game == @game %>><%= link_to_unless(game == @game, game.full_title_limit, game_path(game)) %></span>
+              <span<%= " class=showing" if game == @game %>><%= link_to_unless(game == @game, game.full_title_colon_limit, game_path(game)) %></span>
               <%= "(#{game.platform.short_name.upcase})" %>
               <%= "(unreleased)" if game.release_date > Date.today %><br />
             <% end %>

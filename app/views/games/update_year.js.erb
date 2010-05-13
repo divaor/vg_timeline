@@ -1,10 +1,21 @@
 <% ignore = false %>
-$('<%= 'filters'+@year %>').show()
-$('<%= 'filters'+@year %>').update("<%= escape_javascript(render 'applied_year_filters') %>")
+<% if @filtered %>
+  $('<%= 'filters'+@year %>').show();
+  $('<%= 'filters'+@year %>').update("<%= escape_javascript(render 'applied_year_filters') %>");
+<% else %>
+  $('<%= 'filters'+@year %>').hide();
+<% end %>
 <% for @month in @months %>
   <% if @month.class == Array and ignore == false %>
     <% if @limit > 0 %>
-      $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view_filtered') %>");
+      <% if @filtered %>
+        $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view_filtered') %>");
+        $('<%= 'filters'+@m %>').update('Filtered(Year)');
+        $('<%= 'filters'+@m %>').show();
+      <% else %>
+        $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view') %>");
+        $('<%= 'filters'+@m %>').hide();
+      <% end %>
     <% else %>
       $('<%= 'month'+@m %>').update("<%= escape_javascript(render 'month_view_all') %>");
     <% end %>
@@ -21,23 +32,25 @@ $('<%= 'filters'+@year %>').update("<%= escape_javascript(render 'applied_year_f
   <% if !@ignore_months.include?(no_game) %>
     if($('<%= 'month'+no_game %>') != null) {
       $('<%= 'month'+no_game %>').update("No Games with these filters.");
+      <% if @filtered %>
+        $('<%= 'filters'+no_game %>').update('Filtered(Year)');
+        $('<%= 'filters'+no_game %>').show();
+      <% else %>
+        $('<%= 'filters'+no_game %>').hide();
+      <% end %>
     }
   <% end %>
 <% end %>
-function checked() {
-  var desc = $$('<%= '.'+@year %>');
-  var check = false;
-  desc.each(function(item) {
-      if (item.checked == true) {
-          check = true;
-          throw $break;
-      } 
-   });
-   return check;
-}
-if (checked() == false) {
-  $('year_filter_all<%= @year %>').checked = true;
-}
+<% if @applied_filters[0].length == 1 %>
+  $('y_plat_all').checked = true;
+<% end %>
+<% if @applied_filters[1].length == 1 %>
+  $('y_pub_all').checked = true;
+<% end %>
+<% if @applied_filters[2].length == 1 %>
+  $('y_dev_all').checked = true;
+<% end %>
+$('year_stats').update('<%= escape_javascript(render 'year_stats') %>');
 Element.hide("<%= 'spinner'+@year %>");
 Element.hide("<%= 'spinnerp'+@year %>");
 Element.hide("<%= 'spinnerd'+@year %>");

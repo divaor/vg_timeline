@@ -1,7 +1,6 @@
 function monthFilterPlatform(item, year, limit) {
     spinner(item.className, "Show");
     uncheckMonthFilterAll(item.className, true);
-    limit = checkIfMonthShowAll(item.className, limit);
     updateMonth(item.className, year, limit);
 }
 
@@ -20,24 +19,6 @@ function uncheckMonthFilterAll(month, unCheck) {
     }
 }
 
-function checkIfMonthShowAll(month, limit) {
-    var monthShowAll = $('month_show_all'+month);
-    if (monthShowAll.checked == true) {
-        return 0;
-    } else {
-        return limit;
-    }
-}
-
-function checkIfYearShowAll(year, limit) {
-    var yearShowAll = $('year_show_all'+year);
-    if (yearShowAll.checked == true) {
-        return 0;
-    } else {
-        return limit;
-    }
-}
-
 function updateMonth(month, year, limit) {
     new Ajax.Request('/update_month',
     {
@@ -49,18 +30,17 @@ function updateMonth(month, year, limit) {
 function getCheckedMonth(month, year, limit) {
     var desc = $$('.'+month);
     var check = false;
-    var monthShowAll = $('month_show_all'+month);
     var params = "y=" + year + "&m=" + month
     var i = 1;
     desc.each(function(item) {
-        if (item.checked == true && item != monthShowAll) {
+        if (item.checked == true) {
             params = params + "&" + i + "=" + item.id;
             i = i + 1;
             check = true;
         }
     })
     if (check == false) {
-        params += getCheckedPlatformsYear(year)  + "&l=" + checkIfYearShowAll(year, limit);
+        params += getCheckedPlatformsYear(year)  + "&l=3";
     } else {
         params += "&l=" + limit
     }
@@ -69,36 +49,23 @@ function getCheckedMonth(month, year, limit) {
 
 function monthFilterAll(item, year, limit) {
     if (item.checked == true) {
-        monthSpinner(item.className, "Show");
+        spinner(item.className, "Show");
         uncheckFiltersPlatforms(item.className, true);
-        limit = checkIfMonthShowAll(item.className, limit);
         item.checked = true;
         updateMonth(item.className, year, limit);
     } else {
-        monthSpinner(item.className, "Show");
-        limit = checkIfMonthShowAll(item.className, limit);
+        spinner(item.className, "Show");
         updateMonth(item.className, year, limit);
     }
 }
 
 function uncheckFiltersPlatforms(month) {
     var desc = $$('.'+month);
-    var monthShowAll = $('month_show_all'+month);
     desc.each(function(item) {
-        if (item.checked == true && item != monthShowAll) {
+        if (item.checked == true) {
             item.checked = false;
         }
     });
-}
-
-function monthShowAll(item, year, limit) {
-    if (item.checked == true) {
-        monthSpinner(item.className, "Show");
-        updateMonth(item.className, year, limit);
-    } else {
-        monthSpinner(item.className, "Show");
-        updateMonth(item.className, year, 3);
-    }
 }
 
 function yearShowAll(item, limit) {
@@ -186,10 +153,9 @@ function getCheckedMonths() {
     var months = ["01","02","03","04","05","06","07","08","09","10","11","12"];
     while (m < 12) {
         var filters = $$('.'+months[m]);
-        var monthShowAll = $('month_show_all'+months[m]);
         if (filters != "") {
             filters.each(function(filter) {
-                if (filter.checked == true && filter != monthShowAll) {
+                if (filter.checked == true) {
                     check = true;
                     throw $break;
                 }
@@ -398,6 +364,24 @@ function showHide(element) {
     } else {
         element.update('More')
     }
+}
+
+function showStats(elem, content) {
+    new Tip(elem, content, {
+        style: 'custom',
+        fixed: true,
+        showOn: 'click',
+        hideOn: 'click',
+        hook: {
+            tip: 'topLeft'
+        },
+        stem: 'topLeft',
+        offset: {
+            x: 30,
+            y: 10
+        }
+    });
+    elem.onmouseover=null;
 }
 
 function showMorePlatforms(elem, content) {

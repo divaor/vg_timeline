@@ -17,6 +17,7 @@ class GamesController < ApplicationController
       @id = params[:game_id] if params[:game_id]
       @enter_year = true
       @games = Game.where('release_date >= ? and release_date <= ?', "#{@year}-01-01", "#{@year}-12-31").order("release_date asc, hits desc, main_title asc").all
+      @stats = get_stats(@games)
       @platforms = Platform.order("name asc")
       @publishers = Publisher.order("name asc")
       @developers = Developer.order("name asc")
@@ -301,6 +302,7 @@ class GamesController < ApplicationController
       end
     }
     @games = search_games_by_checked_platforms(params)
+    @stats = get_stats(@games)
     @applied_filters = []; platforms = ["Platforms"]; publishers = ["Publishers"]; developers = ["Developers"];
     params.each_pair { |key, value|
       if key.to_i > 0 and value.to_i > 0
@@ -312,6 +314,11 @@ class GamesController < ApplicationController
       end
     }
     @applied_filters = [platforms,publishers,developers]
+    if @applied_filters == [["Platforms"],["Publishers"],["Developers"]]
+      @filtered = false
+    else
+      @filtered = true
+    end
     if @games.empty?
       @months = []
       @no_games = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
@@ -329,6 +336,13 @@ class GamesController < ApplicationController
   def update_month
     @m = params[:m]; @year = params[:y]; @limit = params[:l].to_i
     @games = search_games_by_checked_platforms(params)
+    @filtered = false
+    params.each_pair { |key, value|
+      if key.to_i > 0 and value.to_i > 0
+        @filtered = true
+        break
+      end
+    }
     if not @games.empty?
       games = make_games_array(@games, @limit)
       @month = games['games']
@@ -399,6 +413,37 @@ class GamesController < ApplicationController
   end
 
   private
+
+  def get_stats(games)
+    stats = {"Total" => {"Games", games.length}, "Platforms" => {}, "Publishers" => {}, "Developers" => {}}
+    for game in games
+      if stats["Platforms"][game.platform.name]
+        stats["Platforms"][game.platform.name] += 1
+      else
+        stats["Platforms"][game.platform.name] = 1
+      end
+      for dev in game.developers
+        if stats["Developers"][dev.name]
+          stats["Developers"][dev.name] += 1
+        else
+          stats["Developers"][dev.name] = 1
+        end
+      end
+      for pub in game.publishers
+        if stats["Publishers"][pub.name]
+          stats["Publishers"][pub.name] += 1
+        else
+          stats["Publishers"][pub.name] = 1
+        end
+      end
+    end
+    stats["Total"] = stats["Total"].sort {|a,b| b[1]<=>a[1]}
+    stats["Publishers"] = stats["Publishers"].sort {|a,b| b[1]<=>a[1]}
+    stats["Developers"] = stats["Developers"].sort {|a,b| b[1]<=>a[1]}
+    stats["Platforms"] = stats["Platforms"].sort {|a,b| b[1]<=>a[1]}
+    stats
+  end
+
   # games => array, games to be formatted for the view(can be an array returned by search_games_by_checked_platforms)
   #
   # limit => int, highest number in array to show in one day (starts in 'start' ends in 'limit'), 0 for no limit[default => 0]

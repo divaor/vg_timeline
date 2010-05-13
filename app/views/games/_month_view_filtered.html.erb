@@ -4,7 +4,7 @@
   <tr>
     <% for @day in @month %>
       <% if @day.class == Array %>
-        <td class="day_display round<%= ' unreleased' if cur_date_all(@year, @m, @day_text) > Date.today %> filtered " <%= "id=#{@day_text}" %>>
+        <td class="day_display round<%= ' unreleased' if cur_date_all(@year, @m, @day_text) > Date.today %> filtered" <%= "id=#{@day_text}" %>>
           <%= render 'day_view' %>
         </td>
       <% else %>

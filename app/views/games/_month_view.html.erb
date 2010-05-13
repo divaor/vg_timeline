@@ -1,9 +1,10 @@
 <%#*<span class="left_month_arrow"><%= (image_tag "go-next.png", :size => "12x12", :alt => "<") %><%#</span>%>
-<% @day_text = "" %>
+<% @day_text = ""; total_games = 0 %>
 <table cellspacing="10px">
   <tr>
     <% for @day in @month %>
       <% if @day.class == Array %>
+        <% total_games += @day.length - 1 %>
         <td class="day_display round<%= ' unreleased' if cur_date_all(@year, @m, @day_text) > Date.today %>" <%= "id=#{@day_text}" %>>
           <%= render 'day_view' %>
         </td>

@@ -1,8 +1,34 @@
 <% if @games.empty? %>
   $("<%= "month"+@m %>").update("No Games with these filters.");
+  $('<%= 'filters'+@m %>').update('Filtered(Year)');
+  $('<%= 'filters'+@m %>').show();
 <% else %>
   <% if @limit > 0 %>
-    $("<%= "month"+@m %>").update("<%= escape_javascript(render 'month_view') %>");
+    <% if @filtered %>
+      function checked(cls) {
+        var desc = $$(cls);
+        var check = false;
+        desc.each(function(item) {
+          if (item.checked == true) {
+            check = true;
+            throw $break;
+          }
+        });
+        return check;
+      }
+      if( checked('<%= '.'+@m %>') == true ) {
+        filter = 'Filtered(Month)'
+      } else {
+        filter = 'Filtered(Year)'
+      }
+      $("<%= "month"+@m %>").update("<%= escape_javascript(render 'month_view_filtered') %>");
+      $('<%= 'filters'+@m %>').update(filter);
+      $('<%= 'filters'+@m %>').show();
+    <% else %>
+      $("<%= "month"+@m %>").update("<%= escape_javascript(render 'month_view') %>");
+      $('<%= 'filters'+@m %>').update();
+      $('<%= 'filters'+@m %>').hide();
+    <% end %>
   <% else %>
     $("<%= "month"+@m %>").update("<%= escape_javascript(render 'month_view_all') %>");
   <% end %>
