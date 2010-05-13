@@ -1,0 +1,16 @@
+<% c = 0; margin_left = 0 %>
+<% @stats.each_pair { |key, value| %>
+  <strong><%= key %></strong><br />
+  <table>
+    <tr>
+      <% for val in value %>
+        <td style="padding-left:<%= margin_left.to_s+"px" %>"><%= val[0].to_s+": " %></td><td><%= val[1] %></td><% c += 1; margin_left = 10 %>
+        <% if c == 3 %>
+          <% c = 0; margin_left = 0 %>
+        </tr>
+      <% end %>
+    <% end %>
+    <% c = 0; margin_left = 0 %>
+  </table>
+  <br />
+<% } %>
