@@ -68,7 +68,7 @@ class Game < ActiveRecord::Base
         games_titles << game.full_title
         games << game
       end
-    end
+    end if self.series
     games.sort { |a, b| b.release_date <=> a.release_date}
   end
 
