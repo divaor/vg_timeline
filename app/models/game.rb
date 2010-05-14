@@ -27,7 +27,7 @@ class Game < ActiveRecord::Base
   has_many :industry_people, :through => :project_leaders
   has_many :awards
 
-  validates :main_title, :release_date, :presence => true
+  validates :main_title, :release_date, :platform_id, :presence => true
   has_attached_file :boxart, :storage => :s3, :s3_credentials => "#{Rails.root}/config/s3.yml", :url => "/images/:release_year/:release_month/:style/:title", :styles => { :medium => "400x400>", :thumb => "120x120>", :mini => "50x50>" }, :path => "/images/:release_year/:release_month/:style/:title"
 
   def full_title
@@ -58,6 +58,18 @@ class Game < ActiveRecord::Base
   def full_title_colon_limit
     return "#{full_title_colon.slice(0, 49)}..." if full_title_colon.length > 50
     full_title_colon
+  end
+
+  def find_by_full_title
+    games_titles = []
+    games = []
+    for game in self.series.games
+      unless games_titles.include?(game.full_title)
+        games_titles << game.full_title
+        games << game
+      end
+    end
+    games.sort { |a, b| b.release_date <=> a.release_date}
   end
 
   def added_by

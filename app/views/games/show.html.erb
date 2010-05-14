@@ -75,15 +75,16 @@
       <div id="game_series" class="round">
         <% series = @game.series %>
         <% unless series.nil? %>
-          <% games_in_series = series.games.sort { |a,b| a.release_date <=> b.release_date } %>
+  <%# games_in_series = series.games.sort { |a,b| a.release_date <=> b.release_date } %>
           <h4><%= series.name %> series</h4>
           <%= pop_up "Edit Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
+          <%= pop_up "Add new game to series", new_game_path(:series => @game.series.id) if user_signed_in? %>
           <div id="prequel_sequel_cont">
             <div id="prequel">
               <% if @game.prequel %>
                 <span>Prev</span><br />
                 <%= link_to(box_logo(@game.prequel, :thumb, :tooltip => true), game_path(@game.prequel)) %>
-                <%# TODO Tooltip function changed name %>
+    <%# TODO Tooltip function changed name %>
               <% end %>
               <%= pop_up "Add sequel", "/edit?id=#{@game.id.to_s}&view=add_sequel" if user_signed_in? %>
             </div>
@@ -96,10 +97,22 @@
           </div>
           <div id="series_list">
             <h5>Full List:</h5>
-            <% for game in games_in_series %>
+            <% for game in @series_games %>
               <%= game.r_y %> -
-              <span<%= " class=showing" if game == @game %>><%= link_to_unless(game == @game, game.full_title_colon_limit, game_path(game)) %></span>
-              <%= "(#{game.platform.short_name.upcase})" %>
+              <span<%= " class=showing" if game == @game %>><%= game.full_title_colon_limit %></span>
+              <span>
+                <% diff_p = game.different_platforms %>
+                <% pre = raw "(" + link_to_unless(game == @game, game.platform.short_name.upcase, game_path(game)) %>
+                <% pre = pre + ", " unless diff_p.empty? %>
+                <% unless diff_p.empty? %>
+                  <% diff_p.each do |g| %>
+                    <% pre2 = g == diff_p.first ? pre : "" %>
+                    <%=raw pre2 + link_to_unless(g == @game, g.platform.short_name.upcase, game_path(g)) + (g == diff_p.last ? ")" : ", ") %>
+                  <% end %>
+                <% else %>
+                  <%=raw "(#{link_to_unless game == @game, game.platform.short_name.upcase, games_path(game)})" %>
+                <% end %>
+              </span>
               <%= "(unreleased)" if game.release_date > Date.today %><br />
             <% end %>
           </div>
@@ -174,7 +187,7 @@
           <% if @game.local_multi_modes %>
             ,
             <% if @game.local_multi_modes.coop %>
-              Co-op<%= ", " unless @game.local_multi_modes.vs.empty? %>
+              Co-op<%= ", " if @game.local_multi_modes.vs %>
             <% end %>
             <% if @game.local_multi_modes.vs %>
               Vs
