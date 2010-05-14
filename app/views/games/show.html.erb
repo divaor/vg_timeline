@@ -67,6 +67,7 @@
         <h4>Description</h4>
         <% if @game.description %>
           <%= @game.description %>
+          <%= pop_up "Edit Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
         <% else %>
           No description has been added for this game.
           <%= pop_up "Add Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
