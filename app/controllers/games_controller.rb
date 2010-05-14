@@ -79,6 +79,7 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @game.update_attribute('hits', @game.hits += 1)
+    @series_games = @game.find_by_full_title
     @title = @game.full_title_limit
   end
 
@@ -90,6 +91,8 @@ class GamesController < ApplicationController
     @year = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
     index = @level.index("id_diff")
     id_diff = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
+    index = @level.index("series")
+    series_id = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
     @level = @level.slice(0,1) if @level.length > 1
     @view = params[:action]
     @title = "Add New Game"
@@ -98,6 +101,9 @@ class GamesController < ApplicationController
       attributes = { :main_title => game_diff.main_title, :sub_title => game_diff.sub_title, :release_date => game_diff.release_date }
       @view = "new_lite"
       @diff_platform_id = game_diff.id
+    elsif series_id
+      series = Series.find(series_id)
+      attributes = { :main_title => series.name, :series_id => series.id }
     end
     @game = attributes ? Game.new(attributes) : Game.new
     @game.publisher_names = game_diff.publisher_names if game_diff
@@ -190,11 +196,14 @@ class GamesController < ApplicationController
         flash[:notice] = "Game succesfully created." + add_flash
         redirect_to game_path(@game)
       else
+        flash[:alert] = "Could not complete request."
         @title = "Add New Game"
         @platforms = Platform.all
         @developers = Developer.order("name asc").all
         @publishers = Publisher.order("name asc").all
-        render :partial => 'new', :layout => 'application'
+        @markets = Market.all
+        @ratings = Rating.all
+        render :template => 'games/_new', :layout => 'application'
       end
     end
   end
