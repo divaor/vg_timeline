@@ -88,7 +88,7 @@ class Game < ActiveRecord::Base
     values = { 'title' => 10, 'release_date' => 10, 'boxart' => 10,
       'developer' => 8, 'publisher' => 8, 'platform' => 8, 'description' => 7,
       'genre' => 7, 'rating' => 7, 'series' => 7, 'players' => 5,
-      'also_on' => 5, 'market' => 4, 'type' => 4 }
+      'also_on' => 5, 'market' => 4, 'type' => 4 } # TODO update completion %
     perc = perc + values['title'] unless main_title.nil?
     perc = perc + values['release_date'] unless release_date.nil?
     perc = perc + values['boxart'] unless boxart_file_name.nil?
