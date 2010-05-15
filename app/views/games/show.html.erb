@@ -14,7 +14,7 @@
           <td>
             <%= link_to @game.platform.name, '#' %>
             <% unless @game.different_platforms.empty? %>
-              <div id="diff_platforms" class="round">
+              <div <%= @game.sub_title.empty? ? " id=diff_platforms" : " id=diff_platforms_sub" %> class="round">
                 <table>
                   <tr>
                     <td class="subtitle">
@@ -107,34 +107,59 @@
         <%= pop_up "Add Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
       <% end %>
     </div>
-    <div id="game_info_scores" class="round">
+	<div id="game_info_scores" class="round">
+	  <div id="scores_container">
       <h4>Scores</h4>
       <% scores = @game.scores %>
-      <% unless scores.empty? %>
-        <table cellspacing="0">
-          <% for score in scores %>
-            <tr>
-              <td><%= link_to score.press.name, score.press.url, :target => '_blank' %></td>
-              <td><%= link_to score.score, score.url, :target => '_blank' %></td>
-            </tr>
-          <% end %>
-        </table>
-      <% end %>
-      <%= pop_up_controller "Add scores", 'new', 'scores', :game_id => @game.id if user_signed_in? %>
-      <br />
-      <h4>Awards</h4>
+	  <% unless scores.empty? %>
+		  <% total = 0 %>
+                  <% count = 0 %>
+		<div id="scores_content">
+		<% for score in scores %>
+		  <% if score.score.to_i < 4 %>
+			<% color = 'bg_color_darkgray' %>
+		  <% elsif score.score.to_i > 7 %>
+			<% color = 'bg_color_lightgray' %>
+		  <% else %>
+			<% color = 'bg_color_gray' %>
+		  <% end %>
+			<div class="scores_press">
+			<%= link_to score.press.name, score.press.url, :target => '_blank' %>
+		  </div>
+		  <div class="scores round <%= color %>">
+			  <%= link_to score.score, score.url, :target => '_blank' %>
+		  </div>
+		  <% count += 1 %>
+		  <% total += score.score.to_i %>
+	  <% end %>
+      </div>
+		  <% if total/count < 4 %>
+			<% bg_color = 'bg_color_red' %>
+		  <% elsif total/count > 7 %>
+			<% bg_color = 'bg_color_green' %>
+		  <% else %>
+			<% bg_color = 'bg_color_yellow' %>
+		  <% end %>
+	  <div id="avg_score_container"><div id="avg_score" class="<%= bg_color %>">
+		<div class="centering"><%= total/count %></div>
+	  </div></div>
+  <% end %><div class="scores_add">
+	  <%= pop_up_controller "+", 'new', 'scores', :game_id => @game.id if user_signed_in? %></div>
+  </div>
+      <div id="award_container">
+		  <h4>Awards</h4>
+	  <div id="awards_content">
       <% awards = @game.awards %>
       <% unless awards.empty? %>
-        <table cellspacing="0">
           <% for award in awards %>
-            <tr>
-              <td><%= link_to award.press.name, award.press.url %></td>
-              <td><%= award.description %></td>
-            </tr>
+              <div class="award_press_name"><%= link_to award.press.name, award.press.url %></div>
+              <div class="award_description"><%= award.description %></div>
           <% end %>
-        </table>
       <% end %>
-      <%= pop_up_controller "Add awards", 'new', 'awards', :game_id => @game.id if user_signed_in? %>
+              <div class="scores_add">
+	  <%= pop_up_controller "+", 'new', 'awards', :game_id => @game.id if user_signed_in? %>
+  </div>
+	</div>
     </div>
   </div>
 
@@ -142,74 +167,117 @@
     <% if @game.rating %>
       <%= rating_logo(@game.rating) %><br />
     <% end %>
-    <% unless @game.types.empty? %>
-      <% for type in @game.types %>
-        <%= type.name %><%= ", " unless type == @game.types.last %>
-      <% end %><br />
-    <% end %>
-    <%= pop_up "Add type", '/edit?id=' + @game.id.to_s + '&view=add_type' if user_signed_in? %><br />
-    <% unless @game.genres.empty? %>
-      Genre(s):
-      <% for genre in @game.genres %>
-        <%= genre.name %>
+    <div class="right_label">
+      Type:
+    </div>
+    <div class="right_description">
+      <% unless @game.types.empty? %>
+        <% for type in @game.types %>
+          <%= type.name %><%= ", " unless type == @game.types.last %>
+        <% end %>
       <% end %>
-    <% end %>
-    <%= pop_up "Genre(s)", '/edit?id=' + @game.id.to_s + '&view=add_genre' if user_signed_in? %><br />
-    <% if @game.local_players %>
-      Local:<br />
-      <%= @game.local_players %> Player(s)<br />
-      <% if @game.local_multi_modes %>
+      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_type' if user_signed_in? %><br />
+    </div>
+    <div class="right_label">
+      Genre(s):
+    </div>
+    <div class="right_description">
+      <% unless @game.genres.empty? %>
+        <% for genre in @game.genres %>
+          <%= genre.name %><%= ", " unless genre == @game.genres.last %>
+        <% end %>
+      <% end %>
+      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_genre' if user_signed_in? %><br />
+    </div>
+    <div class="right_label">
+      Local:
+    </div>
+    <div class="right_description">
+      <% if @game.local_players %>
+        <%= @game.local_players %> Player(s)<%= ", " if @game.local_multi_modes.coop or @game.local_multi_modes.vs %>
         <% if @game.local_multi_modes.coop %>
-          Co-op<br />
+          Co-op<%= ", " if @game.local_multi_modes.vs %>
         <% end %>
         <% if @game.local_multi_modes.vs %>
-          Vs<br />
+          Vs
         <% end %>
       <% end %>
-    <% end %>
-    <% if @game.online_players %>
-      Online:<br />
-      <% if @game.online_players > 0 %>
-        <%= @game.online_players %> Players<br />
-      <% else %>
-        This game has no online play.<br />
-      <% end %>
-      <% if @game.online_multi_modes %>
+      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
+    </div>
+    <div class="right_label">
+      Online:
+    </div>
+    <div class="right_description">
+      <% if @game.online_players %>
+        <% if @game.online_players > 0 %>
+          <%= @game.online_players %> Players<%= ", " if @game.online_multi_modes.coop or @game.online_multi_modes.vs %>
+        <% else %>
+          Not available
+        <% end %>
         <% if @game.online_multi_modes.coop %>
-          Co-op<br />
+          Co-op<%= ", " if @game.online_multi_modes.vs %>
         <% end %>
         <% if @game.online_multi_modes.vs %>
-          Vs<br />
+          Vs
         <% end %>
       <% end %>
-    <% end %>
-    <%= pop_up "online/local players", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
+      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
+    </div>
     <%= @game.achievements %>
+    <%# Take off when providing the add key people link%>
     <% unless @game.project_leaders.empty? %>
-      Key People:<br />
-      <% for person in @game.industry_people %>
-        <%= person.name %>: <%= person.position %><br />
-      <% end %>
+      <div class="right_label">
+        Key People:
+      </div>
+      <div class="right_description">
+        <% unless @game.project_leaders.empty? %>
+          <% for person in @game.industry_people %>
+            <%= person.name %>: <%= person.position %>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
-    <% unless @game.features.empty? %>
-      Features:<br />
-      <% for feature in @game.features %>
-        <%= feature.description %><br />
+    <div class="right_label">
+      Features:
+    </div>
+    <div class="right_description">
+      <% unless @game.features.empty? %>
+        <% for feature in @game.features %>
+          <%= feature.description %>
+        <% end %>
       <% end %>
-    <% end %>
-    <%= pop_up "Features", '/edit?id=' + @game.id.to_s + '&view=add_features' if user_signed_in? %><br />
-    <% unless @game.specifications.empty? %>
-      Specs:<br />
-      <% for specification in @game.specifications %>
-        <%= specification.description %><br />
+      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_features' if user_signed_in? %><br />
+    </div>    
+    <div class="right_label">
+      Specs:
+    </div>
+    <div class="right_description">
+      <% unless @game.specifications.empty? %>
+        <% for specification in @game.specifications %>
+          <%= specification.description %>
+        <% end %>
       <% end %>
-    <% end %>
-    <%= pop_up "Specs", '/edit?id=' + @game.id.to_s + '&view=add_specs' if user_signed_in? %><br />
+      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_specs' if user_signed_in? %><br />
+    </div>
+    <%# Take off when providing the add key people link%>
     <% unless @game.peripherals.empty? %>
-      Compatible with:<br />
-      <% for peripheral in @game.peripherals %>
-        <%= peripheral.name %><br />
-      <% end %>
+      <div class="right_label">
+        Compatible with:
+      </div>
+      <div class="right_description">
+        <% unless @game.peripherals.empty? %>
+          <% for peripheral in @game.peripherals %>
+            <%= peripheral.name %>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+  window.onload = function() {
+    var height = $('game_display').clientHeight
+    $('right_column').setStyle({ 'height':height+'px' })
+  };
+</script>

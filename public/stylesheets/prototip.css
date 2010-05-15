@@ -110,7 +110,7 @@
 
 /*Custom*/
 .prototip .custom {
-    min-width: 250px;
+    min-width: auto;
     color: #000000;
 }
 .prototip .custom .toolbar {
@@ -120,7 +120,7 @@
 }
 .prototip .custom .title { padding: 5px; }
 .prototip .custom .content {
-    background: #fff;
+    background: #fFF;
     padding: 5px;
 }
 

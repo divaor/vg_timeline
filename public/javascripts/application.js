@@ -1,3 +1,18 @@
+//// Browser detection
+//
+//var nAgt = navigator.userAgent;
+//var browserName  = navigator.appName;
+//var verOffset;
+//
+//if ((verOffset=nAgt.indexOf("Opera"))!=-1)
+//   document.write('<link rel=”stylesheet” href=”/stylesopera.css” type=”text/css”>')
+//else if ((verOffset=nAgt.indexOf("Chrome"))!=-1)
+//   document.write('<link rel=”stylesheet” href=”/styleschrome.css” type=”text/css”>')
+//else if ((verOffset=nAgt.indexOf("Firefox"))!=-1)
+//   document.write('<link rel=”stylesheet” href=”/stylesff.css” type=”text/css”>')
+//
+//// end of browsing detection
+
 function monthFilterPlatform(item, year, limit) {
     spinner(item.className, "Show");
     uncheckMonthFilterAll(item.className, true);

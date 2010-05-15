@@ -509,10 +509,12 @@ div.tooltip_boxart.right {
 
 #right_column {
     background-color: white;
-    display: table;
+    display: block;
     float: right;
-    height: 93%;
-    margin: 10px 55px 10px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 55px;
+    margin-left: 10px;
     padding: 2px;
     width: 200px;
 }
@@ -521,11 +523,28 @@ div.tooltip_boxart.right {
     display: block;
     padding-top: 10px;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
 #left_column, #right_column {
     font-size: 13px;
+}
+
+.right_label {
+    float: left;
+    width: 75px;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.right_description {
+    float: left;
+    width: 110px;
+    padding-right: 5px;
+}
+
+.right_description a {
+    text-decoration: none;
 }
 
 /* Boxart */
@@ -560,7 +579,7 @@ h2.game_show_title {
 td.label {
     font-weight: bold;
     padding-right: 10px;
-    width: 105px;
+    width: 110px;
     vertical-align: top;
 }
 
@@ -568,11 +587,24 @@ td.lab_info {
     width: 250px;
 }
 
-#diff_platforms {
+#diff_platforms_sub{
     position: absolute;
     left: 59%;
     top: 0;
-    margin-top: 60px;
+    margin-top: 63px;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 250px;
+    border: 1px solid gray;
+    background-color: #c9ced7;
+    font-size: 10px;
+}
+
+#diff_platforms{
+    position: absolute;
+    left: 59%;
+    top: 0;
+    margin-top: 38px;
     margin-bottom: 10px;
     padding: 10px;
     width: 250px;
@@ -582,7 +614,7 @@ td.lab_info {
 }
 
 td.subtitle {
-    font-weight: 600;
+    font-weight: bold;
     align: top;
     font-size: 12px;
     width: 70px;
@@ -652,6 +684,137 @@ span.showing {
     background-color: #c9ced7;
     border: 1px solid gray;
 }
+
+#scores_container {
+}
+
+#scores_content {
+	float: left;
+	width: 65%;
+}
+
+#scores_content a, a:hover{
+	color: black;
+}
+
+
+.scores_press {
+	padding-left: 10px;
+	float: left;
+	width: 60%;
+        margin-bottom: 1px;
+}
+
+.scores_press a{
+	color: black;
+}
+
+.scores {
+	float:left;
+	width: 35%;
+	text-align: center;
+        margin-bottom: 1px;
+}
+
+.scores_add {
+	padding-left: 10px;
+	float: left;
+	width: 60%;
+}
+
+.bg_color_red {
+	background-color: #EFC2C2;
+}
+
+.bg_color_lightgray {
+    background-color: #dfdfdf;
+}
+
+.bg_color_gray {
+    background-color: #afafaf;
+}
+
+.bg_color_darkgray {
+    background-color: #7f7f7f;
+}
+
+.red a{
+	color: red;
+}
+
+.yellow a{
+	color: black;
+}
+
+.green a{
+	color: green;
+}
+
+.bg_color_yellow {
+	background-color: #FFF8AF;
+}
+
+.bg_color_green {
+	background-color: #C9EFC2;
+}
+
+#avg_score_container {
+	background-color: white;
+	float: right;
+	margin-top: 0;
+	margin-right: 10px;
+	padding: 1px;
+	border: 1px solid black;
+}
+
+#avg_score {
+	float: right;
+	margin: 3px;
+	width: 75px;
+	height: 75px;
+	line-height: 75px;
+	border: 1px solid black;
+	font-size: 45px;
+	text-align: center;
+}
+
+.centering {
+	vertical-align: middle;
+	color: white; 
+	text-shadow: -1px 0 black, 0 1px black,
+      1px 0 black, 0 -1px black;
+	}
+
+.clear {
+	clear: both;
+}
+
+#award_container {
+	clear: both;
+}
+
+#awards_content {
+	float: left;
+	width: 100%;
+}
+
+.award_press_name {
+	padding-left: 10px;
+	float: left;
+	width: 35%;
+}
+
+.award_description {
+	float: left;
+	width: 55%;
+	padding-right: 10px;
+	font-style: italic;
+}
+
+.award_press_name a{
+	color: black;
+}
+
 
 /* Specs & Features */
 
