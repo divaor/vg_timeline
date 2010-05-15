@@ -63,6 +63,14 @@
         <span class="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %></span>
         <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
       </div>
+      <div id="game_info_completion">
+        <div id="completion_bar">
+          <div id="completion_filled" style="<%= "width: #{@game.completion}%;" %>"></div>
+        </div>
+        <span id="completion_text">
+          <%= "#{@game.completion}%" %>
+        </span>
+      </div>
       <div id="game_info_description">
         <h4>Description</h4>
         <% if @game.description %>
@@ -111,7 +119,7 @@
                     <%=raw pre2 + link_to_unless(g == @game, g.platform.short_name.upcase, game_path(g)) + (g == diff_p.last ? ")" : ", ") %>
                   <% end %>
                 <% else %>
-                  <%=raw "(#{link_to_unless game == @game, game.platform.short_name.upcase, games_path(game)})" %>
+                  <%=raw "(#{link_to_unless game == @game, game.platform.short_name.upcase, game_path(game)})" %>
                 <% end %>
               </span>
               <%= "(unreleased)" if game.release_date > Date.today %><br />

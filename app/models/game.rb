@@ -83,6 +83,29 @@ class Game < ActiveRecord::Base
     Modification.where("modified = true and table_id = ? and modified_id = ?", table.id, self.id).all
   end
 
+  def completion
+    perc = 0
+    values = { 'title' => 10, 'release_date' => 10, 'boxart' => 10,
+      'developer' => 8, 'publisher' => 8, 'platform' => 8, 'description' => 7,
+      'genre' => 7, 'rating' => 7, 'series' => 7, 'players' => 5,
+      'also_on' => 5, 'market' => 4, 'type' => 4 }
+    perc = perc + values['title'] unless main_title.nil?
+    perc = perc + values['release_date'] unless release_date.nil?
+    perc = perc + values['boxart'] unless boxart_file_name.nil?
+    perc = perc + values['developer'] unless developers.empty?
+    perc = perc + values['publisher'] unless publishers.empty?
+    perc = perc + values['platform'] unless platform.nil?
+    perc = perc + values['description'] unless description.nil?
+    perc = perc + values['genre'] unless genres.empty?
+    perc = perc + values['rating'] unless rating.nil?
+    perc = perc + values['series'] unless series.nil?
+    perc = perc + values['players'] unless local_players.nil? and online_players.nil?
+    perc = perc + values['also_on'] unless different_platforms.empty?
+    perc = perc + values['market'] unless market.nil?
+    perc = perc + values['type'] unless types.empty?
+    return perc
+  end
+
   def r_d
     release_date.strftime('%d')
   end
