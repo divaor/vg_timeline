@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  include Paperclip
+
   attr_accessor :boxart_dir
   belongs_to :platform
   belongs_to :game_type
