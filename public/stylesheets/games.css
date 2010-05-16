@@ -405,6 +405,20 @@ div.boxart_links {
   height:0px;
 }
 
+span.bottom_right_image_link {
+    background-color:white;
+    top:80px;
+    left:65px;
+    position:relative;
+}
+
+span.top_right_image_link {
+    background-color:white;
+    top:2px;
+    left:2px;
+    position:relative;
+}
+
 span.boxart_tooltip_link {
   font-size: 10px;
 }
@@ -412,6 +426,13 @@ span.boxart_tooltip_link {
 span.game_view_tooltip_link {
   font-size: 10px;
   margin-right: 10px;
+}
+
+span.bottom_left_image_link {
+    background-color:white;
+    top:80px;
+    position:relative;
+    right:32px;
 }
 
 div.current_month {
@@ -556,8 +577,12 @@ div.tooltip_text {
 
 .right_description {
   float: left;
-  max-width: 110px;
+    width: 110px;
   padding-right: 5px;
+}
+
+.right_description a {
+    text-decoration: none;
 }
 
 /* Boxart */
@@ -713,6 +738,137 @@ span.showing {
   background-color: #c9ced7;
   border: 1px solid gray;
 }
+
+#scores_container {
+}
+
+#scores_content {
+	float: left;
+	width: 65%;
+}
+
+#scores_content a, a:hover{
+	color: black;
+}
+
+
+.scores_press {
+	padding-left: 10px;
+	float: left;
+	width: 60%;
+        margin-bottom: 1px;
+}
+
+.scores_press a{
+	color: black;
+}
+
+.scores {
+	float:left;
+	width: 35%;
+	text-align: center;
+        margin-bottom: 1px;
+}
+
+.scores_add {
+	padding-left: 10px;
+	float: left;
+	width: 60%;
+}
+
+.bg_color_red {
+	background-color: #EFC2C2;
+}
+
+.bg_color_lightgray {
+    background-color: #dfdfdf;
+}
+
+.bg_color_gray {
+    background-color: #afafaf;
+}
+
+.bg_color_darkgray {
+    background-color: #7f7f7f;
+}
+
+.red a{
+	color: red;
+}
+
+.yellow a{
+	color: black;
+}
+
+.green a{
+	color: green;
+}
+
+.bg_color_yellow {
+	background-color: #FFF8AF;
+}
+
+.bg_color_green {
+	background-color: #C9EFC2;
+}
+
+#avg_score_container {
+	background-color: white;
+	float: right;
+	margin-top: 0;
+	margin-right: 10px;
+	padding: 1px;
+	border: 1px solid black;
+}
+
+#avg_score {
+	float: right;
+	margin: 3px;
+	width: 75px;
+	height: 75px;
+	line-height: 75px;
+	border: 1px solid black;
+	font-size: 45px;
+	text-align: center;
+}
+
+.centering {
+	vertical-align: middle;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black,
+      1px 0 black, 0 -1px black;
+	}
+
+.clear {
+	clear: both;
+}
+
+#award_container {
+	clear: both;
+}
+
+#awards_content {
+	float: left;
+	width: 100%;
+}
+
+.award_press_name {
+	padding-left: 10px;
+	float: left;
+	width: 35%;
+}
+
+.award_description {
+	float: left;
+	width: 55%;
+	padding-right: 10px;
+	font-style: italic;
+}
+
+.award_press_name a{
+	color: black;
+}
+
 
 /* Specs & Features */
 

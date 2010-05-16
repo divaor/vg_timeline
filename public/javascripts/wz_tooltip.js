@@ -57,10 +57,10 @@ var TagsToTip	= true		// false or true - if true, HTML elements to be converted 
 
 config. Above			= false		// false or true - tooltip above mousepointer
 //config. BgColor		= '#E2E7FF'	// Background colour (HTML colour value, in quotes)
-config. BgColor			= '#ffffff'
+config. BgColor			= '#C3D9FF'
 config. BgImg			= ''		// Path to background image, none if empty string ''
 //config. BorderColor		= '#003099'
-config. BorderColor		= '#ffffff'
+config. BorderColor		= '#C3D9FF'
 config. BorderStyle		= 'solid'	// Any permitted CSS value, but I recommend 'solid', 'dotted' or 'dashed'
 config. BorderWidth		= 3
 config. BorderRadius            = 0

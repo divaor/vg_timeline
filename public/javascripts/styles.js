@@ -22,7 +22,7 @@ Prototip.Styles = {
   'custom': {
     className: 'custom',
     border: 1,
-    borderColor: 'black',
+    borderColor: '#000',
     radius: 0,
     stem: { height: 12, width: 15 }
   },

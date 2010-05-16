@@ -5,7 +5,7 @@ source 'http://gemcutter.org'
 gem "rails", "3.0.0.beta3"
 
 ## Bundle edge rails:
-#gem "rails", :git => "git://github.com/rails/rails.git"
+# gem "rails", :git => "git://github.com/rails/rails.git"
 
 gem "mysql"
 
@@ -28,5 +28,5 @@ gem "devise", "1.1.rc1"
 gem "gravtastic", :branch => 'master'
 gem "pg"
 
+#gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git', :branch => 'master'
 gem "paperclip", :git => 'http://github.com/JasonKing/paperclip.git', :branch => 'rails3'
-
