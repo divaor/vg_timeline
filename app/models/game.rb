@@ -21,6 +21,7 @@ class Game < ActiveRecord::Base
   has_and_belongs_to_many :peripherals
   has_and_belongs_to_many :specifications
   has_and_belongs_to_many :types
+  has_and_belongs_to_many :characters
   has_and_belongs_to_many :different_markets, :class_name => "Game", :join_table => :different_markets_games, :foreign_key => :different_market_id
   has_and_belongs_to_many :different_platforms, :class_name => "Game", :join_table => :different_platforms_games, :foreign_key => :different_platform_id
   has_many :scores
@@ -175,6 +176,15 @@ class Game < ActiveRecord::Base
     vs = local_multi_modes.vs ? "Vs" : ""
     also = local_multi_modes.coop and local_multi_modes.vs ? " & " : ""
     coop + also + vs
+  end
+
+  def character_name
+    ""
+  end
+
+  def character_name=(name)
+    char = Character.find_or_create_by_name(name.strip) unless name.blank?
+    self.characters << char unless characters.include?(char)
   end
 
   def feature_descriptions

@@ -267,6 +267,10 @@ class GamesController < ApplicationController
         game.update_attribute('series_id', @game.series_id)
       end
       move_boxart(old_game_info, @game)
+      if params[:character]
+        character = Character.find_by_name(params[:game][:character_name])
+        character.update_attributes(params[:character])
+      end
       add_flash = experience_user(5)
       flash[:notice] = "Game succesfully updated." + add_flash
       redirect_to game_path(@game)

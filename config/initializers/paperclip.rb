@@ -20,3 +20,11 @@ Paperclip.interpolates :release_month do |attachment, style|
   end
   month
 end
+
+Paperclip.interpolates :character_picture do |attachment, style|
+  name = attachment.instance.name
+  name = name.downcase
+  name = name.tr("\'\"", "")
+  name = name.tr('#.:;-/\\', " ")
+  name = name.split.join('_')
+end

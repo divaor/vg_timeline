@@ -1,0 +1,16 @@
+class Character < ActiveRecord::Base
+  include Paperclip
+  
+  has_and_belongs_to_many :games
+
+  has_attached_file :picture, :storage => :s3, :s3_credentials => "#{Rails.root}/config/s3.yml", :url => "/images/characters/:character_picture", :styles => { :medium => "400x400>", :thumb => "120x120>", :mini => "50x50>" }, :path => "/images/characters/:character_picture"
+
+  def game
+    games.last.id
+  end
+
+  def game=(game_id)
+    gm = Game.find(game_id) unless game_id.blank?
+    self.games << gm unless games.include?(gm)
+  end
+end

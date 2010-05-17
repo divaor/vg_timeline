@@ -4,9 +4,10 @@
       <div id="boxart_medium_container">
         <%= box_logo(@game, :medium) %>
       </div>
+
       <div id="basic_info_container">
         <h3 class="game_show_title"><%= @game.main_title %></h3>
-        <% if @game.sub_title != "" %>
+        <% unless @game.sub_title.empty? %>
           <h2 class="game_show_title"><%= @game.sub_title %></h2>
         <% end %>
         <table cellpadding="0">
@@ -65,12 +66,26 @@
       </div>
 
       <div id="game_info_completion">
+        <h4>Game Info Completion</h4><%# TODO change wording %>
         <div id="completion_bar">
           <div id="completion_filled" style="<%= "width: #{@game.completion}%;" %>"></div>
         </div>
         <span id="completion_text">
           <%= "#{@game.completion}%" %>
         </span>
+      </div>
+
+      <div id="game_info_characters">
+        <div id="characters_list">
+          <h4>Characters</h4>
+          <% i = 1 %>
+          <% for character in @game.characters %>
+            <%= "#{i} - #{character.name}" %>
+            <%= image_tag(character.picture.url(:mini), :alt => character.name, :name => character.name) %><br />
+            <% i = i + 1 %>
+          <% end %>
+          <%= pop_up_controller "+", 'new', 'characters', :game_id => @game.id if user_signed_in? %>
+        </div>
       </div>
 
       <div id="game_info_description">
@@ -83,10 +98,10 @@
           <%= pop_up "Add Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
         <% end %>
       </div>
+
       <div id="game_series" class="round">
         <% series = @game.series %>
         <% unless series.nil? %>
-  <%# games_in_series = series.games.sort { |a,b| a.release_date <=> b.release_date } %>
           <h4><%= series.name %> series</h4>
           <%= pop_up "Edit Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
           <%= pop_up "Add new game to series", new_game_path(:series => @game.series.id) if user_signed_in? %>
@@ -132,7 +147,9 @@
           <%= pop_up "Add Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
         <% end %>
       </div>
+
       <div id="game_info_scores" class="round">
+
         <div id="scores_container">
           <h4>Scores</h4>
           <% scores = @game.scores %>
@@ -175,6 +192,7 @@
             <%= pop_up_controller "+", 'new', 'scores', :game_id => @game.id if user_signed_in? %>
           </div>
         </div>
+
         <div id="award_container">
           <h4>Awards</h4>
           <div id="awards_content">
