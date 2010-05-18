@@ -6,9 +6,10 @@
   </div>
   <div class="field">
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= text_field_with_auto_complete :character, :name, {}, { :url => characters_path(), :method => :get, :param_name => 'search' } %>
   </div>
   <div class="field">
+    <%= f.label :picture %>
     <%= f.file_field :picture %>
   </div>
   <%= f.submit "Submit" %>

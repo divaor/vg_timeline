@@ -275,7 +275,7 @@ class Game < ActiveRecord::Base
       if preq
         preq.update_attribute(:sequel, self)
         preq.update_attribute(:series_id, series_id) if series_id
-        self.prequel = preq # TODO have game be assigned to prequel as sequel
+        self.prequel = preq
       end
     end
   end
@@ -292,7 +292,7 @@ class Game < ActiveRecord::Base
       if seq
         seq.update_attribute(:prequel, self)
         seq.update_attribute(:series_id, series_id) if series_id
-        self.sequel = seq # TODO have game be assigned to sequel as prequel
+        self.sequel = seq
       end
     end
   end

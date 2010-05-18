@@ -1,4 +1,14 @@
 class CharactersController < ApplicationController
+
+
+  def index
+    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search].downcase}%")
+    @search = params[:search]
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def new
     @character = Character.new
     @level = params[:lv]

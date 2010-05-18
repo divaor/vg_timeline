@@ -3,7 +3,7 @@ class Character < ActiveRecord::Base
   
   has_and_belongs_to_many :games
 
-  has_attached_file :picture, :storage => :s3, :s3_credentials => "#{Rails.root}/config/s3.yml", :url => "/images/characters/:character_picture", :styles => { :medium => "400x400>", :thumb => "120x120>", :mini => "50x50>" }, :path => "/images/characters/:character_picture"
+  has_attached_file :picture, :storage => :s3, :s3_credentials => "#{Rails.root}/config/s3.yml", :url => "/images/characters/:style/:character_picture", :styles => { :medium => "400x400>", :thumb => "120x120>", :mini => "50x50>" }, :path => "/images/characters/:style/:character_picture"
 
   def game
     games.last.id
