@@ -3,3 +3,12 @@ $('lev<%= @level %>').insert('<div class="window_close_block"><%= link_to(image_
 $('lev<%= @level %>').insert('<%= escape_javascript(render @view) %>');
 Effect.Appear('lev<%= @level %>', { duration: 0.3 });
 Effect.Appear('trans<%= @level %>', { duration: 0.3, to: 0.3 });
+$('lev<%= @level %>').addClassName('focus');
+var i = 0;
+Event.observe(window, 'mouseover', function(event) {
+  if (i == 0) {
+    i++;
+    $$('.focus .fcs').first().focus();
+    $$('.focus .fcs').first().select();
+  }
+});

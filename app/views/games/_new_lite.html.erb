@@ -16,7 +16,7 @@
   </div>
   <div class="field">
     <%= f.label :platform_name, "Platform" %><br />
-    <%= text_field_with_auto_complete :game, :platform_name, {}, { :url => platforms_path(), :method => :get, :param_name => 'search' } %>
+    <%= text_field_with_auto_complete :game, :platform_name, { :class => 'fcs' }, { :url => platforms_path(), :method => :get, :param_name => 'search' } %>
   </div>
   <div id="publishers">
     <div class="field">

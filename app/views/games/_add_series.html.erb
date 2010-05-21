@@ -2,7 +2,7 @@
 
 <%= form_for @game do |f| %>
 <div class="field">
-  <%= text_field_with_auto_complete :game, :series_name, {}, { :url => series_index_path(), :method => :get, :param_name => 'search' } %>
+  <%= text_field_with_auto_complete :game, :series_name, { :class => 'fcs' }, { :url => series_index_path(), :method => :get, :param_name => 'search' } %>
 </div>
 <%= f.submit "Submit" %>
 <% end %>

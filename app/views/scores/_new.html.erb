@@ -6,7 +6,7 @@
   </div>
   <div class="field">
     <%= f.label :press_name, "Press name: " %>
-    <%= text_field_with_auto_complete :score, :press_name, { :size => 20 }, { :url => press_index_path(), :method => :get, :param_name => 'search' } %>
+    <%= text_field_with_auto_complete :score, :press_name, { :size => 20, :class => 'fcs' }, { :url => press_index_path(), :method => :get, :param_name => 'search' } %>
   </div>
   <div class="field">
     <%= f.label :score, "Score: " %>

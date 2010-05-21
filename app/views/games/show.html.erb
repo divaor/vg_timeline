@@ -82,9 +82,8 @@
           <h4>Characters</h4>
           <% i = 1 %>
           <% for character in @game.characters %>
-            <%#= "#{character.name}" %>
-            <%# TODO Tooltip to display character info %>
-          <%= image_tag(character.picture.url(:mini), :alt => character.name, :name => character.name, :onmouseover => "new Tip(this, '#{character.name}', { width: 'auto' })") %>
+  <%# TODO Tooltip to display character info %>
+          <%= pop_up_controller(image_tag(character.picture.url(:mini), :alt => character.name, :name => character.name, :onmouseover => "new Tip(this, '#{character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.id) if user_signed_in? %>
             <% i = i + 1 %>
           <% end %>
           <%= pop_up_controller "+", 'new', 'characters', :game_id => @game.id if user_signed_in? %>

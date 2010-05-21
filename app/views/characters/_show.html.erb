@@ -1,0 +1,9 @@
+<h2>
+  <%= image_tag(@character.picture.url(:thumb), :alt => @character.name) %>
+</h2>
+<div id="recent_games">
+  <h4>Games:</h4>
+  <% for game in @character.games %>
+    <%= link_to game.full_title_colon_limit, game_path(game) %><br />
+  <% end %>
+</div>

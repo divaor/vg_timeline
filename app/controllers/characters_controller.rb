@@ -9,6 +9,15 @@ class CharactersController < ApplicationController
     end
   end
 
+  def show
+    @character = Character.find(params[:id])
+    @level = params[:lv]
+    @view = params[:action]
+    respond_to do |format|
+      format.js { render 'pop_up' }
+    end
+  end
+
   def new
     @character = Character.new
     @level = params[:lv]
@@ -23,8 +32,7 @@ class CharactersController < ApplicationController
   def create
     @character = Character.find_by_name(params[:character][:name])
     if @character
-      @character.update_attributes(:game =>  params[:character][:game],
-        :picture => params[:character][:picture])
+      @character.update_attribute(:game, params[:character][:game])
     else
       @character = Character.new(params[:character])
       if @character.save
