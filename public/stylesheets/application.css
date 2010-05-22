@@ -452,3 +452,53 @@ span.title_top_filter {
     font-size: 14px;
     padding-top: 13px;
 }
+
+div.form_container {
+    background-color: #E5E5E5;
+    border: 2px solid black;
+    display: table;
+    width: 1196px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+div.form_header {
+    clear: both;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+div.form_content {
+    background-color: #c9ced7;
+    border: 1px solid silver;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    width: 50%;
+}
+
+div.form_label {
+    float: left;
+    width: 48%;
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+div.form_text {
+    float: right;
+    width: 48%;
+    padding-bottom: 10px;
+}
+
+div.form_submit {
+    clear:both;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.form_links {
+    text-align: right;
+}
