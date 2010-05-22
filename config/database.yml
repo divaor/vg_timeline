@@ -21,7 +21,7 @@ development:
   database: vg_timeline_development
   pool: 5
   username: root
-  password: 13579-
+  password: 121784
   socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as "test" will be erased and
