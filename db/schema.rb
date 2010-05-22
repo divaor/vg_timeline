@@ -96,12 +96,6 @@ ActiveRecord::Schema.define(:version => 20100522020333) do
     t.integer "platform_id"
   end
 
-  create_table "game_types", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "games", :force => true do |t|
     t.string   "main_title",                                 :null => false
     t.string   "sub_title"
@@ -189,6 +183,8 @@ ActiveRecord::Schema.define(:version => 20100522020333) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "levels", ["level"], :name => "level", :unique => true
 
   create_table "markets", :force => true do |t|
     t.string   "name",         :null => false
@@ -328,9 +324,21 @@ ActiveRecord::Schema.define(:version => 20100522020333) do
   end
 
   create_table "tables", :force => true do |t|
-    t.string    "name",       :limit => 100, :null => false
-    t.timestamp "created_at",                :null => false
-    t.timestamp "updated_at",                :null => false
+    t.string   "table_catalog"
+    t.string   "name",                         :null => false
+    t.string   "table_schema"
+    t.string   "table_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "table_type"
+    t.string   "self_referencing_column_name"
+    t.string   "reference_generation"
+    t.string   "user_defined_type_catalog"
+    t.string   "user_defined_type_schema"
+    t.string   "user_defined_type_name"
+    t.string   "is_insertable_into"
+    t.string   "is_typed"
+    t.string   "commit_action"
   end
 
   create_table "types", :force => true do |t|
@@ -360,5 +368,10 @@ ActiveRecord::Schema.define(:version => 20100522020333) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["username"], :name => "Index_users_on_username", :unique => true
 
 end
