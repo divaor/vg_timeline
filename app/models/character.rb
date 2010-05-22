@@ -1,7 +1,8 @@
 class Character < ActiveRecord::Base
   include Paperclip
   
-  has_and_belongs_to_many :games
+  has_many :characters_games
+  has_many :games, :through => :characters_games
 
   has_attached_file :picture, :storage => :s3, :s3_credentials => "#{Rails.root}/config/s3.yml", :url => "/images/characters/:style/:character_picture", :styles => { :medium => "400x400>", :thumb => "120x120>", :mini => "50x50>" }, :path => "/images/characters/:style/:character_picture"
 

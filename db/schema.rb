@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100517051636) do
+ActiveRecord::Schema.define(:version => 20100522020333) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -32,14 +32,15 @@ ActiveRecord::Schema.define(:version => 20100517051636) do
 
   create_table "characters", :force => true do |t|
     t.string   "name"
-    t.string   "picture_filename"
+    t.string   "picture_file_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "characters_games", :id => false, :force => true do |t|
+  create_table "characters_games", :force => true do |t|
     t.integer "character_id"
     t.integer "game_id"
+    t.boolean "playable",     :default => true, :null => false
   end
 
   create_table "composers_games", :id => false, :force => true do |t|

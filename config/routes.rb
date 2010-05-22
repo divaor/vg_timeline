@@ -1,4 +1,8 @@
 VgTimeline::Application.routes.draw do |map|
+  get "characters_games/new"
+
+  get "characters_games/create"
+
   get "characters/new"
 
   get "characters/create"
@@ -28,7 +32,9 @@ VgTimeline::Application.routes.draw do |map|
   devise_for :users
 
   #  constraints :host => /localhost/ do
-  resources :games, :platforms, :developers, :publishers, :series, :press, :scores, :awards, :genres, :features, :specifications, :characters
+  resources :games, :platforms, :developers, :publishers, :series, :press,
+    :scores, :awards, :genres, :features, :specifications, :characters,
+    :characters_games
   match "/:year" => "games#index", :as => :year, :constraints => { :year => /\d{4}/ }
   match "/list" => "games#list", :as => :games_list
   match "/recent" => "games#recent", :as => :games_recent

@@ -1,0 +1,14 @@
+$('lev<%= @level %>').update("");
+$('lev<%= @level %>').insert('<div class="window_close_block"><%= link_to(image_tag("window-close.png", :class => "window_close"), { :controller => 'games', :action => 'close_pop', :level => @level }, :remote => true) %></div>');
+$('lev<%= @level %>').insert('<%= escape_javascript(render @view) %>');
+Effect.Appear('lev<%= @level %>', { duration: 0.3 });
+Effect.Appear('trans<%= @level %>', { duration: 0.3, to: 0.3 });
+$('lev<%= @level %>').addClassName('focus');
+var i = 0;
+Event.observe(window, 'mouseover', function(event) {
+  if (i == 0) {
+    i++;
+    $$('.focus .fcs').first().focus();
+    $$('.focus .fcs').first().select();
+  }
+});

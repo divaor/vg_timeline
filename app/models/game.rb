@@ -21,11 +21,12 @@ class Game < ActiveRecord::Base
   has_and_belongs_to_many :peripherals
   has_and_belongs_to_many :specifications
   has_and_belongs_to_many :types
-  has_and_belongs_to_many :characters
   has_and_belongs_to_many :different_markets, :class_name => "Game", :join_table => :different_markets_games, :foreign_key => :different_market_id
   has_and_belongs_to_many :different_platforms, :class_name => "Game", :join_table => :different_platforms_games, :foreign_key => :different_platform_id
   has_many :scores
   has_many :press, :through => :scores
+  has_many :characters_games
+  has_many :characters, :through => :characters_games
   has_many :project_leaders
   has_many :industry_people, :through => :project_leaders
   has_many :awards
@@ -63,7 +64,7 @@ class Game < ActiveRecord::Base
     full_title_colon
   end
 
-  def find_by_full_title
+  def series_list_by_full_title
     games_titles = []
     games = []
     for game in self.series.games
@@ -74,6 +75,15 @@ class Game < ActiveRecord::Base
     end if self.series
     
     games.sort { |a, b| b.release_date <=> a.release_date}
+  end
+
+  def get_characters_type
+    characters_type = {}
+    playable_characters = characters_games.select { |a| a.playable == true }
+    non_playable_characters = characters_games.select { |a| a.playable == false}
+    characters_type['playable'] = playable_characters
+    characters_type['non_playable'] = non_playable_characters
+    return characters_type
   end
 
   def added_by

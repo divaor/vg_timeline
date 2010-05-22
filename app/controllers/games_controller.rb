@@ -79,7 +79,8 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @game.update_attribute('hits', @game.hits += 1)
-    @series_games = @game.find_by_full_title
+    @characters = @game.get_characters_type
+    @series_games = @game.series_list_by_full_title
     @title = @game.full_title_limit
   end
 

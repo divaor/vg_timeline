@@ -1,0 +1,20 @@
+<h2>Character</h2>
+
+<%= form_for(@characters_game, :html => { :multipart => true }) do |f| %>
+  <div class="field">
+    <%= f.hidden_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %>
+    <%= text_field_with_auto_complete :characters_game, :character_name, { :class => 'fcs' }, { :url => characters_path(), :method => :get, :param_name => 'search' } %>
+  </div>
+  <div>
+    <%= f.check_box :playable %>
+    <%= f.label :playable %>
+  </div>
+  <div class="field">
+    <%= f.label :picture %>
+    <%= file_field :character, :picture %>
+  </div>
+  <%= f.submit "Submit" %>
+<% end %>
