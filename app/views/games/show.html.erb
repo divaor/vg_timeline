@@ -66,34 +66,18 @@
           </td>
         </tr>
       </table>
-      <span class="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %></span>
-      <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
-    </div>
-
-    <!-- GAME INFO COMPLETION -->
-    <div id="game_info_completion">
-      <h4>Game Info Completion</h4><%# TODO change wording %>
-      <div id="completion_bar">
-        <div id="completion_filled" style="<%= "width: #{@game.completion}%;" %>"></div>
+      <!-- GAME INFO COMPLETION -->
+      <div id="game_info_completion">
+        <span id="completion_label">Game Info Progress</span><%# TODO change wording %>
+        <div id="completion_bar">
+          <div id="completion_filled" style="<%= "width: #{@game.completion}%;" %>"></div>
+        </div>
+        <span id="completion_text">
+          <%= "#{@game.completion}%" %>
+        </span>
       </div>
-      <span id="completion_text">
-        <%= "#{@game.completion}%" %>
-      </span>
-    </div>
-
-    <!-- CHARACTERS -->
-    <div id="game_info_characters">
-      <div id="characters_list">
-        <h4>Characters</h4>
-        <h5>Playable:</h5>
-        <% for character in @characters['playable'] %>
-          <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) if user_signed_in? %>
-        <% end %>
-        <h5>Non-playable:</h5>
-        <% for character in @characters['non_playable'] %>
-          <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) if user_signed_in? %>
-        <% end %>
-        <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id if user_signed_in? %>
+      <div id="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %>
+      <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
       </div>
     </div>
 
@@ -159,6 +143,22 @@
       <% end %>
     </div>
 
+    <!-- CHARACTERS -->
+    <div id="game_info_characters" class="round">
+      <div id="characters_list">
+        <h4>Characters</h4>
+        <h5>Playable:</h5>
+        <% for character in @characters['playable'] %>
+          <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) if user_signed_in? %>
+        <% end %>
+        <h5>Non-playable:</h5>
+        <% for character in @characters['non_playable'] %>
+          <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) if user_signed_in? %>
+        <% end %>
+        <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id if user_signed_in? %>
+      </div>
+    </div>
+
     <!-- SCORES & AWARDS -->
     <div id="game_info_scores" class="round">
 
@@ -177,10 +177,10 @@
               <% else %>
                 <% color = 'bg_color_gray' %>
               <% end %>
-              <div class="scores_press">
+              <div class="scores_press round_left <%= color %>">
                 <%= link_to score.press.name, score.press.url, :target => '_blank' %>
               </div>
-              <div class="scores round <%= color %>">
+              <div class="scores round_right <%= color %>">
                 <%= link_to score.score, score.url, :target => '_blank' %>
               </div>
               <% count += 1 %>

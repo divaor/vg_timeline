@@ -638,19 +638,29 @@ td.lab_info {
 
 td.subtitle {
   font-weight: bold;
-  align: top;
+  vertical-align: top;
   font-size: 12px;
   width: 70px;
 }
 
 td.platforms {
-  width: 150px;
+  width: 150p;
+}
+
+div#new_game {
+    clear: both;
 }
 
 /* Completion */
 
 #game_info_completion {
-  margin-top: 10px;
+  float: left;
+  width: 40%;
+  padding-top: 30px;
+}
+
+#completion_label {
+    float: left;
 }
 
 div#completion_bar {
@@ -663,7 +673,7 @@ div#completion_bar {
 }
 
 div#completion_filled {
-  background-color: lightBlue;
+  background-color: #C3D9FF;
   width: 72%;
   height: 10px;
 }
@@ -675,13 +685,21 @@ span#completion_text {
 
 /* Characters */
 
+#game_info_characters {
+    float: right;
+    padding: 10px 14px 10px 13px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 44%;
+    background-color: #c9ced7;
+    border: 1px solid gray;
+}
+
 
 
 /* Description */
 
-#game_info_description, #game_info_completion,
-#game_info_characters {
-  padding: 10px;
+#game_info_description {
   clear: both;
   padding: 10px 14px 10px 13px;
   text-align: justify;
@@ -731,7 +749,7 @@ span.showing {
 #game_info_scores {
   margin-left: 10px;
   margin-bottom: 10px;
-  float: left;
+  float: right;
   padding: 10px 14px 10px 13px;
   width: 44%;
   background-color: #c9ced7;
@@ -776,7 +794,7 @@ span.showing {
 }
 
 .bg_color_red {
-	background-color: #EFC2C2;
+    background-color: #EFC2C2;
 }
 
 .bg_color_lightgray {
@@ -789,18 +807,6 @@ span.showing {
 
 .bg_color_darkgray {
     background-color: #7f7f7f;
-}
-
-.red a{
-	color: red;
-}
-
-.yellow a{
-	color: black;
-}
-
-.green a{
-	color: green;
 }
 
 .bg_color_yellow {
