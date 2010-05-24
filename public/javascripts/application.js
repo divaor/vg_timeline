@@ -13,19 +13,86 @@
 //
 //// end of browsing detection
 
-Event.observe(window, 'load', function(event) {
-  if($('game_display')) {
-    if (Prototype.Browser.WebKit)
-      $('game_display').setStyle({
+Event.observe(window, 'load', function() {
+  var gameDisp = $('game_display')
+  if(gameDisp) {
+    // Set width to game display on browsers that make it thinner
+    if (gameDisp.clientWidth < 1196)
+      gameDisp.setStyle({
         'width': '100%'
       });
 
     // Set height of right column in game info view
-    var height = $('game_display').clientHeight
+    var height = gameDisp.clientHeight
     $('right_column').setStyle({
       'height': (height - 24)+'px'
     })
   }
+});
+
+// Ajax request loading
+document.observe("ajax:loading", function(event) {
+  if(event.target.tagName.toLowerCase() != 'form') {
+    var href = event.target.readAttribute('href');
+    var lv = href.charAt(href.indexOf('lv=') + 3);
+    $('lev'+lv).update("");
+    $('lev'+lv).insert('<h4>Loading...</h4>');
+    Effect.Appear('lev'+lv, {
+      duration: 0.3
+    });
+    Effect.Appear('trans'+lv, {
+      duration: 0.3,
+      to: 0.3
+    });
+  }
+});
+
+// Ajax request complete
+document.observe("ajax:complete", function(event) {
+  if(event.target.tagName.toLowerCase() != 'form') {
+    var focus = $$('.focus .fcs').first();
+    if(focus) {
+      focus.focus();
+      focus.select();
+    }
+
+    // Close pop up window
+    var close = $('window_close');
+    if(close){
+      close.observe('click', function() {
+        var lev = close.ancestors()[1];
+        var trans = $('trans' + lev.readAttribute('id').charAt(3));
+        new Effect.Fade(lev, {
+          duration: 0.3
+        });
+        new Effect.Fade(trans, {
+          duration: 0.3
+        });
+        lev.removeClassName('focus');
+        lev.update('');
+      });
+    }
+  }
+
+  var char_pic = $('character_picture');
+  if(char_pic) {
+    char_pic.observe('change', function() {
+      $('new_characters_game').setAttribute('data-remote', '');
+    })
+  }
+});
+
+// Ajax request failure
+document.observe('ajax:failure', function(event) {
+  alert('Whoops, something went wrong!!!');
+  var href = event.target.readAttribute('href');
+  var lv = href.charAt(href.indexOf('lv=') + 3);
+  new Effect.Fade('lev'+lv, {
+    duration: 0.3
+  });
+  new Effect.Fade('trans'+lv, {
+    duration: 0.3
+  });
 });
 
 function monthFilterPlatform(item, year, limit) {

@@ -11,15 +11,26 @@
 
     <!-- BASIC INFO -->
     <div id="basic_info_container">
+
+      <!-- NAME -->
       <h3 class="game_show_title"><%= @game.main_title %></h3>
       <% unless @game.sub_title.empty? %>
         <h2 class="game_show_title"><%= @game.sub_title %></h2>
       <% end %>
+
+
+      <!-- PLATFORM, REL DATE, DEVELOPER, PUBLISHER AND ALSO ON -->
       <table cellpadding="0">
+        
+        <!-- PLATFORM AND ALSO ON -->
         <tr>
           <td class="label">Platform:</td>
           <td>
+
+            <!-- PLATFORM -->
             <%= link_to @game.platform.name, '#' %>
+
+            <!-- ALSO ON -->
             <% unless @game.different_platforms.empty? %>
               <div id="diff_platforms" class="round <%= @game.sub_title.empty? ? "" : " sub" %>">
                 <table>
@@ -29,7 +40,7 @@
                     </td>
                     <td class="platforms">
                       <% for diff_platform in @game.different_platforms %>
-                        <%= link_to(diff_platform.platform.short_name.upcase, game_path(diff_platform)) + (diff_platform == @game.different_platforms.last ? "" : ", ") %>
+                        <%= link_to(diff_platform.platform.short_name.upcase, game_path(diff_platform), :onmouseover => "new Tip(this, '#{diff_platform.platform.name}', { width: 'auto' });") + (diff_platform == @game.different_platforms.last ? "" : ", ") %>
                       <% end %>
                     </td>
                   </tr>
@@ -45,10 +56,14 @@
             <% end %>
           </td>
         </tr>
+
+        <!-- RELEASE DATE -->
         <tr>
           <td class="label">Release Date:</td>
           <td><%= link_to @game.release_date, year_path(@game.r_y) %></td>
         </tr>
+
+        <!-- DEVELOPER -->
         <tr>
           <td class="label">Developed by:</td>
           <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
@@ -57,6 +72,8 @@
             <% end %>
           </td>
         </tr>
+
+        <!-- PUBLISHER -->
         <tr>
           <td class="label">Published by:</td>
           <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
@@ -66,6 +83,7 @@
           </td>
         </tr>
       </table>
+
       <!-- GAME INFO COMPLETION -->
       <div id="game_info_completion">
         <span id="completion_label">Game Info Progress</span><%# TODO change wording %>
@@ -76,8 +94,11 @@
           <%= "#{@game.completion}%" %>
         </span>
       </div>
-      <div id="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %>
-      <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
+
+      <!-- ADD & EDIT GAME LINKS -->
+      <div id="new_game">
+        <%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %>
+        <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
       </div>
     </div>
 
@@ -118,24 +139,7 @@
         </div>
         <div id="series_list">
           <h5>Full List:</h5>
-          <% for game in @series_games %>
-            <%= game.r_y %> -
-            <span<%= " class=showing" if game == @game %>><%= game.full_title_colon_limit %></span>
-            <span>
-              <% diff_p = game.different_platforms %>
-              <% pre = raw "(" + link_to_unless(game == @game, game.platform.short_name.upcase, game_path(game)) %>
-              <% pre = pre + ", " unless diff_p.empty? %>
-              <% unless diff_p.empty? %>
-                <% diff_p.each do |g| %>
-                  <% pre2 = g == diff_p.first ? pre : "" %>
-                  <%=raw pre2 + link_to_unless(g == @game, g.platform.short_name.upcase, game_path(g)) + (g == diff_p.last ? ")" : ", ") %>
-                <% end %>
-              <% else %>
-                <%=raw "(#{link_to_unless game == @game, game.platform.short_name.upcase, game_path(game)})" %>
-              <% end %>
-            </span>
-            <%= "(unreleased)" if game.release_date > Date.today %><br />
-          <% end %>
+          <%= games_list(@series_games, :gm => @game) %>
         </div>
       <% else %>
         <h4>Series</h4>
@@ -145,17 +149,25 @@
 
     <!-- CHARACTERS -->
     <div id="game_info_characters" class="round">
+
       <div id="characters_list">
         <h4>Characters</h4>
+
         <h5>Playable:</h5>
-        <% for character in @characters['playable'] %>
-          <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) if user_signed_in? %>
-        <% end %>
+        <div id="characters_list_playable">
+          <% for character in @characters['playable'] %>
+            <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) %>
+          <% end %>
+        </div>
+
         <h5>Non-playable:</h5>
-        <% for character in @characters['non_playable'] %>
-          <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) if user_signed_in? %>
-        <% end %>
-        <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id if user_signed_in? %>
+        <div id="characters_list_nonplayable">
+          <% for character in @characters['non_playable'] %>
+            <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) %>
+          <% end %>
+        </div>
+
+        <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id, :tip => "Add Character" if user_signed_in? %>
       </div>
     </div>
 

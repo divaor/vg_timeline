@@ -744,6 +744,11 @@ span.showing {
   float: left;
 }
 
+.list_series_name {
+  display: block;
+  font-weight: bold;
+}
+
 /* Scores */
 
 #game_info_scores {

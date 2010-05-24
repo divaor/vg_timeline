@@ -1,6 +1,6 @@
 <h2>Character</h2>
 
-<%= form_for(@characters_game, :html => { :multipart => true }) do |f| %>
+<%= form_for(@characters_game, :html => { :multipart => true, :remote => true }) do |f| %>
   <div class="field">
     <%= f.hidden_field :game_id %>
   </div>

@@ -16,7 +16,10 @@ class CharactersGamesController < ApplicationController
       @characters_game = CharactersGame.where("game_id = ? AND character_id = ?", params[:characters_game][:game_id], @character.id).first
       if @characters_game
         @characters_game.update_attributes(params[:characters_game])
-        redirect_to game_path(params[:characters_game][:game_id])
+        respond_to do |format|
+          format.js
+          format.html { redirect_to game_path(params[:characters_game][:game_id]) }
+        end
         return
       end
     end
@@ -27,7 +30,10 @@ class CharactersGamesController < ApplicationController
     else
       flash[:alert] = "Could not add character."
     end
-    redirect_to game_path(params[:characters_game][:game_id])
+    respond_to do |format|
+      format.js
+      format.html { redirect_to game_path(params[:characters_game][:game_id]) }
+    end
   end
 
 end
