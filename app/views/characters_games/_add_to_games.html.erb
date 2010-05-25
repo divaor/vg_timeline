@@ -1,11 +1,13 @@
 <h3>Does this character appear in any of these games?</h3>
 
-<%= form_tag 'add_to_games', :remote => true do |f| %>
-  <%= hidden_field_tag :character, @characters_game.character_id %>
-  <% for game in @series_games_characters %>
-    <label><%= game.full_title_colon_limit + "(#{game.platform.short_name.upcase})" %></label>
-    <%= check_box game.id, :appears %> Yes
-    <%= check_box game.id, :playable, :checked => @characters_game.playable %> Playable<br />
+<div class="inner_scroll">
+  <%= form_tag 'add_to_games', :remote => true do |f| %>
+    <%= hidden_field_tag :character, @characters_game.character_id %>
+    <% for game in @series_games_characters %>
+      <label><%= game.full_title_colon_limit + "(#{game.platform.short_name.upcase})" %></label>
+      <%= check_box game.id, :appears %> Yes
+      <%= check_box game.id, :playable, :checked => @characters_game.playable %> Playable<br />
+    <% end %>
+    <%= submit_tag "Submit" %>
   <% end %>
-  <%= submit_tag "Submit" %>
-<% end %>
+</div>

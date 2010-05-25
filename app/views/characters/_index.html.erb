@@ -1,0 +1,16 @@
+<h2>Characters:</h2>
+
+<div class="inner_scroll">
+  <table>
+    <tr>
+      <th>Name</th>
+      <th># of games</th>
+    </tr>
+    <% for character in @characters %>
+      <tr>
+        <td><%= pop_up_controller character.name, 'show', 'characters', :id => character.id %></td>
+        <td><%= "#{character.games.count} games" %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

@@ -2,10 +2,20 @@ class CharactersController < ApplicationController
 
 
   def index
-    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search].downcase}%")
-    @search = params[:search]
-    respond_to do |format|
-      format.js
+    if params[:search]
+      @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search].downcase}%")
+      @search = params[:search]
+      respond_to do |format|
+        format.js
+      end
+    else
+      @characters = Character.all
+      @characters.sort! { |a, b| b.games.count <=> a.games.count }
+      @level = params[:lv]
+      @view = params[:action]
+      respond_to do |format|
+        format.js { render 'pop_up' }
+      end
     end
   end
 
