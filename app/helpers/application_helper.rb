@@ -135,4 +135,12 @@ module ApplicationHelper
     end
     raw(output)
   end
+
+  def characters_list(characters_games)
+    list = ""
+    for characters_game in characters_games
+      list += pop_up_controller(image_tag(characters_game.character.picture.url(:mini), :alt => characters_game.character.name, :name => characters_game.character.name, :onmouseover => "new Tip(this, '#{characters_game.character.name}', { width: 'auto' })"), 'show', 'characters', :id => characters_game.character.id)
+    end
+    return raw list
+  end
 end

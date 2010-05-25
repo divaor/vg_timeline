@@ -284,6 +284,20 @@ class GamesController < ApplicationController
     end
   end
 
+  def add_to_games
+    params.each do |key, value|
+      if key.to_i > 0
+        if value[:appears] == '1'
+          @characters_game = CharactersGame.new(
+            :character_id => params[:character], :game_id => key,
+            :playable => value[:playable]
+          )
+          @characters_game.save
+        end
+      end
+    end
+  end
+
   def show_game_info
     @game = Game.find(params[:id])
     x_coord = params[:xcoord]

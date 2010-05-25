@@ -155,16 +155,12 @@
 
         <h5>Playable:</h5>
         <div id="characters_list_playable">
-          <% for character in @characters['playable'] %>
-            <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) %>
-          <% end %>
+          <%= characters_list(@characters['playable']) %>
         </div>
 
         <h5>Non-playable:</h5>
         <div id="characters_list_nonplayable">
-          <% for character in @characters['non_playable'] %>
-            <%= pop_up_controller(image_tag(character.character.picture.url(:mini), :alt => character.character.name, :name => character.character.name, :onmouseover => "new Tip(this, '#{character.character.name}', { width: 'auto' })"), 'show', 'characters', :id => character.character.id) %>
-          <% end %>
+          <%= characters_list(@characters['nonplayable']) %>
         </div>
 
         <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id, :tip => "Add Character" if user_signed_in? %>

@@ -58,7 +58,7 @@ document.observe("ajax:complete", function(event) {
 
     // Close pop up window
     var close = $('window_close');
-    if(close){
+    if(close) {
       close.observe('click', function() {
         var lev = close.ancestors()[1];
         var trans = $('trans' + lev.readAttribute('id').charAt(3));

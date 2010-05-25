@@ -42,6 +42,7 @@ VgTimeline::Application.routes.draw do |map|
   match "publishers(/:action)" => "publishers#action"
   match "games/new" => "games#create"
   match "/search_results" => "application#search_results", :as => :search_results
+  match "/games/add_to_games" => "games#add_to_games"
   #  match "application" => "games#index"
   root :to => "games#index"
   #  end

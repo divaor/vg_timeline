@@ -1,7 +1,18 @@
-new Effect.Fade('lev1', {
-  duration: 0.3
-});
-new Effect.Fade('trans1', {
-  duration: 0.3
-});
-$('characters_list_<%= @characters_game.playable ? "" : "non" %>playable').insert('<%= escape_javascript(pop_up_controller(image_tag(@characters_game.character.picture.url(:mini), :alt => @characters_game.character.name, :name => @characters_game.character.name, :onmouseover => "new Tip(this, '#{@characters_game.character.name}', { width: 'auto' })"), 'show', 'characters', :id => @characters_game.character.id)) %>')
+<% if @series_games_characters.empty? %>
+  new Effect.Fade('lev1', {
+    duration: 0.3
+  });
+  new Effect.Fade('trans1', {
+    duration: 0.3
+  });
+<% else %>
+  var child = $('lev1').childElements();
+  child.each(function(e) {
+    if (e != child[0]) {
+      e.remove();
+    }
+  });
+  $('lev1').insert('<%= escape_javascript(render 'add_to_games') %>');
+<% end %>
+$('characters_list_playable').update('<%= escape_javascript(characters_list(@characters_list['playable'])) %>')
+$('characters_list_nonplayable').update('<%= escape_javascript(characters_list(@characters_list['nonplayable'])) %>')

@@ -82,7 +82,7 @@ class Game < ActiveRecord::Base
     playable_characters = characters_games.select { |a| a.playable == true }
     non_playable_characters = characters_games.select { |a| a.playable == false}
     characters_type['playable'] = playable_characters
-    characters_type['non_playable'] = non_playable_characters
+    characters_type['nonplayable'] = non_playable_characters
     return characters_type
   end
 
@@ -98,10 +98,10 @@ class Game < ActiveRecord::Base
 
   def completion
     perc = 0
-    values = { 'title' => 10, 'release_date' => 10, 'boxart' => 10,
+    values = { 'title' => 10, 'release_date' => 11, 'boxart' => 11,
       'developer' => 8, 'publisher' => 8, 'platform' => 8, 'description' => 7,
-      'genre' => 7, 'rating' => 7, 'series' => 7, 'players' => 5,
-      'also_on' => 5, 'market' => 4, 'type' => 4 } # TODO update completion %
+      'genre' => 8, 'rating' => 8, 'players' => 6,
+      'also_on' => 5, 'market' => 5, 'type' => 5 } # TODO update completion %
     perc = perc + values['title'] unless main_title.nil?
     perc = perc + values['release_date'] unless release_date.nil?
     perc = perc + values['boxart'] unless boxart_file_name.nil?
@@ -111,7 +111,6 @@ class Game < ActiveRecord::Base
     perc = perc + values['description'] unless description.nil?
     perc = perc + values['genre'] unless genres.empty?
     perc = perc + values['rating'] unless rating.nil?
-    perc = perc + values['series'] unless series.nil?
     perc = perc + values['players'] unless local_players.nil? and online_players.nil?
     perc = perc + values['also_on'] unless different_platforms.empty?
     perc = perc + values['market'] unless market.nil?
