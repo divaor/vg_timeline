@@ -24,6 +24,9 @@ class CharactersGamesController < ApplicationController
       @characters_game = CharactersGame.new(params[:characters_game])
       @characters_game.save
     end
+    for game in @characters_game.game.different_platforms
+      game.characters << @characters_game.character unless game.characters.include?(@characters_game.character)
+    end
     @characters_game.character.update_attributes(params[:character]) if params[:character]
     @series_games_characters = @characters_game.in_series_games || []
     @characters_list = @characters_game.game.get_characters_type

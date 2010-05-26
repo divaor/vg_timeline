@@ -14,4 +14,17 @@ class Character < ActiveRecord::Base
     gm = Game.find(game_id) unless game_id.blank?
     self.games << gm unless games.include?(gm)
   end
+
+  def games_of_character
+    games_titles = []
+    games = []
+    for game in self.games
+      unless games_titles.include?(game.full_title)
+        games_titles << game.full_title
+        games << game
+      end
+    end
+
+    return games
+  end
 end

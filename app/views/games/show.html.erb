@@ -150,8 +150,10 @@
     <!-- CHARACTERS -->
     <div id="game_info_characters" class="round">
 
+      <!-- LIST -->
       <div id="characters_list">
         <h4>Characters</h4>
+        <%= pop_up "Edit", '/edit?id=' + @game.id.to_s + '&view=edit_characters' if user_signed_in? and not @game.characters.empty? %>
 
         <h5>Playable:</h5>
         <div id="characters_list_playable">

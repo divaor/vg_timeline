@@ -5,6 +5,6 @@
   <%= image_tag(@character.picture.url(:thumb), :alt => @character.name) %>
   <div id="recent_games">
     <h5>Games:</h5>
-    <%= games_list(@character.games, :series => true) %>
+    <%= games_list(@character.games_of_character, :series => true) %>
   </div>
 </div>

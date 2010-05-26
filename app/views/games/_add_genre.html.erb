@@ -2,7 +2,7 @@
 
 <%= form_for @game do |f| %>
   <% for genre in @genres %>
-    <%= check_box_tag "game[genre_ids][]", genre.id %>
+    <%= check_box_tag "game[genre_ids][]", genre.id, @game.genres.include?(genre) %>
     <%= f.label :genre_ids, genre.name, :class => genre == @genres.first ? 'fcs' : '' %><br />
   <% end %>
   <%= f.submit "Submit" %>

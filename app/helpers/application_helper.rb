@@ -103,7 +103,7 @@ module ApplicationHelper
 
   def games_list(games, options = {})
     options.merge(:gm => "", :series => false)
-    output = ""
+    list = ""
     series = ""
     if options[:series]
       games.sort! do |a, b|
@@ -113,34 +113,45 @@ module ApplicationHelper
     end
     for game in games
       list_output = ""
+      link = ""
       series_name = game.series ? game.series.name : "<No Series>"
-      output += content_tag(:span, series_name, :class => 'list_series_name') if options[:series] and series != game.series
-      output += game.r_y + ' - '
-      output += content_tag(:span, game.full_title_colon_limit, :class => game == options[:gm] ? "showing" : "")
+      list += content_tag(:span, series_name, :class => 'list_series_name') if options[:series] and series != game.series
+      list += game.r_y + ' - '
+      list += content_tag(:span, game.full_title_colon_limit, :class => game == options[:gm] ? "showing" : "")
       diff_p = game.different_platforms
       pre = "(" + link_to_unless(game == options[:gm], game.platform.short_name.upcase, game_path(game))
-      pre = pre + ", " unless diff_p.empty?
       unless diff_p.empty?
         diff_p.each do |g|
+          link = ""
           pre2 = g == diff_p.first ? pre : ""
-          list_output += pre2 + link_to_unless(g == options[:gm], g.platform.short_name.upcase, game_path(g)) + (g == diff_p.last ? ")" : ", ")
+          unless options[:series] and not g.characters.include?(@character)
+            link = (', ' + link_to_unless(g == options[:gm], g.platform.short_name.upcase, game_path(g)))
+          end
+          list_output += pre2 + link  + (g == diff_p.last ? ")" : "")
         end
       else
         list_output += " (#{link_to_unless game == options[:gm], game.platform.short_name.upcase, game_path(game)})"
       end
       list_output += " (unreleased)" if game.release_date > Date.today
       list_output += tag(:br)
-      output += content_tag(:span, raw(list_output))
+      list += content_tag(:span, raw(list_output))
       series = game.series
     end
-    raw(output)
+    raw list
   end
 
   def characters_list(characters_games)
     list = ""
     for characters_game in characters_games
-      list += pop_up_controller(image_tag(characters_game.character.picture.url(:mini), :alt => characters_game.character.name, :name => characters_game.character.name, :onmouseover => "new Tip(this, '#{characters_game.character.name}', { width: 'auto' })"), 'show', 'characters', :id => characters_game.character.id)
+      list += character_pic(characters_game.character)
     end
-    return raw list
+    raw list
+  end
+
+  def character_pic(character, options = {})
+    options.merge({ :make_link => true })
+    pic = image_tag(character.picture.url(:mini), :alt => character.name, :name => character.name, :onmouseover => "new Tip(this, '#{character.name}', { width: 'auto' })")
+    pic = pop_up_controller(pic, 'show', 'characters', :id => character.id) if options[:make_link]
+    return pic
   end
 end
