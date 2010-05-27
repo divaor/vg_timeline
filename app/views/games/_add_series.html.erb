@@ -1,8 +1,10 @@
 <h2>Game Series</h2>
 
-<%= form_for @game do |f| %>
-<div class="field">
-  <%= text_field_with_auto_complete :game, :series_name, { :class => 'fcs' }, { :url => series_index_path(), :method => :get, :param_name => 'search' } %>
-</div>
-<%= f.submit "Submit" %>
+<%= form_for @game, :html => { :remote => true } do |f| %>
+  <%= hidden_field_tag :element_id, @element_id %>
+  <%= hidden_field_tag :helper, @helper %>
+  <div class="field">
+    <%= text_field_with_auto_complete :game, :series_name, { :class => 'fcs' }, { :url => series_index_path(), :method => :get, :param_name => 'search' } %>
+  </div>
+  <%= f.submit "Submit" %>
 <% end %>

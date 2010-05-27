@@ -196,6 +196,7 @@ class GamesController < ApplicationController
         @game.specifications = @game_diff.specifications
         @game.types = @game_diff.types
         @game.project_leaders = @game_diff.project_leaders
+        @game.characters = @game_diff.characters
         @game.different_platforms << @game_diff
         for game1 in @game_diff.different_platforms
           @game.different_platforms << game1 unless @game.different_platforms.exists?(game1) or game1 == @game
@@ -213,8 +214,20 @@ class GamesController < ApplicationController
           end
         end
         add_flash = experience_user(10)
-        flash[:notice] = "Game succesfully created." + add_flash
-        redirect_to game_path(@game)
+        respond_to do |format|
+          format.js {
+            if params[:diff_platform_id]
+              @element_id = 'diff_platforms_container'
+              @game_eval = @game_diff ? '@game_diff' : '@game'
+              @helper = "also_on(#{@game_eval})"
+            end
+            render 'refresh_game'
+          }
+          format.html {
+            flash[:notice] = "Game succesfully created." + add_flash
+            redirect_to game_path(@game)
+          }
+        end
       else
         flash[:alert] = "Could not complete request."
         @title = "Add New Game"
@@ -234,6 +247,10 @@ class GamesController < ApplicationController
     id = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
     index = @level.index("view")
     view = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
+    index = @level.index("element_id")
+    @element_id = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
+    index = @level.index("eval")
+    @helper = @level.slice(@level.index("=", index) + 1, @level.index("&", index) - @level.index("=", index) - 1) if index
     @level = @level.slice(0,1) if @level.length > 1
     @view = view ? view : params[:action]
     @title = "Edit Game"
@@ -294,7 +311,14 @@ class GamesController < ApplicationController
       end
       add_flash = experience_user(5)
       flash[:notice] = "Game succesfully updated." + add_flash
-      redirect_to game_path(@game)
+      respond_to do |format|
+        format.js {
+          @element_id = params[:element_id]
+          @helper = params[:helper] + "(@game)"
+          render 'refresh_game'
+        }
+        format.html { redirect_to game_path(@game) }
+      end
     else
       @title = "Add New Game"
       @platforms = Platform.all

@@ -31,29 +31,9 @@
             <%= link_to @game.platform.name, '#' %>
 
             <!-- ALSO ON -->
-            <% unless @game.different_platforms.empty? %>
-              <div id="diff_platforms" class="round <%= @game.sub_title.empty? ? "" : " sub" %>">
-                <table>
-                  <tr>
-                    <td class="subtitle">
-                      Also on:
-                    </td>
-                    <td class="platforms">
-                      <% for diff_platform in @game.different_platforms %>
-                        <%= link_to(diff_platform.platform.short_name.upcase, game_path(diff_platform), :onmouseover => "new Tip(this, '#{diff_platform.platform.name}', { width: 'auto' });") + (diff_platform == @game.different_platforms.last ? "" : ", ") %>
-                      <% end %>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="2">
-                      <%= pop_up "Add to another platform", new_game_path(:id_diff => @game.id) if user_signed_in? %>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            <% else %>
-              <%=raw "(#{pop_up "Add to another platform", new_game_path(:id_diff => @game.id)})" if user_signed_in? %>
-            <% end %>
+            <span id="diff_platforms_container">
+              <%= also_on(@game) %>
+            </span>
           </td>
         </tr>
 
@@ -105,46 +85,14 @@
     <!-- DESCRIPTION -->
     <div id="game_info_description">
       <h4>Description</h4>
-      <% if @game.description %>
-        <%= @game.description %>
-        <%= pop_up "Edit Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
-      <% else %>
-        No description has been added for this game.
-        <%= pop_up "Add Description", '/edit?id=' + @game.id.to_s + '&view=new_description' if user_signed_in? %>
-      <% end %>
+      <div id="game_description">
+        <%= description(@game) %>
+      </div>
     </div>
 
     <!-- SERIES -->
     <div id="game_series" class="round">
-      <% series = @game.series %>
-      <% unless series.nil? %>
-        <h4><%= series.name %> series</h4>
-        <%= pop_up "Edit Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
-        <%= pop_up "Add new game to series", new_game_path(:series => @game.series.id) if user_signed_in? %>
-        <div id="prequel_sequel_cont">
-          <div id="prequel">
-            <% if @game.prequel %>
-              <span>Prev</span><br />
-              <%= link_to(box_logo(@game.prequel, :thumb, :tooltip => true), game_path(@game.prequel)) %>
-    <%# TODO Tooltip function changed name %>
-            <% end %>
-            <%= pop_up "Add sequel", "/edit?id=#{@game.id.to_s}&view=add_sequel" if user_signed_in? %>
-          </div>
-          <div id="sequel">
-            <% if @game.sequel %>
-              <span>Next</span><br />
-              <%= link_to(box_logo(@game.sequel, :thumb, :tooltip => true), game_path(@game.sequel)) %>
-            <% end %>
-          </div>
-        </div>
-        <div id="series_list">
-          <h5>Full List:</h5>
-          <%= games_list(@series_games, :gm => @game) %>
-        </div>
-      <% else %>
-        <h4>Series</h4>
-        <%= pop_up "Add Series", '/edit?id=' + @game.id.to_s + '&view=add_series' if user_signed_in? %>
-      <% end %>
+      <%= series(@game) %>
     </div>
 
     <!-- CHARACTERS -->
