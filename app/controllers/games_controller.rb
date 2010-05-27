@@ -30,6 +30,25 @@ class GamesController < ApplicationController
     end
   end
 
+  def month_view
+    @year = params[:year] ? params[:year].to_i : Date.today.year
+    @month = params[:month] ? params[:month] : Date.today.month
+    @month = "0"+@month.to_s if @month.length == 1
+    @real_month = @month
+    @title = month_name(@month.to_i) + " " + @year.to_s
+    @enter_year = true
+    first_day = first_week_sunday(@month, @year)
+    last_day = last_day_month(@month, @year)
+    @games = Game.where('release_date >= ? and release_date <= ?', "#{first_day.year}-#{first_day.month}-#{first_day.day}", "#{last_day.year}-#{last_day.month}-#{last_day.day}").order("release_date asc, hits desc, main_title asc").all
+    #if not @games.empty?
+    @stats = get_stats(@games)
+    games = games_array_weeks(@games, @month, @year)
+    @weeks = games['games']
+    @platforms_month = games['platforms']
+    @platforms_year = games['platforms_month']
+    #end
+  end
+
   def other_year
     @game = Game.new
     @year = params[:year] ? params[:year].to_i : Date.today.year;
@@ -343,7 +362,8 @@ class GamesController < ApplicationController
   end
 
   def update_month
-    @m = params[:m]; @year = params[:y]; @limit = params[:l].to_i
+    if params[:w] then params[:m] = params[:w][0,2].to_i.to_s; @m = params[:w]; @month_view = true else @m = params[:m] end
+    @year = params[:y]; @limit = params[:l].to_i
     @games = search_games_by_checked_platforms(params)
     @filtered = false
     params.each_pair { |key, value|
@@ -353,8 +373,13 @@ class GamesController < ApplicationController
       end
     }
     if not @games.empty?
-      games = make_games_array(@games, @limit)
-      @month = games['games']
+      if not @month_view
+        games = make_games_array(@games, @limit)
+        @month = games["games"]
+      else
+        @month = games_array_week(@games);
+        @real_month = params[:m]
+      end
     end
     respond_to do |format|
       format.js
@@ -453,6 +478,64 @@ class GamesController < ApplicationController
     stats
   end
 
+  def games_array_week(games)
+    week = []; day_games = []
+    rel_date = games.first.release_date
+    week << rel_date
+    for game in games
+      if game.release_date == rel_date
+        day_games << game
+      else
+        week << day_games
+        day_games = []
+        rel_date = game.release_date
+        week << rel_date
+        day_games << game
+      end
+    end
+    week << day_games
+    week
+  end
+
+  def games_array_weeks(games, month, year)
+    last_week_day = 7.days.since(first_week_sunday(month, year)); weeks = []; enter = true; last = false; past_entry = last_week_day.day
+    platforms_month = []; platforms_week = []; iterate = true
+    while enter
+      weeks << last_week_day
+      week_games = [];  platforms = []
+      for game in games
+        if iterate
+          platforms_month << game.platform unless platforms_month.include?(game.platform)
+        end
+        if game.release_date < last_week_day and game.release_date >= 7.days.ago(last_week_day)
+          platforms << game.platform unless platforms.include?(game.platform)
+          week_games << game
+        end
+      end
+      final_week_games = []; day_games = []; iterate = false;
+      day_rel_date = week_games.first.release_date if not week_games.empty?
+      final_week_games = [day_rel_date] if not week_games.empty?
+      platforms_week << last_week_day; platforms_week << platforms
+      for week_game in week_games
+        if week_game.release_date == day_rel_date
+          day_games << week_game
+        else
+          final_week_games << day_games
+          day_rel_date = week_game.release_date
+          final_week_games << day_rel_date
+          day_games = [week_game]
+        end
+      end
+      final_week_games << day_games
+      weeks << final_week_games
+      last_week_day = 7.days.since(last_week_day)
+      enter = false if last
+      last = true if past_entry > last_week_day.day
+      past_entry = last_week_day.day
+    end
+    return { 'games' => weeks, 'platforms' => platforms_week, 'platforms_month' => platforms_month }
+  end
+
   # games => array, games to be formatted for the view(can be an array returned by search_games_by_checked_platforms)
   #
   # limit => int, highest number in array to show in one day (starts in 'start' ends in 'limit'), 0 for no limit[default => 0]
@@ -485,6 +568,7 @@ class GamesController < ApplicationController
       gms = [games.length]
     end
     g = 0
+    games_in_day = []
     platforms_months = [first.r_m]
     platforms = []
     for game in games
@@ -493,6 +577,7 @@ class GamesController < ApplicationController
         g = 0
         days_month << gms
         gms = [0]
+        games_in_day = []
         day = game.r_d
         day_change = month < game.r_m ? true : false if include_months
         days_month << game.r_d unless day_change
@@ -509,9 +594,11 @@ class GamesController < ApplicationController
         platforms_months << game.r_m
       end if include_months
       if include_days
-        gms << game #if (gms.length < limit + 1 or limit == 0)
+        gms << game unless games_in_day.include?(game.full_title) #if (gms.length < limit + 1 or limit == 0)
+        games_in_day << game.full_title
       else
-        gms << game #if g >= start and g <= limit
+        gms << game unless games_in_day.include?(game.full_title) #if g >= start and g <= limit
+        games_in_day << game.full_title
       end
       platforms << game.platform unless platforms.include?(game.platform)
       platforms_year << game.platform unless platforms_year.include?(game.platform) if include_months
@@ -539,14 +626,23 @@ class GamesController < ApplicationController
     unless parameters[:date]
       year = parameters[:y]
       if parameters[:m]
-        starting_month = parameters[:m]
-        ending_month = parameters[:m]
+        if parameters[:w]
+          starting_month = 7.days.ago(Date.parse("#{year}-#{parameters[:w][2,2]}-#{parameters[:w][4,2]}")).month.to_s
+          ending_month = 1.days.ago(Date.parse("#{year}-#{parameters[:w][2,2]}-#{parameters[:w][4,2]}")).month.to_s
+          starting_day = 7.days.ago(Date.parse("#{year}-#{starting_month}-#{parameters[:w][4,2]}")).day.to_s
+          ending_day = 1.days.ago(Date.parse("#{year}-#{starting_month}-#{parameters[:w][4,2]}")).day.to_s
+        else
+          starting_month = parameters[:m]
+          ending_month = parameters[:m]
+          starting_day = "01"
+          ending_day = "31"
+        end
       else
         starting_month = "01"
         ending_month = "12"
+        starting_day = "01"
+        ending_day = "31"
       end
-      starting_day = "01"
-      ending_day = "31"
     end
     offset = parameters[:of]
     #    limit = parameters[:l]

@@ -108,6 +108,16 @@ class Game < ActiveRecord::Base
     return perc
   end
 
+  def different_platforms_same_day
+    games = []
+    for game in self.different_platforms
+      if game.release_date == self.release_date
+        games << game
+      end
+    end
+    games
+  end
+
   def r_d
     release_date.strftime('%d')
   end

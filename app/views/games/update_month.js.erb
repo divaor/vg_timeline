@@ -17,11 +17,19 @@
         return check;
       }
       if( checked('<%= '.'+@m %>') == true ) {
-        filter = 'Filtered(Month)'
+        <% if @month_view %>
+          filter = 'Filtered(Week)'
+        <% else %>
+          filter = 'Filtered(Month)'
+        <% end %>
       } else {
-        filter = 'Filtered(Year)'
+        <% if @month_view %>
+          filter = 'Filtered(Month)'
+        <% else %>
+          filter = 'Filtered(Year)'
+        <% end %>
       }
-      $("<%= "month"+@m %>").update("<%= escape_javascript(render 'month_view_filtered') %>");
+      $("<%= "month"+@m %>").update("<%= escape_javascript(render 'month_view') %>");
       $('<%= 'filters'+@m %>').update(filter);
       $('<%= 'filters'+@m %>').show();
     <% else %>

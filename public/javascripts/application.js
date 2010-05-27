@@ -45,7 +45,11 @@ function updateMonth(month, year, limit) {
 function getCheckedMonth(month, year, limit) {
     var desc = $$('.'+month);
     var check = false;
-    var params = "y=" + year + "&m=" + month
+    var params = ""
+    if (limit != 3)
+        params = "y=" + year + "&w=" + month
+    else
+        params = "y=" + year + "&m=" + month
     var i = 1;
     desc.each(function(item) {
         if (item.checked == true) {

@@ -57,4 +57,46 @@ class ApplicationController < ActionController::Base
       " +#{new_exp} Exp. points."
     end
   end
+
+  def month_name(month_number)
+    if month_number == 1
+      return "January"
+    elsif month_number == 2
+      return "February"
+    elsif month_number == 3
+      return "March"
+    elsif month_number == 4
+      return "April"
+    elsif month_number == 5
+      return "May"
+    elsif month_number == 6
+      return "June"
+    elsif month_number == 7
+      return "July"
+    elsif month_number == 8
+      return "August"
+    elsif month_number == 9
+      return "September"
+    elsif month_number == 10
+      return "October"
+    elsif month_number == 11
+      return "November"
+    elsif month_number == 12
+      return "December"
+    end
+  end
+
+  def first_week_sunday(month, year)
+    date = Date.parse("#{year}-#{month}-01")
+    return date if date.strftime("%A") == "Sunday"
+    1.days.ago(date.monday)
+  end
+
+  def last_day_month(month, year)
+    date = Date.parse("#{year}-#{month}-#{Time.days_in_month(month.to_i, year.to_i)}")
+    while date.strftime("%A") != "Saturday"
+      date = 1.days.since(date)
+    end
+    date
+  end
 end

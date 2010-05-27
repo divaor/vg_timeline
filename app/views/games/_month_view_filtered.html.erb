@@ -1,14 +1,26 @@
 <%#*<span class="left_month_arrow"><%= (image_tag "go-next.png", :size => "12x12", :alt => "<") %><%#</span>%>
-<% @day_text = "" %>
+<% @day_text = ""; total_games = 0; @unreleased = false %>
 <table cellspacing="10px">
   <tr>
     <% for @day in @month %>
       <% if @day.class == Array %>
-        <td class="day_display round<%= ' unreleased' if cur_date_all(@year, @m, @day_text) > Date.today %> filtered" <%= "id=#{@day_text}" %>>
-          <%= render 'day_view' %>
+        <% total_games += @day.length - 1 %>
+        <td class="day_display round filtered<%= ' unreleased' if @unreleased %>" <%= "id=#{@day_game}" %>>
+          <% if not @day.empty? %>
+            <%= render 'day_view' %>
+          <% else %>
+            <%= "No games with these filters." %>
+          <% end %>
         </td>
       <% else %>
         <% @day_text = @day %>
+        <% if @month_view %>
+          <% @day_game = @day.day %>
+          <% @unreleased = true if @day > Date.today %>
+        <% else %>
+          <% @day_game = @day %>
+          <% @unreleased = true if cur_date_all(@year, @m, @day_game) > Date.today %>
+        <% end %>
       <% end %>
     <% end %>
   </tr>

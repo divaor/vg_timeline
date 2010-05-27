@@ -1,0 +1,19 @@
+<% months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
+<% i = 1 %>
+<% for month in months %>
+  <% if i == @month.to_i %>
+    <% if i == 12 %>
+      <span class="current_year"><%= month %></span>
+    <% else %>
+      <span class="current_year"><%= month %></span> -
+    <% end %>
+  <% else %>
+    <% if i == 12 %>
+      <span><%= link_to month, month_path(@year,i) %></span>
+    <% else %>
+      <% if i.to_s.length == 1 then i_f = "0"+i.to_s else i_f = i end %>
+      <span><%= link_to month, month_path(@year,i_f) %></span> -
+    <% end %>
+  <% end %>
+  <% i += 1 %>
+<% end %>

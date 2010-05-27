@@ -28,7 +28,7 @@
       <div>
         <% current = true if cur_date_year_month(@year, @m) == Date.today %>
         <div class="month_cont<%= ' current_month' if current %>">
-          <span class="month_text"><%= month_name(@month.to_i) %>
+          <span class="month_text"><%= link_to month_name(@month.to_i), month_path(@year,@month) %>
             <span class="day_text_current_month"><%= "#{Date.today.day}" if current %></span>
           </span>
           <% current = false %>

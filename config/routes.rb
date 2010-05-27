@@ -26,6 +26,7 @@ VgTimeline::Application.routes.draw do |map|
   #  constraints :host => /localhost/ do
   resources :games, :platforms, :developers, :publishers, :series, :press, :scores, :awards, :genres, :features, :specifications
   match "/:year" => "games#index", :as => :year, :constraints => { :year => /\d{4}/ }
+  match "/:year/:month" => "games#month_view", :as => :month, :constraints => { :month => /\d{2}/, :year => /\d{4}/ }
   match "/list" => "games#list", :as => :games_list
   match "/recent" => "games#recent", :as => :games_recent
   match ":action" => "games#index"

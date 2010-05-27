@@ -1,10 +1,14 @@
-<% sh = 0 %>
-<% if sh == 0 and not @sh %>
-  <% sh = @day.length - 1 %>
+<%# sh = 0 %>
+<%# if sh == 0 and not @sh %>
+  <%# sh = @day.length - 1 %>
+<%# else %>
+  <%# sh = @sh %>
+<%# end %>
+<% if @month_view %>
+  <span class="day_text"><strong><%= @day_text.strftime("%a %d") %></strong> <%= " ("+@day.length.to_s+")" %></span>
 <% else %>
-  <% sh = @sh %>
+  <span class="day_text"><strong><%= @day_text.to_i.to_s %></strong> <%= " ("+@day.first.to_s+")" %></span>
 <% end %>
-<span class="day_text"><strong><%= @day_text.to_i.to_s %></strong> <%= " ("+@day.first.to_s+")" %></span>
 
 <div class="table_div">
   <table>
@@ -21,13 +25,16 @@
           <% end %>
           <td class="boxart_block" id="<%= game.full_title_limit+"("+game.platform.short_name.upcase+")" %>" onmouseover="fullTooltipGameInfo(event, this, <%= game.id %>)">
             <div id="boxart_links<%= game.id %>" style="display:none;width:auto;">
-              <%= game.full_title_limit+"("+game.platform.short_name.upcase+")" %><br />
-              <span class="game_view_tooltip_link">
-                <%= link_to "View Game", game_path(game.id) %>
+              <%= game.full_title_limit %><%= " (" %><%= link_to(game.platform.short_name.upcase, game_path(game)) + (game.different_platforms_same_day.empty? == true ? ")" : ",") %>
+              <% for diff_platform in game.different_platforms_same_day %>
+                <%= link_to(diff_platform.platform.short_name.upcase, game_path(diff_platform)) + (diff_platform == game.different_platforms_same_day.last ? ")" : ", ") %>
+              <% end %><br />
+              <!-- <span class="game_view_tooltip_link">
+                <%# link_to "View Game", game_path(game.id) %>
               </span>
               <span class="boxart_tooltip_link">
-                <%= link_to "Boxart", "#" %>
-              </span>
+                <%# link_to "Boxart", "#" %>
+              </span> -->
             </div>
             <%= box_logo(game, :thumb, :prototip => true, :tooltip => false, :hover => true) %>
             <script type="text/javascript">

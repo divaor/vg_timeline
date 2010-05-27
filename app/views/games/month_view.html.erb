@@ -1,0 +1,142 @@
+<div id="year_display" class="round_bottom">
+  <div id="year_text"><%= render 'years' %></div>
+  <div id="year_text"><%= render 'months' %></div>
+  <div id="year_view">
+    <div id="year_filter">
+      <span class="year_display"><%= month_name(@month.to_i) + " " + @year.to_s %></span>
+      <span class="view_month">
+        <%= link_to_function 'View Stats', {}, :onmouseover => "showStats(this, $('year_stats'));" %>
+      </span>
+      <span class="platforms_month">
+        <span id="filters<%= @year %>" class="current_filters" style="display:none"></span>
+        <%= link_to 'Change Filters', "#general_filters" %>
+      </span>
+    </div>
+    <div id="year_stats" style="display:none">
+      <%= render 'year_stats' %>
+    </div>
+    <% @developers_year = []; @publishers_year = []; current = false; %>
+    <% @month_view = true; @m = @month.to_i; end_week = ""; id_text = "" %>
+    <% for week in @weeks %>
+      <% if week.class != Date %>
+        <% @month = week %>
+        <div id="month<%= id_text %>" class="month_display<%= ' current_month' if current %>">
+          <% current = false %>
+          <%= render 'month_view' %>
+        </div>
+      <% else %>
+        <% if week.month.to_s.length == 1 then week_month = "0"+week.month.to_s else week_month = week.month.to_s end %>
+        <% if week.day.to_s.length == 1 then week_day = "0"+week.day.to_s else week_day = week.day.to_s end %>
+        <% @m = "0" + @m.to_s if @m.to_s.length == 1 %>
+        <% end_week = week.end_of_week; id_text = @m.to_s + week_month + week_day %>
+        <% current = true if end_week == Date.today.end_of_week %>
+        <div>
+          <div class="month_cont<%= ' current_month' if current %>">
+            <span class="month_text"><%= 7.days.ago(week).strftime("%b %d") + " - " + 1.days.ago(week).strftime("%b %d") %>
+              <span class="day_text_current_month"><%= "#{Date.today.day}" if current %></span>
+            </span>
+            <span class="new_game"><%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %></span>
+            <% if @weeks[@weeks.rindex(week) + 1].length > 1 %>
+              <span class="platforms_month">
+                <span id="filters<%= id_text %>" class="current_filters" style="display:none"></span>
+                <% p_m = (@platforms_month.rindex(week) + 1) %>
+                Only:
+                <span class="platforms">
+                  <% i = 1; missing_platforms = [] %>
+                  <% for platform in @platforms_month[p_m] %>
+                    <% if i < 5 %>
+                      <span class="platform">
+                        <%= check_box_tag platform.id, 1, false, :class => id_text, :onclick => "monthFilterPlatform(this, #{@year.to_s}, 4)" %>
+                        <%= platform.name %>
+                      </span>
+                      <% i += 1 %>
+                    <% else %>
+                      <% missing_platforms << platform %>
+                    <% end %>
+                  <% end %>
+                </span>
+                <% if not missing_platforms.empty? %>
+                  <span class="more_platforms"><%= link_to_function("More", "", :class => 'more'+id_text.to_s, :onmouseover => "showMorePlatforms(this, $('missing_platforms#{id_text}'));") %></span>
+                  <span id="missing_platforms<%= id_text %>" class="missing_platforms" style="display:none">
+                    <% i = 0 %>
+                    <table><tr>
+                        <% for platform in missing_platforms %>
+                          <td><%= check_box_tag platform.id, 1, false, :class => id_text, :onclick => "monthFilterPlatform(this, #{@year.to_s}, 4)" %>
+                            <%= platform.name %></td>
+                          <% i +=1 %><% if i == 3 %></tr><tr><% i = 0 %><% end %>
+                        <% end %></tr>
+                    </table>
+                  </span>
+                <% end %>
+                <span class="platform_extra">
+                  <%= check_box_tag "month_filter_all"+id_text.to_s, 1, false, :class => id_text, :onclick => "monthFilterAll(this, #{@year.to_s}, 4)"  %>
+                  <%= "All" %>
+                </span>
+              </span>
+              <span id="spinner<%= id_text %>" class="spinner" style="display:none;">
+                <img alt="Spinner" src="/images/spinner.gif" />
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div id="general_filters">
+  <span class="general_links">
+    <%= link_to 'Go Up', "#top_nav" %><br />
+    <br />
+    <%= pop_up "Developers list", developers_path %><br />
+    <%= pop_up "Publishers list", publishers_path %><br />
+    <%= pop_up "Recently Added Games", games_recent_path %><br />
+    <%= pop_up "All Games list", games_list_path %>
+  </span>
+  <% if @platforms_year %>
+    <div id="first_filter_cat">
+      <ul id="tabcontrol1">
+        <li class="current_show_filter" id="platforms_tab"><%= link_to_function('Platforms', "tabselect1($('platforms_tab')); paneselect1('platforms_general_filters')") %></li>
+        <li class="nc_show_filter" id="publishers_tab"><%= link_to_function('Publishers', "tabselect1($('publishers_tab')); paneselect1('publishers_general_filters')") %></li>
+        <li class="nc_show_filter" id="developers_tab"><%= link_to_function('Developers', "tabselect1($('developers_tab')); paneselect1('developers_general_filters')") %></li>
+      </ul>
+    </div>
+
+    <div id="platforms_general_filters">
+      <span class="title_top_filter"><%= "Current Year" %></span>
+      <span id="spinner<%= @year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag "y_plat_all", 1, true, :class => @year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <br />
+      <% @platforms_year.sort! { |a,b| a.name <=> b.name } %>
+      <% for platform in @platforms_year %>
+        <%= check_box_tag platform.id, 1, false, :class => @year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_plat_all')" %>
+        <%= platform.name %><br />
+      <% end %>
+    </div>
+
+    <div id="publishers_general_filters" style="display:none">
+      <span class="title_top_filter"><%= "Current Year" %></span>
+      <span id="spinner<%= 'p'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag 'y_pub_all', 1, true, :class => 'p'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <br />
+      <% @publishers_year.sort! { |a,b| a.name <=> b.name } %>
+      <% for publisher in @publishers_year %>
+        <%= check_box_tag 'p'+publisher.id.to_s, 1, false, :class => 'p'+@year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_pub_all')" %>
+        <%= publisher.name %><br />
+      <% end %>
+    </div>
+
+    <div id="developers_general_filters" style="display:none">
+      <span class="title_top_filter"><%= "Current Year" %></span>
+      <span id="spinner<%= 'd'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag 'y_dev_all', 1, true, :class => 'd'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <br />
+      <% @developers_year.sort! { |a,b| a.name <=> b.name } %>
+      <% for developer in @developers_year %>
+        <%= check_box_tag 'd'+developer.id.to_s, 1, false, :class => 'd'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_dev_all')" %>
+        <%= developer.name %><br />
+      <% end %>
+    </div>
+  <% end %>
+</div>
+

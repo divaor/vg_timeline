@@ -1,15 +1,30 @@
 <%#*<span class="left_month_arrow"><%= (image_tag "go-next.png", :size => "12x12", :alt => "<") %><%#</span>%>
-<% @day_text = ""; total_games = 0 %>
+<% @day_text = ""; total_games = 0; @unreleased = false %>
+<% if @month_view then display = 'day_display_week' else display = 'day_display' end  %>
 <table cellspacing="10px">
   <tr>
     <% for @day in @month %>
       <% if @day.class == Array %>
+        <% @nc_month = false if @day.empty? %>
         <% total_games += @day.length - 1 %>
-        <td class="day_display round<%= ' unreleased' if cur_date_all(@year, @m, @day_text) > Date.today %>" <%= "id=#{@day_text}" %>>
-          <%= render 'day_view' %>
+        <td class="<%= display %> round<%= ' unreleased' if @unreleased %><%= ' filtered' if @filtered %><%= ' nc_month' if @nc_month %>" <%= "id=#{@day_game}" %>>
+          <% if not @day.empty? %>
+            <%= render 'day_view' %>
+          <% else %>
+            <%= "No games have been added this week." %>
+          <% end %>
         </td>
       <% else %>
         <% @day_text = @day %>
+        <% if @month_view %>
+          <% @day_game = @day.day %>
+          <% @unreleased = true if @day > Date.today %>
+          <% if @real_month.to_i != @day.month then @nc_month = true else @nc_month = false end  %>
+        <% else %>
+          <% @day_game = @day %>
+          <% @unreleased = true if cur_date_all(@year, @m, @day_game) > Date.today %>
+          <% @nc_month = false %>
+        <% end %>
       <% end %>
     <% end %>
   </tr>
