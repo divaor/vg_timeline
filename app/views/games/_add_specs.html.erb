@@ -3,7 +3,7 @@
 <%= form_for @game do |f| %>
   <div class="field">
     <%= f.label :specification_descriptions %>
-    <%= f.text_field :specification_descriptions %>
+    <%= f.text_field :specification_descriptions, :class => 'fcs' %>
   </div>
   <div class="actions">
     <%= f.submit "Submit" %>

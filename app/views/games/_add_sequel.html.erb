@@ -3,7 +3,7 @@
 <%= form_for @game do |f| %>
   <div class="field">
     <%= f.label :sequel_name %><br />
-    <%= text_field_with_auto_complete :game, :sequel_name, {}, { :url => games_path(), :method => :get, :param_name => 'search' } %>
+    <%= text_field_with_auto_complete :game, :sequel_name, { :class => 'fcs' }, { :url => games_path(), :method => :get, :param_name => 'search' } %>
   </div>
   <div class="field">
     <%= f.label :prequel_name %><br />

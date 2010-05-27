@@ -4,7 +4,7 @@
     <%= f.error_messages %>
     <div class="field">
       <%= f.label :main_title %><br />
-      <%= text_field_with_auto_complete :game, :main_title, {}, { :url => games_path(), :method => :get, :param_name => 'search' } %>
+      <%= text_field_with_auto_complete :game, :main_title, { :class => 'fcs' }, { :url => games_path(), :method => :get, :param_name => 'search' } %>
     </div>
     <div class="field">
       <%= f.label :sub_title %><br />

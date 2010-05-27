@@ -1,0 +1,2 @@
+module CharactersGamesHelper
+end

@@ -98,7 +98,8 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @game.update_attribute('hits', @game.hits += 1)
-    @series_games = @game.find_by_full_title
+    @characters = @game.get_characters_type
+    @series_games = @game.series_list_by_full_title
     @title = @game.full_title_limit
   end
 
@@ -247,6 +248,7 @@ class GamesController < ApplicationController
     @multi_modes = MultiplayerMode.all
     @types = Type.all
     @genres = Genre.all
+    @characters = @game.characters
     respond_to do |format|
       format.js { render :action => 'pop_up' }
     end
@@ -286,6 +288,10 @@ class GamesController < ApplicationController
         game.update_attribute('series_id', @game.series_id)
       end
       move_boxart(old_game_info, @game)
+      if params[:character]
+        character = Character.find_by_name(params[:game][:character_name])
+        character.update_attributes(params[:character])
+      end
       add_flash = experience_user(5)
       flash[:notice] = "Game succesfully updated." + add_flash
       redirect_to game_path(@game)
@@ -295,6 +301,20 @@ class GamesController < ApplicationController
       @developers = Developer.order("name asc").all
       @publishers = Publisher.order("name asc").all
       render :partial => 'edit', :layout => 'application'
+    end
+  end
+
+  def add_to_games
+    params.each do |key, value|
+      if key.to_i > 0
+        if value[:appears] == '1'
+          @characters_game = CharactersGame.new(
+            :character_id => params[:character], :game_id => key,
+            :playable => value[:playable]
+          )
+          @characters_game.save
+        end
+      end
     end
   end
 

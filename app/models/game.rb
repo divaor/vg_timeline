@@ -25,6 +25,8 @@ class Game < ActiveRecord::Base
   has_and_belongs_to_many :different_platforms, :class_name => "Game", :join_table => :different_platforms_games, :foreign_key => :different_platform_id
   has_many :scores
   has_many :press, :through => :scores
+  has_many :characters_games
+  has_many :characters, :through => :characters_games
   has_many :project_leaders
   has_many :industry_people, :through => :project_leaders
   has_many :awards
@@ -62,7 +64,7 @@ class Game < ActiveRecord::Base
     full_title_colon
   end
 
-  def find_by_full_title
+  def series_list_by_full_title
     games_titles = []
     games = []
     for game in self.series.games
@@ -73,6 +75,15 @@ class Game < ActiveRecord::Base
     end if self.series
     
     games.sort { |a, b| b.release_date <=> a.release_date}
+  end
+
+  def get_characters_type
+    characters_type = {}
+    playable_characters = characters_games.select { |a| a.playable == true }
+    non_playable_characters = characters_games.select { |a| a.playable == false}
+    characters_type['playable'] = playable_characters
+    characters_type['nonplayable'] = non_playable_characters
+    return characters_type
   end
 
   def added_by
@@ -87,10 +98,10 @@ class Game < ActiveRecord::Base
 
   def completion
     perc = 0
-    values = { 'title' => 10, 'release_date' => 10, 'boxart' => 10,
+    values = { 'title' => 10, 'release_date' => 11, 'boxart' => 11,
       'developer' => 8, 'publisher' => 8, 'platform' => 8, 'description' => 7,
-      'genre' => 7, 'rating' => 7, 'series' => 7, 'players' => 5,
-      'also_on' => 5, 'market' => 4, 'type' => 4 } # TODO update completion %
+      'genre' => 8, 'rating' => 8, 'players' => 6,
+      'also_on' => 5, 'market' => 5, 'type' => 5 } # TODO update completion %
     perc = perc + values['title'] unless main_title.nil?
     perc = perc + values['release_date'] unless release_date.nil?
     perc = perc + values['boxart'] unless boxart_file_name.nil?
@@ -100,7 +111,6 @@ class Game < ActiveRecord::Base
     perc = perc + values['description'] unless description.nil?
     perc = perc + values['genre'] unless genres.empty?
     perc = perc + values['rating'] unless rating.nil?
-    perc = perc + values['series'] unless series.nil?
     perc = perc + values['players'] unless local_players.nil? and online_players.nil?
     perc = perc + values['also_on'] unless different_platforms.empty?
     perc = perc + values['market'] unless market.nil?
@@ -185,6 +195,15 @@ class Game < ActiveRecord::Base
     vs = local_multi_modes.vs ? "Vs" : ""
     also = local_multi_modes.coop and local_multi_modes.vs ? " & " : ""
     coop + also + vs
+  end
+
+  def character_name
+    ""
+  end
+
+  def character_name=(name)
+    char = Character.find_or_create_by_name(name.strip) unless name.blank?
+    self.characters << char unless characters.include?(char)
   end
 
   def feature_descriptions
@@ -275,7 +294,7 @@ class Game < ActiveRecord::Base
       if preq
         preq.update_attribute(:sequel, self)
         preq.update_attribute(:series_id, series_id) if series_id
-        self.prequel = preq # TODO have game be assigned to prequel as sequel
+        self.prequel = preq
       end
     end
   end
@@ -292,7 +311,7 @@ class Game < ActiveRecord::Base
       if seq
         seq.update_attribute(:prequel, self)
         seq.update_attribute(:series_id, series_id) if series_id
-        self.sequel = seq # TODO have game be assigned to sequel as prequel
+        self.sequel = seq
       end
     end
   end

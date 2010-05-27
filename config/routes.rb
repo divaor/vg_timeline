@@ -1,4 +1,12 @@
 VgTimeline::Application.routes.draw do |map|
+  get "characters_games/new"
+
+  get "characters_games/create"
+
+  get "characters/new"
+
+  get "characters/create"
+
   get "genres/new"
 
   get "genres/create"
@@ -24,7 +32,9 @@ VgTimeline::Application.routes.draw do |map|
   devise_for :users
 
   #  constraints :host => /localhost/ do
-  resources :games, :platforms, :developers, :publishers, :series, :press, :scores, :awards, :genres, :features, :specifications
+  resources :games, :platforms, :developers, :publishers, :series, :press,
+    :scores, :awards, :genres, :features, :specifications, :characters,
+    :characters_games
   match "/:year" => "games#index", :as => :year, :constraints => { :year => /\d{4}/ }
   match "/:year/:month" => "games#month_view", :as => :month, :constraints => { :month => /\d{2}/, :year => /\d{4}/ }
   match "/list" => "games#list", :as => :games_list
@@ -33,6 +43,7 @@ VgTimeline::Application.routes.draw do |map|
   match "publishers(/:action)" => "publishers#action"
   match "games/new" => "games#create"
   match "/search_results" => "application#search_results", :as => :search_results
+  match "/games/add_to_games" => "games#add_to_games"
   #  match "application" => "games#index"
   root :to => "games#index"
   #  end

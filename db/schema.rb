@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100418012924) do
+ActiveRecord::Schema.define(:version => 20100522020333) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -28,6 +28,19 @@ ActiveRecord::Schema.define(:version => 20100418012924) do
     t.string   "description", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "characters", :force => true do |t|
+    t.string   "name"
+    t.string   "picture_file_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "characters_games", :force => true do |t|
+    t.integer "character_id"
+    t.integer "game_id"
+    t.boolean "playable",     :default => true, :null => false
   end
 
   create_table "composers_games", :id => false, :force => true do |t|
@@ -171,8 +184,6 @@ ActiveRecord::Schema.define(:version => 20100418012924) do
     t.datetime "updated_at"
   end
 
-  add_index "levels", ["level"], :name => "level", :unique => true
-
   create_table "markets", :force => true do |t|
     t.string   "name",         :null => false
     t.string   "abbreviation", :null => false
@@ -183,8 +194,8 @@ ActiveRecord::Schema.define(:version => 20100418012924) do
   create_table "modifications", :force => true do |t|
     t.integer  "user_id",                        :null => false
     t.string   "description"
-    t.boolean  "remove",      :default => false, :null => false
-    t.boolean  "new",         :default => false, :null => false
+    t.boolean  "removed",     :default => false, :null => false
+    t.boolean  "added",       :default => false, :null => false
     t.boolean  "modified",    :default => false, :null => false
     t.integer  "table_id",                       :null => false
     t.integer  "modified_id",                    :null => false
@@ -311,9 +322,9 @@ ActiveRecord::Schema.define(:version => 20100418012924) do
   end
 
   create_table "tables", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "name",       :limit => 100, :null => false
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "types", :force => true do |t|
@@ -323,9 +334,9 @@ ActiveRecord::Schema.define(:version => 20100418012924) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                               :default => "", :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
-    t.string   "password_salt",                       :default => "", :null => false
+    t.string   "email",                                              :null => false
+    t.string   "encrypted_password",   :limit => 128,                :null => false
+    t.string   "password_salt",                                      :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
@@ -337,16 +348,11 @@ ActiveRecord::Schema.define(:version => 20100418012924) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.string   "username",                                            :null => false
-    t.integer  "level_id",                            :default => 1,  :null => false
-    t.integer  "exp",                                 :default => 0,  :null => false
+    t.string   "username",                                           :null => false
+    t.integer  "level_id",                            :default => 1, :null => false
+    t.integer  "exp",                                 :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-  add_index "users", ["username"], :name => "Index_users_on_username", :unique => true
 
 end

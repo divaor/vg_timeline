@@ -1,0 +1,18 @@
+<% if @series_games_characters.empty? %>
+  new Effect.Fade('lev1', {
+    duration: 0.3
+  });
+  new Effect.Fade('trans1', {
+    duration: 0.3
+  });
+<% else %>
+  var child = $('lev1').childElements();
+  child.each(function(e) {
+    if (e != child[0]) {
+      e.remove();
+    }
+  });
+  $('lev1').insert('<%= escape_javascript(render 'add_to_games') %>');
+<% end %>
+$('characters_list_playable').update('<%= escape_javascript(characters_list(@characters_list['playable'])) %>')
+$('characters_list_nonplayable').update('<%= escape_javascript(characters_list(@characters_list['nonplayable'])) %>')

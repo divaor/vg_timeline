@@ -544,12 +544,6 @@ div.tooltip_text {
     /*border: 1px solid black;*/
 }
 
-#game_wrapper {
-    overflow: hidden;
-    width: 1200px;
-    margin: 0 auto;
-}
-
 #game_display {
     background-color: #E5E5E5;
     border: 2px solid black;
@@ -666,51 +660,73 @@ td.lab_info {
 }
 
 td.subtitle {
-    font-weight: bold;
-    align: top;
-    font-size: 12px;
-    width: 70px;
+  font-weight: bold;
+  vertical-align: top;
+  font-size: 12px;
+  width: 70px;
 }
 
 td.platforms {
-    width: 150px;
+  width: 150px;
+}
+
+div#new_game {
+    clear: both;
 }
 
 /* Completion */
 
 #game_info_completion {
-    width: 97%;
+  float: left;
+  width: 40%;
+  padding-top: 30px;
+}
+
+#completion_label {
     float: left;
 }
 
 div#completion_bar {
-    width: 200px;
-    background-color: white;
-    text-align: center;
-    height: 20px;
-    float: left;
+  margin-top: 4px;
+  width: 200px;
+  background-color: white;
+  text-align: center;
+  height: 10px;
+  float: left;
 }
 
 div#completion_filled {
-    background-color: lightBlue;
-    width: 72%;
-    height: 20px;
+  background-color: #C3D9FF;
+  width: 72%;
+  height: 10px;
 }
 
-span.completion_text {
-    float: left;
+span#completion_text {
+  float: left;
+  margin-left: 3px;
 }
+
+/* Characters */
+
+#game_info_characters {
+    float: right;
+    padding: 10px 14px 10px 13px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 44%;
+    background-color: #c9ced7;
+    border: 1px solid gray;
+}
+
 
 /* Description */
 
 #game_info_description {
-    padding: 10px;
-    margin-top: 10px;
-    clear: both;
-    padding: 10px 14px 10px 13px;
-    text-align: justify;
-    width: 97%;
-    float: left;
+  clear: both;
+  padding: 10px 14px 10px 13px;
+  text-align: justify;
+  width: 97%;
+  float: left;
 }
 
 /* Series */
@@ -750,16 +766,21 @@ span.showing {
     float: left;
 }
 
+.list_series_name {
+  display: block;
+  font-weight: bold;
+}
+
 /* Scores */
 
 #game_info_scores {
-    margin-left: 10px;
-    margin-bottom: 10px;
-    float: left;
-    padding: 10px 14px 10px 13px;
-    width: 44%;
-    background-color: #c9ced7;
-    border: 1px solid gray;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  float: right;
+  padding: 10px 14px 10px 13px;
+  width: 44%;
+  background-color: #c9ced7;
+  border: 1px solid gray;
 }
 
 #scores_container {
@@ -813,18 +834,6 @@ span.showing {
 
 .bg_color_darkgray {
     background-color: #7f7f7f;
-}
-
-.red a{
-    color: red;
-}
-
-.yellow a{
-    color: black;
-}
-
-.green a{
-    color: green;
 }
 
 .bg_color_yellow {

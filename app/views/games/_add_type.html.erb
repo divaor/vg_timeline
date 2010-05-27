@@ -3,7 +3,7 @@
 <%= form_for @game do |f| %>
   <div class="field">
     <%= f.label :type_name %>
-    <%= f.select :type_name, @types.collect { |t| [t.name, t.id] } %>
+    <%= f.select :type_name, @types.collect { |t| [t.name, t.id] }, {}, :class => 'fcs' %>
   </div>
   <div class="actions">
     <%= f.submit "Submit" %>
