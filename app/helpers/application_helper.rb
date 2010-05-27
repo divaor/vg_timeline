@@ -102,7 +102,7 @@ module ApplicationHelper
   end
 
   def games_list(games, options = {})
-    options.merge(:gm => "", :series => false)
+    options = { :gm => "", :series => false }.merge(options)
     list = ""
     series = ""
     if options[:series]
@@ -149,9 +149,9 @@ module ApplicationHelper
   end
 
   def character_pic(character, options = {})
-    options.merge({ :make_link => true })
+    options = { :make_link => true }.merge(options)
     pic = image_tag(character.picture.url(:mini), :alt => character.name, :name => character.name, :onmouseover => "new Tip(this, '#{character.name}', { width: 'auto' })")
-    pic = pop_up_controller(pic, 'show', 'characters', :id => character.id) if options[:make_link]
-    return pic
+    return pic unless options[:make_link]
+    return pop_up_controller(pic, 'show', 'characters', :id => character.id)
   end
 end

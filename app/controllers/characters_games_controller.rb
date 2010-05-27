@@ -25,7 +25,7 @@ class CharactersGamesController < ApplicationController
       @characters_game.save
     end
     for game in @characters_game.game.different_platforms
-      game.characters << @characters_game.character unless game.characters.include?(@characters_game.character)
+      CharactersGame.create(:game_id => game.id, :character_id => @characters_game.character_id, :playable => @characters_game.playable) unless game.characters.include?(@characters_game.character)
     end
     @characters_game.character.update_attributes(params[:character]) if params[:character]
     @series_games_characters = @characters_game.in_series_games || []
