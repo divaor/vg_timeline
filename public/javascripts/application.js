@@ -35,8 +35,7 @@ document.observe("ajax:loading", function(event) {
   if(event.target.tagName.toLowerCase() != 'form') {
     var href = event.target.readAttribute('href');
     var lv = href.charAt(href.indexOf('lv=') + 3);
-    $('lev'+lv).update("");
-    $('lev'+lv).insert('<h4>Loading...</h4>');
+    $('lev'+lv).update('<h4>Loading...</h4>');
     Effect.Appear('lev'+lv, {
       duration: 0.3
     });
@@ -44,6 +43,8 @@ document.observe("ajax:loading", function(event) {
       duration: 0.3,
       to: 0.3
     });
+  } else {
+    $('lev1').update('<h4>Loading...</h4>');
   }
 });
 
@@ -56,7 +57,7 @@ document.observe("ajax:complete", function(event) {
       focus.select();
     }
 
-    // Close pop up window
+    // Obser close button in pop up window
     var close = $('window_close');
     if(close) {
       close.observe('click', function() {

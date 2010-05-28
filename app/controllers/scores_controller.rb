@@ -14,10 +14,14 @@ class ScoresController < ApplicationController
     @score = Score.new(params[:score])
     if @score.save
       flash[:notice] = "Score added succesfully."
-      redirect_to game_path(@score.game)
     else
       flash[:alert] = "Could not add score."
-      redirect_to game_path(@score.game)
+    end
+    @element_id = "scores_container"
+    @helper = "scores(@game)"
+    @game = @score.game
+    respond_to do |format|
+      format.js { render 'games/refresh_game' }
     end
   end
 

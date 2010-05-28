@@ -1,6 +1,6 @@
 <h2>Game Awards</h2>
 
-<%= form_for @award do |f| %>
+<%= form_for @award, :html => { :remote => true } do |f| %>
   <div class="field">
     <%= f.hidden_field :game_id %>
   </div>

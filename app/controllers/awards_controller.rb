@@ -14,10 +14,14 @@ class AwardsController < ApplicationController
     @award = Award.new(params[:award])
     if @award.save
       flash[:notice] = "Award added succesfully."
-      redirect_to game_path(@award.game)
     else
       flash[:alert] = "Could not add award."
-      redirect_to game_path(@award.game)
+    end
+    @element_id = "award_container"
+    @helper = "awards(@game)"
+    @game = @award.game
+    respond_to do |format|
+      format.js { render 'games/refresh_game' }
     end
   end
 

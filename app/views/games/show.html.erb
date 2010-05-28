@@ -9,7 +9,7 @@
       <%= box_logo(@game, :medium) %>
     </div>
 
-    <!-- BASIC INFO -->
+    <!-- BASIC INFO & COMPLETION BAR -->
     <div id="basic_info_container">
 
       <!-- NAME -->
@@ -66,13 +66,7 @@
 
       <!-- GAME INFO COMPLETION -->
       <div id="game_info_completion">
-        <span id="completion_label">Game Info Progress</span><%# TODO change wording %>
-        <div id="completion_bar">
-          <div id="completion_filled" style="<%= "width: #{@game.completion}%;" %>"></div>
-        </div>
-        <span id="completion_text">
-          <%= "#{@game.completion}%" %>
-        </span>
+        <%= info_completion(@game) %>
       </div>
 
       <!-- ADD & EDIT GAME LINKS -->
@@ -122,180 +116,54 @@
 
       <!-- SCORES -->
       <div id="scores_container">
-        <h4>Scores</h4>
-        <% scores = @game.scores %>
-        <% unless scores.empty? %>
-          <% total = 0 %>
-          <% count = 0 %>
-          <div id="scores_content">
-            <% for score in scores %>
-              <% if score.score.to_i < 4 %>
-                <% color = 'bg_color_darkgray' %>
-              <% elsif score.score.to_i > 7 %>
-                <% color = 'bg_color_lightgray' %>
-              <% else %>
-                <% color = 'bg_color_gray' %>
-              <% end %>
-              <div class="scores_press round_left <%= color %>">
-                <%= link_to score.press.name, score.press.url, :target => '_blank' %>
-              </div>
-              <div class="scores round_right <%= color %>">
-                <%= link_to score.score, score.url, :target => '_blank' %>
-              </div>
-              <% count += 1 %>
-              <% total += score.score.to_i %>
-            <% end %>
-          </div>
-          <% if total/count < 4 %>
-            <% bg_color = 'bg_color_red' %>
-          <% elsif total/count > 7 %>
-            <% bg_color = 'bg_color_green' %>
-          <% else %>
-            <% bg_color = 'bg_color_yellow' %>
-          <% end %>
-          <div id="avg_score_container">
-            <div id="avg_score" class="<%= bg_color %>">
-              <div class="centering"><%= total/count %></div>
-            </div>
-          </div>
-        <% end %>
-        <div class="scores_add">
-          <%= pop_up_controller "+", 'new', 'scores', :game_id => @game.id if user_signed_in? %>
-        </div>
+        <%= scores(@game) %>
       </div>
 
       <!-- AWARDS -->
       <div id="award_container">
-        <h4>Awards</h4>
-        <div id="awards_content">
-          <% awards = @game.awards %>
-          <% unless awards.empty? %>
-            <% for award in awards %>
-              <div class="award_press_name">
-                <%= link_to award.press.name, award.press.url %>
-              </div>
-              <div class="award_description">
-                <%= award.description %>
-              </div>
-            <% end %>
-          <% end %>
-          <div class="scores_add">
-            <%= pop_up_controller "+", 'new', 'awards', :game_id => @game.id if user_signed_in? %>
-          </div>
-        </div>
+        <%= awards(@game) %>
       </div>
     </div>
   </div>
 
   <!-- RIGHT COLUMN -->
   <div id="right_column" class="round">
-    <% if @game.rating %>
-      <%= rating_logo(@game.rating) %><br />
-    <% end %>
-    <div class="right_label">
-      Type:
+
+    <div id="rating">
+      <%= rating(@game) %>
     </div>
-    <div class="right_description">
-      <% unless @game.types.empty? %>
-        <% for type in @game.types %>
-          <%= type.name %><%= ", " unless type == @game.types.last %>
-        <% end %>
-      <% end %>
-      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_type' if user_signed_in? %><br />
+
+    <div id="types">
+      <%= types(@game) %>
     </div>
-    <div class="right_label">
-      Genre(s):
+
+    <div id="genres">
+      <%= genres(@game) %>
     </div>
-    <div class="right_description">
-      <% unless @game.genres.empty? %>
-        <% for genre in @game.genres %>
-          <%= genre.name %><%= ", " unless genre == @game.genres.last %>
-        <% end %>
-      <% end %>
-      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_genre' if user_signed_in? %><br />
+
+    <div id="players">
+      <%= players(@game) %>
     </div>
-    <div class="right_label">
-      Local:
+
+    <div id="achievements">
+      <%= @game.achievements %>
+      <%# Take off when providing the add key people link%>
     </div>
-    <div class="right_description">
-      <% if @game.local_players %>
-        <%= @game.local_players %> Player(s)<%= ", " if @game.local_multi_modes.coop or @game.local_multi_modes.vs %>
-        <% if @game.local_multi_modes.coop %>
-          Co-op<%= ", " if @game.local_multi_modes.vs %>
-        <% end %>
-        <% if @game.local_multi_modes.vs %>
-          Vs
-        <% end %>
-      <% end %>
-      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
+
+    <div id="key_people">
+      <%= key_people(@game) %>
     </div>
-    <div class="right_label">
-      Online:
+
+    <div id="features">
+      <%= features(@game) %>
     </div>
-    <div class="right_description">
-      <% if @game.online_players %>
-        <% if @game.online_players > 0 %>
-          <%= @game.online_players %> Players<%= ", " if @game.online_multi_modes.coop or @game.online_multi_modes.vs %>
-        <% else %>
-          Not available
-        <% end %>
-        <% if @game.online_multi_modes.coop %>
-          Co-op<%= ", " if @game.online_multi_modes.vs %>
-        <% end %>
-        <% if @game.online_multi_modes.vs %>
-          Vs
-        <% end %>
-      <% end %>
-      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_players' if user_signed_in? %><br />
+
+    <div id="specifications">
+      <%= specs(@game) %>
     </div>
-    <%= @game.achievements %>
-<%# Take off when providing the add key people link%>
-    <% unless @game.project_leaders.empty? %>
-      <div class="right_label">
-        Key People:
-      </div>
-      <div class="right_description">
-        <% unless @game.project_leaders.empty? %>
-          <% for person in @game.industry_people %>
-            <%= person.name %>: <%= person.position %>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
-    <div class="right_label">
-      Features:
+
+    <div id="peripherals">
+      <%= peripherals(@game) %>
     </div>
-    <div class="right_description">
-      <% unless @game.features.empty? %>
-        <% for feature in @game.features %>
-          <%= feature.description %>
-        <% end %>
-      <% end %>
-      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_features' if user_signed_in? %><br />
-    </div>
-    <div class="right_label">
-      Specs:
-    </div>
-    <div class="right_description">
-      <% unless @game.specifications.empty? %>
-        <% for specification in @game.specifications %>
-          <%= specification.description %>
-        <% end %>
-      <% end %>
-      <%= pop_up "+", '/edit?id=' + @game.id.to_s + '&view=add_specs' if user_signed_in? %><br />
-    </div>
-<%# Take off when providing the add key people link%>
-    <% unless @game.peripherals.empty? %>
-      <div class="right_label">
-        Compatible with:
-      </div>
-      <div class="right_description">
-        <% unless @game.peripherals.empty? %>
-          <% for peripheral in @game.peripherals %>
-            <%= peripheral.name %>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
   </div>
 </div>
