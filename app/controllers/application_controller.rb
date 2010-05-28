@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
   def create_log_entry(table, id, description, parameters)
     parameters = { :add => false, :mod => false, :remove => false }.merge(parameters)
-    table = Table.where("name = ?", table).first
+    table = ModTable.where("name = ?", table).first
     log = Modification.new(:user => current_user, :table => table, :modified_id => id, :description => description,
       :added => parameters[:add], :modified => parameters[:mod], :removed => parameters[:remove])
     log.save

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100522020333) do
+ActiveRecord::Schema.define(:version => 20100527214235) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -191,6 +191,12 @@ ActiveRecord::Schema.define(:version => 20100522020333) do
     t.datetime "updated_at"
   end
 
+  create_table "mod_tables", :force => true do |t|
+    t.string    "name",       :limit => 150, :null => false
+    t.timestamp "created_at",                :null => false
+    t.timestamp "updated_at",                :null => false
+  end
+
   create_table "modifications", :force => true do |t|
     t.integer  "user_id",                        :null => false
     t.string   "description"
@@ -319,12 +325,6 @@ ActiveRecord::Schema.define(:version => 20100522020333) do
     t.string   "description", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "tables", :force => true do |t|
-    t.string    "name",       :limit => 100, :null => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
   end
 
   create_table "types", :force => true do |t|

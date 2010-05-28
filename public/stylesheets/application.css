@@ -377,7 +377,9 @@ div#general_filters {
 
 div#platforms_general_filters,
 div#publishers_general_filters,
-div#developers_general_filters {
+div#developers_general_filters,
+div#genres_general_filters,
+div#ratings_general_filters {
     font-size: 13px;
     background-color: #E7E7E7;
     margin: 5px 5px 5px 0px;
@@ -411,7 +413,7 @@ div#first_filter_cat li {
     padding:2px 4px;
 }
 
-#developers_tab {
+#ratings_tab {
     border-bottom: 1px solid black;
 }
 

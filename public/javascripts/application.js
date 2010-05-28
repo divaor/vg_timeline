@@ -443,21 +443,39 @@ function paneselect1(div) {
   var hidden_div;
   var nh_div1;
   var nh_div2;
+  var nh_div3;
+  var nh_div4;
   if(div == 'platforms_general_filters') {
     nh_div1 = $('developers_general_filters');
     nh_div2 = $('publishers_general_filters');
+    nh_div3 = $('genres_general_filters');
+    nh_div4 = $('ratings_general_filters');
   } else if(div == 'publishers_general_filters') {
     nh_div1 = $('developers_general_filters');
     nh_div2 = $('platforms_general_filters');
+    nh_div3 = $('genres_general_filters');
+    nh_div4 = $('ratings_general_filters');
   } else if(div == 'developers_general_filters') {
     nh_div1 = $('publishers_general_filters');
     nh_div2 = $('platforms_general_filters');
-  } else {
-
+    nh_div3 = $('genres_general_filters');
+    nh_div4 = $('ratings_general_filters');
+  } else if(div == 'genres_general_filters') {
+    nh_div1 = $('publishers_general_filters');
+    nh_div2 = $('platforms_general_filters');
+    nh_div3 = $('developers_general_filters');
+    nh_div4 = $('ratings_general_filters');
+  } else if(div == 'ratings_general_filters') {
+    nh_div1 = $('publishers_general_filters');
+    nh_div2 = $('platforms_general_filters');
+    nh_div3 = $('developers_general_filters');
+    nh_div4 = $('genres_general_filters');
   }
   hidden_div = $(div);
   nh_div1.style.display = "none";
   nh_div2.style.display = "none";
+  nh_div3.style.display = "none";
+  nh_div4.style.display = "none";
   hidden_div.style.display = "block";
 }
 
