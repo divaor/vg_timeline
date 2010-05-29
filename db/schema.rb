@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100529035749) do
+ActiveRecord::Schema.define(:version => 20100529070838) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -200,13 +200,13 @@ ActiveRecord::Schema.define(:version => 20100529035749) do
   end
 
   create_table "modifications", :force => true do |t|
-    t.integer  "user_id",                        :null => false
+    t.integer  "user_id",                         :null => false
     t.string   "description"
-    t.boolean  "removed",     :default => false, :null => false
-    t.boolean  "added",       :default => false, :null => false
-    t.boolean  "modified",    :default => false, :null => false
-    t.integer  "table_id",                       :null => false
-    t.integer  "modified_id",                    :null => false
+    t.boolean  "removed",      :default => false, :null => false
+    t.boolean  "added",        :default => false, :null => false
+    t.boolean  "modified",     :default => false, :null => false
+    t.integer  "mod_table_id",                    :null => false
+    t.integer  "modified_id",                     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
