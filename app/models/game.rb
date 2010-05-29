@@ -87,12 +87,12 @@ class Game < ActiveRecord::Base
   end
 
   def added_by
-    table = Table.where("name = ?", 'games').first
+    table = ModTable.where("name = ?", 'games').first
     Modification.where("added = true and table_id = ? and modified_id = ?", table.id, self.id).first
   end
 
   def modified_by
-    table = Table.where("name = ?", 'games').rirst
+    table = ModTable.where("name = ?", 'games').rirst
     Modification.where("modified = true and table_id = ? and modified_id = ?", table.id, self.id).all
   end
 

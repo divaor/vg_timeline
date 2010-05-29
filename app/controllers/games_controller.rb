@@ -26,6 +26,8 @@ class GamesController < ApplicationController
         @months = games['games']
         @platforms_month = games['platforms']
         @platforms_year = games['platforms_year']
+        @genres = Genre.all
+        @ratings = Rating.all
       end
     end
   end
