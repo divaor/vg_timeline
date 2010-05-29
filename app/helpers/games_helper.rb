@@ -146,6 +146,7 @@ module GamesHelper
   end
 
   def rating(game)
+    out = ''
     if game.rating
       out = rating_logo(game.rating)
     end

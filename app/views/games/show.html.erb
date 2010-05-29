@@ -123,6 +123,8 @@
       <div id="award_container">
         <%= awards(@game) %>
       </div>
+
+      <%= pop_up_controller "Edit Press", 'index', 'press', :game_id => @game.id if user_signed_in? %>
     </div>
   </div>
 

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100527214235) do
+ActiveRecord::Schema.define(:version => 20100529035749) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -194,9 +194,9 @@ ActiveRecord::Schema.define(:version => 20100527214235) do
   end
 
   create_table "mod_tables", :force => true do |t|
-    t.string    "name",       :limit => 150, :null => false
-    t.timestamp "created_at",                :null => false
-    t.timestamp "updated_at",                :null => false
+    t.string   "name",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "modifications", :force => true do |t|
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(:version => 20100527214235) do
     t.datetime "updated_at"
     t.string   "region"
     t.integer  "market_id"
+    t.string   "scale"
   end
 
   create_table "project_leaders", :force => true do |t|
