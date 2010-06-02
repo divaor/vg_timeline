@@ -1,0 +1,6 @@
+new Effect.Fade('lev1', { duration: 0.3 });
+new Effect.Fade('trans1', { duration: 0.3 });
+var element = $('<%= @element_id %>');
+if(element)
+  element.update('<%= escape_javascript(eval(@helper)) %>');
+$('game_info_completion').update('<%= escape_javascript(info_completion(@game)) %>');

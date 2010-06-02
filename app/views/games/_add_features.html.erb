@@ -1,6 +1,8 @@
 <h2>Features</h2>
 
-<%= form_for @game do |f| %>
+<%= form_for @game, :html => { :remote => true } do |f| %>
+  <%= hidden_field_tag :element_id, @element_id %>
+  <%= hidden_field_tag :helper, @helper %>
   <div class="field">
     <%= f.label :feature_descriptions %>
     <%= f.text_field :feature_descriptions, :class => 'fcs' %>

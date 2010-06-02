@@ -50,7 +50,15 @@
 <% if @applied_filters[2].length == 1 %>
   $('y_dev_all').checked = true;
 <% end %>
+<% if @applied_filters[3].length == 1 %>
+  $('y_gen_all').checked = true;
+<% end %>
+<% if @applied_filters[4].length == 1 %>
+  $('y_rat_all').checked = true;
+<% end %>
 $('year_stats').update('<%= escape_javascript(render 'year_stats') %>');
 Element.hide("<%= 'spinner'+@year %>");
 Element.hide("<%= 'spinnerp'+@year %>");
 Element.hide("<%= 'spinnerd'+@year %>");
+Element.hide("<%= 'spinnern'+@year %>");
+Element.hide("<%= 'spinnerr'+@year %>");

@@ -1,6 +1,8 @@
 <h2>Type</h2>
 
-<%= form_for @game do |f| %>
+<%= form_for @game, :html => { :remote => true } do |f| %>
+  <%= hidden_field_tag :element_id, @element_id %>
+  <%= hidden_field_tag :helper, @helper %>
   <div class="field">
     <%= f.label :type_name %>
     <%= f.select :type_name, @types.collect { |t| [t.name, t.id] }, {}, :class => 'fcs' %>

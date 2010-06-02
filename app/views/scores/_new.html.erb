@@ -1,6 +1,6 @@
 <h2>Game Scores</h2>
 
-<%= form_for @score do |f| %>
+<%= form_for @score, :html => { :remote => true } do |f| %>
   <div class="field">
     <%= f.hidden_field :game_id %>
   </div>

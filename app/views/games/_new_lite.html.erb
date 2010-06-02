@@ -1,6 +1,6 @@
 <h2>Multiplatform</h2>
 
-<%= form_for(@game, :url => { :diff_platform_id => @diff_platform_id }, :html => { :multipart => true }) do |f| %>
+<%= form_for(@game, :url => { :diff_platform_id => @diff_platform_id }, :html => { :multipart => true, :remote => true }) do |f| %>
   <%= f.error_messages %>
   <div class="field">
     <%= f.label :main_title %><br />

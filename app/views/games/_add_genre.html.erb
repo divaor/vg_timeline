@@ -1,6 +1,8 @@
 <h2>Genres</h2>
 
-<%= form_for @game do |f| %>
+<%= form_for @game, :html => { :remote => true } do |f| %>
+  <%= hidden_field_tag :element_id, @element_id %>
+  <%= hidden_field_tag :helper, @helper %>
   <% for genre in @genres %>
     <%= check_box_tag "game[genre_ids][]", genre.id, @game.genres.include?(genre) %>
     <%= f.label :genre_ids, genre.name, :class => genre == @genres.first ? 'fcs' : '' %><br />
