@@ -22,6 +22,22 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def search
+    @results = []
+    @search = params[:search]
+    @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(4)
+    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @developers = Developer.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @publishers = Publisher.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @games.each { |g| @results << g }
+    @characters.each { |c| @results << c }
+    @developers.each { |d| @results << d }
+    @publishers.each { |p| @results << p }
+    respond_to do |format|
+      format.js { render 'layouts/search' }
+    end
+  end
+
   def search_results
     title = params[:game][:main_title].split(':')
     title[1] = "" unless title[1]

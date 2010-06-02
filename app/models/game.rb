@@ -64,6 +64,14 @@ class Game < ActiveRecord::Base
     full_title_colon
   end
 
+  def result_display
+    full_title_colon_limit
+  end
+
+  def result_picture
+    boxart.url(:mini)
+  end
+
   def series_list_by_full_title
     games_titles = []
     games = []
@@ -88,7 +96,7 @@ class Game < ActiveRecord::Base
 
   def added_by
     table = ModTable.where("name = ?", 'games').first
-    Modification.where("added = true and table_id = ? and modified_id = ?", table.id, self.id).first
+    Modification.where("added = true and mod_table_id = ? and modified_id = ?", table.id, self.id).first
   end
 
   def modified_by
