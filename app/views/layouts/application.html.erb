@@ -30,7 +30,7 @@
         </div>
         <%= form_tag search_results_path, :method => :post do %>
           <span id="search_box">
-            <%= text_field_with_auto_complete :game, :main_title, { :size => 35 }, { :url => games_path(), :method => :get, :param_name => 'search' } %>
+            <%= text_field_with_auto_complete :game, :main_title, { :size => 35 }, { :url => search_path(), :method => :get, :param_name => 'search' } %>
             <%= submit_tag "Search" %>
           </span>
         <% end %>

@@ -1,0 +1,11 @@
+<ul>
+  <% for result in @results %>
+    <li>
+      <%= result.result_display %>
+      (<%= result.class %>)
+      <% if result.respond_to?('result_picture') %>
+        <%= image_tag(result.result_picture) %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

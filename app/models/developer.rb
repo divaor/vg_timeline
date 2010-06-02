@@ -1,5 +1,9 @@
 class Developer < ActiveRecord::Base
   has_and_belongs_to_many :games
 
-  validates_presence_of :name
+  validates :name, :presence => true
+
+  def result_display
+    name
+  end
 end

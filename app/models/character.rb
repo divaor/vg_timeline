@@ -27,4 +27,12 @@ class Character < ActiveRecord::Base
 
     return games
   end
+
+  def result_display
+    name
+  end
+
+  def result_picture
+    picture.url(:mini)
+  end
 end

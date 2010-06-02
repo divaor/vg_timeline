@@ -22,6 +22,22 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def search
+    @results = []
+    @search = params[:search]
+    @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(4)
+    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @developers = Developer.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @publishers = Publisher.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @games.each { |g| @results << g }
+    @characters.each { |c| @results << c }
+    @developers.each { |d| @results << d }
+    @publishers.each { |p| @results << p }
+    respond_to do |format|
+      format.js { render 'layouts/search' }
+    end
+  end
+
   def search_results
     title = params[:game][:main_title].split(':')
     title[1] = "" unless title[1]
@@ -42,7 +58,7 @@ class ApplicationController < ActionController::Base
   def create_log_entry(table, id, description, parameters)
     parameters = { :add => false, :mod => false, :remove => false }.merge(parameters)
     table = ModTable.where("name = ?", table).first
-    log = Modification.new(:user => current_user, :table => table, :modified_id => id, :description => description,
+    log = Modification.new(:user => current_user, :mod_table => table, :modified_id => id, :description => description,
       :added => parameters[:add], :modified => parameters[:mod], :removed => parameters[:remove])
     log.save
   end
