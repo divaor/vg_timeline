@@ -378,6 +378,7 @@ class GamesController < ApplicationController
     @games = search_games_by_checked_platforms(params)
     @stats = get_stats(@games)
     @applied_filters = []; platforms = ["Platforms"]; publishers = ["Publishers"]; developers = ["Developers"];
+    ratings = ["Ratings"]; genres = ["Genres"]
     params.each_pair { |key, value|
       if key.to_i > 0 and value.to_i > 0
         platforms << Platform.find(value)
@@ -385,10 +386,14 @@ class GamesController < ApplicationController
         publishers << Publisher.find(value.delete('p').to_i)
       elsif value[0,1] == 'd'
         developers << Developer.find(value.delete('d').to_i)
+      elsif value[0,1] == 'n'
+        genres << Genre.find(value.delete('n').to_i)
+      elsif value[0,1] == 'r'
+        ratings << Rating.find(value.delete('r').to_i)
       end
     }
-    @applied_filters = [platforms,publishers,developers]
-    if @applied_filters == [["Platforms"],["Publishers"],["Developers"]]
+    @applied_filters = [platforms,publishers,developers,genres,ratings]
+    if @applied_filters == [["Platforms"],["Publishers"],["Developers"],["Genres"],["Ratings"]]
       @filtered = false
     else
       @filtered = true
@@ -495,7 +500,7 @@ class GamesController < ApplicationController
   private
 
   def get_stats(games)
-    stats = {"Total" => {"Games", games.length}, "Platforms" => {}, "Publishers" => {}, "Developers" => {}}
+    stats = {"Total" => {"Games", games.length}, "Platforms" => {}, "Publishers" => {}, "Developers" => {}, "Genres" => {}, "Ratings" => {}}
     for game in games
       if stats["Platforms"][game.platform.name]
         stats["Platforms"][game.platform.name] += 1
@@ -516,11 +521,27 @@ class GamesController < ApplicationController
           stats["Publishers"][pub.name] = 1
         end
       end
+      for gen in game.genres
+        if stats["Genres"][gen.name]
+          stats["Genres"][gen.name] += 1
+        else
+          stats["Genres"][gen.name] = 1
+        end
+      end
+      if game.rating
+        if stats["Ratings"][game.rating.name]
+          stats["Ratings"][game.rating.name] += 1
+        else
+          stats["Ratings"][game.rating.name] = 1
+        end
+      end
     end
     stats["Total"] = stats["Total"].sort {|a,b| b[1]<=>a[1]}
     stats["Publishers"] = stats["Publishers"].sort {|a,b| b[1]<=>a[1]}
     stats["Developers"] = stats["Developers"].sort {|a,b| b[1]<=>a[1]}
     stats["Platforms"] = stats["Platforms"].sort {|a,b| b[1]<=>a[1]}
+    stats["Genres"] = stats["Genres"].sort {|a,b| b[1]<=>a[1]}
+    stats["Ratings"] = stats["Ratings"].sort {|a,b| b[1]<=>a[1]}
     stats
   end
 
@@ -694,7 +715,7 @@ class GamesController < ApplicationController
     #    limit = parameters[:l]
     limit = "0"
     games = []
-    platform_ids = []; publisher_ids = []; developer_ids = [];
+    platform_ids = []; publisher_ids = []; developer_ids = []; genre_ids = []; rating_ids = []
     parameters.each_pair { |key, value|
       if key.to_i > 0 and value.to_i > 0
         platform_ids << value
@@ -702,67 +723,72 @@ class GamesController < ApplicationController
         publisher_ids << value.delete('p')
       elsif value[0,1] == 'd'
         developer_ids << value.delete('d')
+      elsif value[0,1] == 'n'
+        genre_ids << value.delete('n')
+      elsif value[0,1] == 'r'
+        rating_ids << value.delete('r')
       end
     }
-    platform_query = ""; publisher_query = ""; developer_query = "";
+    platform_query = ""; publisher_query = ""; developer_query = ""; genre_query = ""; rating_query = ""
     unless platform_ids.empty?
       platform_ids = platform_ids.join(",")
-      platform_query = " and platform_id in (#{platform_ids})"
+      platform_query = "platform_id in (#{platform_ids})"
     end
     unless publisher_ids.empty?
       publisher_ids = publisher_ids.join(",")
-      publisher_query = " and publishers.id in (#{publisher_ids})"
+      publisher_query = "publishers.id in (#{publisher_ids})"
     end
     unless developer_ids.empty?
       developer_ids = developer_ids.join(",")
-      developer_query = " and developers.id in (#{developer_ids})"
+      developer_query = "developers.id in (#{developer_ids})"
+    end
+    unless genre_ids.empty?
+      genre_ids = genre_ids.join(",")
+      genre_query = "genres.id in (#{genre_ids})"
+    end
+    unless rating_ids.empty?
+      rating_ids = rating_ids.join(",")
+      rating_query = "rating_id in (#{rating_ids})"
     end
     if parameters[:date]
-      if limit == "0"
-        if not publisher_ids.empty? and developer_ids.empty?
-          games = Game.where("release_date = ?#{platform_query} and games.id = games_publishers.game_id and games_publishers.publisher_id = publishers.id#{publisher_query}", parameters[:date]).order("release_date asc, hits desc, main_title asc").includes(:publishers)
-        elsif not developer_ids.empty? and publisher_ids.empty?
-          games = Game.where("release_date = ?#{platform_query} and games.id = developers_games.game_id and developers_games.developer_id = developers.id#{developer_query}", parameters[:date]).order("release_date asc, hits desc, main_title asc").includes(:developers)
-        elsif not publisher_ids.empty? and not developer_ids.empty?
-          games = Game.where("release_date = ?#{platform_query} and games.id = developers_games.game_id and developers_games.developer_id = developers.id#{developer_query} and games.id = games_publishers.game_id and games_publishers.publisher_id = publishers.id#{publisher_query}", parameters[:date]).order("release_date asc, hits desc, main_title asc").includes(:developers, :publishers)
-        else
-          games = Game.where("release_date = ?#{platform_query}", parameters[:date]).order("release_date asc, hits desc, main_title asc").offset(offset)
-        end
-      else
-        games = Game.where("release_date = ?#{platform_query}", parameters[:date]).order("release_date asc, hits desc, main_title asc").offset(offset).limit(limit)
-      end
+      games = Game.where("release_date = ?", parameters[:date])
     else
-      if limit == "0"
-        if not publisher_ids.empty? and developer_ids.empty?
-          games = Game.where("release_date >= ? and release_date <= ?#{platform_query} and games.id = games_publishers.game_id and games_publishers.publisher_id = publishers.id#{publisher_query}", "#{year}-#{starting_month}-#{starting_day}", "#{year}-#{ending_month}-#{ending_day}").order("release_date asc, hits desc, main_title asc").includes(:publishers)
-        elsif not developer_ids.empty? and publisher_ids.empty?
-          games = Game.where("release_date >= ? and release_date <= ?#{platform_query} and games.id = developers_games.game_id and developers_games.developer_id = developers.id#{developer_query}", "#{year}-#{starting_month}-#{starting_day}", "#{year}-#{ending_month}-#{ending_day}").order("release_date asc, hits desc, main_title asc").includes(:developers)
-        elsif not publisher_ids.empty? and not developer_ids.empty?
-          games = Game.where("release_date >= ? and release_date <= ?#{platform_query} and games.id = developers_games.game_id and developers_games.developer_id = developers.id#{developer_query} and games.id = games_publishers.game_id and games_publishers.publisher_id = publishers.id#{publisher_query}", "#{year}-#{starting_month}-#{starting_day}", "#{year}-#{ending_month}-#{ending_day}").order("release_date asc, hits desc, main_title asc").includes(:developers, :publishers)
-        else
-          games = Game.where("release_date >= ? and release_date <= ?#{platform_query}", "#{year}-#{starting_month}-#{starting_day}", "#{year}-#{ending_month}-#{ending_day}").order("release_date asc, hits desc, main_title asc").offset(offset)
-        end
-      else
-        games = Game.where("release_date >= ? and release_date <= ?#{platform_query}", "#{year}-#{starting_month}-#{starting_day}", "#{year}-#{ending_month}-#{ending_day}").order("release_date asc, hits desc, main_title asc").offset(offset).limit(limit)
-      end
+      games = Game.where("release_date >= ? and release_date <= ?", "#{year}-#{starting_month}-#{starting_day}", "#{year}-#{ending_month}-#{ending_day}")
     end
-    return games
-  end
+    #      if limit == "0"
+    if not platform_ids.empty?
+      games = games.where("#{platform_query}")
+    end
+    if not publisher_ids.empty?
+      games = games.where("games.id = games_publishers.game_id and games_publishers.publisher_id = publishers.id and #{publisher_query}").includes(:publishers)
+    end
+    if not developer_ids.empty?
+      games = games.where("games.id = games_developers.game_id and games_developers.developer_id = developers.id and #{developer_query}").includes(:developers)
+    end
+    if not genre_ids.empty?
+      games = games.where("games.id = games_genres.game_id and games_genres.genre_id = genres.id and #{genre_query}").includes(:genres)
+    end
+    if not rating_ids.empty?
+      games = games.where("#{rating_query}")
+    end
+    games = games.order("release_date asc, hits desc, main_title asc")
+  return games
+end
 
-  def move_boxart old_info, game
-    styles = %w(thumb mini medium original)
-    bucket = 'vg-timeline'
-    AWS::S3::Base.establish_connection!(:access_key_id => 'AKIAIMXJ77QKTJ3QN27Q', :secret_access_key => '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')
-    for style in styles
-      old_file_path = "images/#{old_info[:year]}/#{old_info[:month]}/#{style}/#{old_info[:path]}"
-      new_file_path = "images/#{game.r_y}/#{game.r_m}/#{style}/#{game.make_boxart_path}"
-      if AWS::S3::S3Object.exists?(old_file_path, bucket) and old_file_path != new_file_path
-        AWS::S3::S3Object.copy old_file_path, new_file_path, bucket
-        AWS::S3::S3Object.delete old_file_path, bucket
-        policy = AWS::S3::S3Object.acl(new_file_path, bucket)
-        policy.grants << AWS::S3::ACL::Grant.grant(:public_read)
-        AWS::S3::S3Object.acl(new_file_path, bucket, policy)
-      end
+def move_boxart old_info, game
+  styles = %w(thumb mini medium original)
+  bucket = 'vg-timeline'
+  AWS::S3::Base.establish_connection!(:access_key_id => 'AKIAIMXJ77QKTJ3QN27Q', :secret_access_key => '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')
+  for style in styles
+    old_file_path = "images/#{old_info[:year]}/#{old_info[:month]}/#{style}/#{old_info[:path]}"
+    new_file_path = "images/#{game.r_y}/#{game.r_m}/#{style}/#{game.make_boxart_path}"
+    if AWS::S3::S3Object.exists?(old_file_path, bucket) and old_file_path != new_file_path
+      AWS::S3::S3Object.copy old_file_path, new_file_path, bucket
+      AWS::S3::S3Object.delete old_file_path, bucket
+      policy = AWS::S3::S3Object.acl(new_file_path, bucket)
+      policy.grants << AWS::S3::ACL::Grant.grant(:public_read)
+      AWS::S3::S3Object.acl(new_file_path, bucket, policy)
     end
   end
+end
 end

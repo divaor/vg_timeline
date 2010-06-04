@@ -151,12 +151,12 @@
 
     <div id="genres_general_filters" style="display:none">
       <span class="title_top_filter"><%= "Current Year" %></span>
-      <span id="spinner<%= 'g'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-      <span class="check_top_filter"><%= check_box_tag 'y_gen_all', 1, true, :class => 'g'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+      <span id="spinner<%= 'n'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      <span class="check_top_filter"><%= check_box_tag 'y_gen_all', 1, true, :class => 'n'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
       <br />
       <% @genres.sort! { |a,b| a.name <=> b.name } %>
       <% for genre in @genres %>
-        <%= check_box_tag 'g'+genre.id.to_s, 1, false, :class => 'g'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_gen_all')" %>
+        <%= check_box_tag 'n'+genre.id.to_s, 1, false, :class => 'n'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_gen_all')" %>
         <%= genre.name %><br />
       <% end %>
     </div>

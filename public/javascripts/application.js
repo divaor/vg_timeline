@@ -229,7 +229,7 @@ function updateYear(cls) {
 }
 
 function getCheckedYear(cls) {
-  var filters = $$('.'+cls).concat($$('.p'+cls)).concat($$('.d'+cls));
+  var filters = $$('.'+cls).concat($$('.p'+cls)).concat($$('.d'+cls)).concat($$('.r'+cls)).concat($$('.n'+cls));
   var params = "y=" + cls + "&l=3";
   var i = 1;
   filters.each(function(filter) {
