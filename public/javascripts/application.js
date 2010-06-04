@@ -96,6 +96,13 @@ document.observe('ajax:failure', function(event) {
   });
 });
 
+// Insert li.id into input after selecting item from auto_complete
+function insertResultId(element, value) {
+  var resultId = $('result_id');
+  if(resultId)
+    resultId.setAttribute('value', value.id);
+}
+
 function monthFilterPlatform(item, year, limit) {
   spinner(item.className, "Show");
   uncheckMonthFilterAll(item.className, true);

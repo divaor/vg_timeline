@@ -75,7 +75,6 @@ module GamesHelper
         preq_int += tag(:br)
         preq_int += link_to(box_logo(game.prequel, :thumb, :tooltip => true), game_path(game.prequel))
       end
-      preq_int += pop_up "Add sequel", "/edit?id=#{game.id.to_s}&view=add_sequel&element_id=game_series&eval=series" if user_signed_in?
       preq_seq = content_tag(:div, raw(preq_int), :id => "prequel")
       if game.sequel
         seq_int += content_tag(:span, "Next")
@@ -84,6 +83,7 @@ module GamesHelper
       end
       preq_seq += content_tag(:div, raw(seq_int), :id => "sequel")
       series += content_tag(:div, raw(preq_seq), :id => "prequel_sequel_cont")
+      series += content_tag(:div, (pop_up "Add sequel", "/edit?id=#{game.id.to_s}&view=add_sequel&element_id=game_series&eval=series")) if user_signed_in?
       list = content_tag(:h5, "Full List:")
       list += games_list(game.series_list_by_full_title, :gm => game)
       series += content_tag(:div, raw(list), :id => "series_list")

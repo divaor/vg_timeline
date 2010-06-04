@@ -39,14 +39,22 @@ class ApplicationController < ActionController::Base
   end
 
   def search_results
-    title = params[:game][:main_title].split(':')
-    title[1] = "" unless title[1]
-    @game = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", title[1].downcase.strip).first
-    unless @game
-      @game = Game.where("LOWER(sub_title) LIKE ?", "%#{title[0].downcase.strip}%").first
+    if params[:result_id] != 'none'
+      values = params[:result_id].split('_', 2)
+      model = values[0]
+      id = values[1]
+      @result = eval("#{model}.find(#{id})")
+    else
+      title = params[:game][:main_title].split(':')
+      title[1] = "" unless title[1]
+      @result = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", title[1].downcase.strip).first
+      unless @result
+        @result = Game.where("LOWER(sub_title) LIKE ?", "%#{title[0].downcase.strip}%").first
+      end
+      model = 'game'
     end
-    if @game
-      redirect_to game_path(@game)
+    if @result
+      redirect_to eval("#{model.downcase}_path(@result)")
     else
       flash[:alert] = "Game not found."
       redirect_to year_path(Date.today.year)

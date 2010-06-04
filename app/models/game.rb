@@ -65,7 +65,7 @@ class Game < ActiveRecord::Base
   end
 
   def result_display
-    full_title_colon_limit
+    "#{full_title_colon_limit} (#{platform.short_name.upcase})"
   end
 
   def result_picture
