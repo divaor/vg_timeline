@@ -31,7 +31,7 @@
         <%= form_tag search_results_path, :method => :post do %>
           <span id="search_box">
             <%= hidden_field_tag :result_id, "none" %>
-            <%= text_field_with_auto_complete :game, :main_title, { :size => 35 }, { :url => search_path(), :method => :get, :param_name => 'search', :after_update_element => 'insertResultId' } %>
+            <%=raw text_field_with_auto_complete :result, :text, { :size => 35 }, { :url => search_path(), :method => :get, :param_name => 'search', :after_update_element => 'insertResultId', :skip_style => true } %>
             <%= submit_tag "Search" %>
           </span>
         <% end %>

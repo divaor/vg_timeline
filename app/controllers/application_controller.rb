@@ -25,10 +25,10 @@ class ApplicationController < ActionController::Base
   def search
     @results = []
     @search = params[:search]
-    @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(4)
-    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
-    @developers = Developer.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
-    @publishers = Publisher.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(3)
+    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(3)
+    @developers = Developer.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(1)
+    @publishers = Publisher.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(1)
     @games.each { |g| @results << g }
     @characters.each { |c| @results << c }
     @developers.each { |d| @results << d }
@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
       id = values[1]
       @result = eval("#{model}.find(#{id})")
     else
-      title = params[:game][:main_title].split(':')
+      title = params[:result][:text].split(':')
       title[1] = "" unless title[1]
       @result = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", title[1].downcase.strip).first
       unless @result

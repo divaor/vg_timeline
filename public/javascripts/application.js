@@ -347,7 +347,7 @@ function tooltipAjax(e, element, id) {
 }
 
 function setTooltipPosition(element, e, id) {
-  var middle = screen.availWidth / 2;
+  var middle = window.screen.availWidth / 2;
   var x = e.screenX;
   var pos = 'left';
   if (x < middle) {
@@ -362,7 +362,7 @@ function setTooltipPosition(element, e, id) {
 }
 
 function fullTooltipGameInfo(e, element, id) {
-  var middle = screen.availWidth / 2;
+  var middle = window.screen.availWidth / 2;
   var x = e.screenX;
   var toolTip = 'topRight';
   var toolXOff = 15;

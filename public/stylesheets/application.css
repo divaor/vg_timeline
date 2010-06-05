@@ -511,3 +511,49 @@ div.form_check {
     margin-left: auto;
     margin-right: auto;
 }
+
+
+
+/* AUTO COMPLETE STYLE */
+div.auto_complete {
+  width: 350px;
+  background: #fff;
+}
+div.auto_complete ul {
+  border:1px solid #888;
+  margin:0;
+  padding-bottom: 5px;
+  padding-left: 0;
+  width:100%;
+  list-style-type:none;
+  background-color: lightslategrey;
+}
+div.auto_complete ul li {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  padding:3px;
+  background-color: #87ceeb;
+  display: table;
+  width: 212px;
+}
+div.auto_complete ul li.selected {
+  background-color: #ffb;
+  font-weight: bold;
+}
+div.auto_complete ul strong.highlight {
+  color: #000;
+  margin:0;
+  padding:0;
+}
+
+div.auto_complete ul li span.result_text {
+  width: 150px;
+  float: left;
+  display: block;
+  margin-right: 3px;
+}
+
+div.auto_complete ul li span.informal {
+  display: inline;
+}
