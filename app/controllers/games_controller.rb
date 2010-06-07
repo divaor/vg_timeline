@@ -276,7 +276,7 @@ class GamesController < ApplicationController
   def update
     @game = Game.find(params[:id])
     old_game_info = { :year => @game.r_y, :month => @game.r_m, :path => @game.make_boxart_path }
-    if @game.update_attributes(params[:game])
+    if @game.update_attributes(params[:game]) # TODO if no params[:game] is passed it throws error
       if (params[:game][:prequel_name] or params[:game][:sequel_name]) and not @game.sequel and not @game.prequel
         unless params[:game][:sequel_name].empty?
           pre_seq = params[:game][:sequel_name]

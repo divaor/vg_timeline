@@ -147,7 +147,7 @@ function getCheckedMonth(month, year, limit) {
       i = i + 1;
       check = true;
     }
-  })
+  });
   if (check == false) {
     params += getCheckedPlatformsYear(year)  + "&l=3";
   } else {

@@ -1,7 +1,7 @@
 <h2>Edit Characters</h2>
 
 <div class="inner_scroll">
-  (Remove check for characters you want to remove)
+  (Uncheck characters you want to remove)
   <%= form_for @game do |f| %>
     <% for character in @characters %>
       <%= check_box_tag "game[character_ids][]", character.id, true %>
