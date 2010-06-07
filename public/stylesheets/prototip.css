@@ -124,6 +124,22 @@
     padding: 5px;
 }
 
+/*For 'add' popups''*/
+.prototip .pop {
+    width: auto;
+    color: #7f7f7f;
+}
+.prototip .pop .toolbar {
+    background: #DEDFA7;
+    font-weight: bold;
+    border-bottom: 0px;
+}
+.prototip .pop .title { padding: 5px; }
+.prototip .pop .content {
+    background: #FFCA6F;
+    padding: 5px;
+}
+
 /* This is how to resize the close button for a style */
 .prototip .protogrey .toolbar .close {
     width: 14px;

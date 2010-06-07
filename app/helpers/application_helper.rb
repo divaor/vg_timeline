@@ -13,12 +13,12 @@ module ApplicationHelper
       path =  path.slice(1, path.length)
     end
     path = path.slice(path.rindex("/") + 1, path.length) if path.rindex("/")
-    link_to text, { :action => path.index("?") ? path.slice(0, path.index("?")) : path, :lv => path.index("?") ? "#{options[:level]}&#{path.slice(path.index("?") + 1, path.length)}" : options[:level] }, :remote => true, :onmouseover => options[:tip] ? "new Tip(this, '#{options[:tip]}', { width: 'auto' });" : ""
+    link_to text, { :action => path.index("?") ? path.slice(0, path.index("?")) : path, :lv => path.index("?") ? "#{options[:level]}&#{path.slice(path.index("?") + 1, path.length)}" : options[:level] }, :remote => true, :onmouseover => options[:tip] ? "new Tip(this, '#{options[:tip]}', { style: 'pop+' });" : ""
   end
 
   def pop_up_controller(text, path, controller, options = {})
     options[:level] = options[:level] ? options[:level] : 1
-    link_to text, { :action => path, :controller => controller, :id => options[:id], :lv => options[:level], :game => options[:game_id] }, :remote => true, :onmouseover => options[:tip] ? "new Tip(this, '#{options[:tip]}', { width: 'auto' });" : ""
+    link_to text, { :action => path, :controller => controller, :id => options[:id], :lv => options[:level], :game => options[:game_id] }, :remote => true, :onmouseover => options[:tip] ? "new Tip(this, '#{options[:tip]}', { style: 'pop+' });" : ""
   end
 
   def close_button

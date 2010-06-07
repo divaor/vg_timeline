@@ -194,9 +194,21 @@ ActiveRecord::Schema.define(:version => 20100529070838) do
   end
 
   create_table "mod_tables", :force => true do |t|
-    t.string   "name",       :null => false
+    t.string   "table_catalog"
+    t.string   "name",                         :null => false
+    t.string   "table_schema"
+    t.string   "table_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "table_type"
+    t.string   "self_referencing_column_name"
+    t.string   "reference_generation"
+    t.string   "user_defined_type_catalog"
+    t.string   "user_defined_type_schema"
+    t.string   "user_defined_type_name"
+    t.string   "is_insertable_into"
+    t.string   "is_typed"
+    t.string   "commit_action"
   end
 
   create_table "modifications", :force => true do |t|
@@ -326,12 +338,6 @@ ActiveRecord::Schema.define(:version => 20100529070838) do
 
   create_table "specifications", :force => true do |t|
     t.string   "description", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "mod_tables", :force => true do |t|
-    t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
