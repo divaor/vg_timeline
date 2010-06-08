@@ -13,7 +13,7 @@
 //
 //// end of browsing detection
 
-Event.observe(window, 'load', function() {
+document.observe('dom:loaded', function() {
   var gameDisp = $('game_display')
   if(gameDisp) {
     // Set width to game display on browsers that make it thinner

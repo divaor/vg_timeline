@@ -1,0 +1,15 @@
+<h2>Peripherals</h2>
+
+<div class="inner_scroll">
+  <%= form_for @game, :html => { :remote => true } do |f| %>
+    <%= hidden_field_tag :element_id, @element_id %>
+    <%= hidden_field_tag :helper, @helper %>
+    <div class="field">
+      <%= f.label :peripheral_names, "Peripherals" %>
+      <%= text_field_with_auto_complete :game, :peripheral_names, { :class => 'fcs' }, { :url => peripherals_path, :method => 'get', :param_name => 'search', :tokens => ',' } %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Submit" %>
+    </div>
+  <% end %>
+</div>

@@ -1,4 +1,12 @@
 VgTimeline::Application.routes.draw do |map|
+  get "project_leaders/new"
+
+  get "project_leaders/create"
+
+  get "industry_people/index"
+
+  get "peripherals/index"
+
   get "characters_games/new"
 
   get "characters_games/create"
@@ -34,7 +42,7 @@ VgTimeline::Application.routes.draw do |map|
   #  constraints :host => /localhost/ do
   resources :games, :platforms, :developers, :publishers, :series, :press,
     :scores, :awards, :genres, :features, :specifications, :characters,
-    :characters_games
+    :characters_games, :peripherals, :industry_people, :project_leaders
   match "/:year" => "games#index", :as => :year, :constraints => { :year => /\d{4}/ }
   match "/:year/:month" => "games#month_view", :as => :month, :constraints => { :month => /\d{2}/, :year => /\d{4}/ }
   match "/list" => "games#list", :as => :games_list

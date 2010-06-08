@@ -131,39 +131,48 @@
   <!-- RIGHT COLUMN -->
   <div id="right_column" class="round shadow">
 
+    <!-- RATING -->
     <div id="rating">
       <%= rating(@game) %>
     </div>
 
+    <!-- TYPES -->
     <div id="types">
       <%= types(@game) %>
     </div>
 
+    <!-- GENRES -->
     <div id="genres">
       <%= genres(@game) %>
     </div>
 
+    <!-- PLAYERS -->
     <div id="players">
       <%= players(@game) %>
     </div>
 
+    <!-- ACHIEVEMENTS -->
     <div id="achievements">
       <%= @game.achievements %>
       <%# Take off when providing the add key people link%>
     </div>
 
+    <!-- KEY PEOPLE -->
     <div id="key_people">
       <%= key_people(@game) %>
     </div>
 
+    <!-- FEATURES -->
     <div id="features">
       <%= features(@game) %>
     </div>
 
+    <!-- SPECS -->
     <div id="specifications">
       <%= specs(@game) %>
     </div>
 
+    <!-- PERIPHERALS -->
     <div id="peripherals">
       <%= peripherals(@game) %>
     </div>

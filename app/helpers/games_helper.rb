@@ -223,17 +223,17 @@ module GamesHelper
   end
 
   def key_people(game)
-    out = ''
+    key_people = ''
+    out = content_tag(:div, "Key People:", :class => "right_label")
     unless game.project_leaders.empty?
-      out += content_tag(:div, "Key People:", :class => "right_label")
-        unless game.project_leaders.empty?
-          for person in game.industry_people
-            key_people += person.name + ": "
-            key_people += person.position
-          end
-        end
-      out += content_tag(:div, raw(key_people), :class => "right_description")
+      for person in game.project_leaders
+        key_people += person.industry_person_name + ": "
+        key_people += person.position
+        key_people += ", " unless person == game.project_leaders.last
+      end
     end
+    key_people += (pop_up_controller "+", 'new', 'project_leaders', :game_id => game.id, :tip => "Add industry person") if user_signed_in?
+    out += content_tag(:div, raw(key_people), :class => "right_description")
     raw out
   end
 
@@ -266,16 +266,17 @@ module GamesHelper
   end
 
   def peripherals(game)
-    out = ''
+    peripherals = ''
+    out = content_tag(:div, "Peripherals:", :class => "right_label")
     unless game.peripherals.empty?
-      out += content_tag(:div, "Compatible with:", :class => "right_label")
-        unless game.peripherals.empty?
-          for peripheral in game.peripherals
-            peripherals += peripheral.name
-          end
-        end
-      out += content_tag(:div, raw(peripherals), :class => "right_description")
+      for peripheral in game.peripherals
+        peripherals += peripheral.name
+        peripherals += ", " unless peripheral == game.peripherals.last
+      end
     end
+    peripherals += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_peripherals&element_id=peripherals&eval=peripherals', :tip => "Add peripheral(s)") if user_signed_in?
+    peripherals += tag(:br)
+    out += content_tag(:div, raw(peripherals), :class => "right_description")
     raw out
   end
 end
