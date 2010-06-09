@@ -29,16 +29,14 @@
     </div>
     <div id="developers">
       <div class="field">
-        <%= f.label :developer_names, "Developer" %>
-        <span class="add_another"><%= link_to "Another Developer", { :action => 'new_game_add_developer' }, :remote => true %></span><br />
-        <%= text_field_with_auto_complete :game, :developer_names, {}, { :url => developers_path(), :method => :get, :param_name => 'search' } %>
+        <%= f.label :developer_names, "Developer" %><br />
+        <%= text_field_with_auto_complete :game, :developer_names, {}, { :url => developers_path(), :method => :get, :param_name => 'search', :tokens => ',' } %>
       </div>
     </div>
     <div id="publishers">
       <div class="field">
-        <%= f.label :publisher_names, "Publisher" %>
-        <span class="add_another"><%= link_to "Another Publisher", { :action => 'new_game_add_publisher' }, :remote => true %></span><br />
-        <%= text_field_with_auto_complete :game, :publisher_names, {}, { :url => publishers_path(), :method => :get, :param_name => 'search' } %>
+        <%= f.label :publisher_names, "Publisher" %><br />
+        <%= text_field_with_auto_complete :game, :publisher_names, {}, { :url => publishers_path(), :method => :get, :param_name => 'search', :tokens => ',' } %>
       </div>
     </div>
     <div class="field" id="boxart_image">

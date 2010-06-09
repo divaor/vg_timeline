@@ -85,7 +85,8 @@ div#nav {
 }
 
 #display_tab li.current {
-    background-color: #E5E5E5;
+     background-color: #e5e5e5; 
+    /*background-image: url("/images/slashwa.png");*/
     padding-top:2px;
 }
 
@@ -114,7 +115,8 @@ span#search_box {
     border-right:2px solid black;
     border-top:2px solid black;
     border-left:1px solid black;
-    background-color: #E5E5E5;
+    background-color: #e5e5e5;
+    /*background-image: url("/images/slashwa.png");*/
     position:relative;
     padding: 5px 5px 0px;
     top:2px;
@@ -141,11 +143,6 @@ input[type=text]:focus, select:focus, input[type=file]:focus {
 
 div.auto_complete {
     font-size:12px;
-}
-
-div.auto_complete ul li.selected {
-    background-color: #DAE4FF !important;
-    cursor: default;
 }
 
 .round {
@@ -186,6 +183,13 @@ div.auto_complete ul li.selected {
     -moz-border-radius-topleft: 7px;
     -webkit-border-top-right-radius: 7px;
     -webkit-border-top-left-radius: 7px;
+}
+
+.shadow {
+  box-shadow: 0px 0px 9px #313131;
+  -webkit-box-shadow: 0px 0px 9px #313131;
+  -moz-box-shadow: 0px 0px 9px #313131;
+  filter: progid:DXImageTransform.Microsoft.dropShadow(color=#313131, offX=0, offY=0, positive=true);
 }
 
 div.pop_up {
@@ -284,7 +288,8 @@ img.window_close {
 #user_info {
     float:right;
     padding: 3px 5px;
-    background-color: #E5E5E5;
+    background-color: #e5e5e5;
+    /* background-image: url("/images/slashwa.png"); */
     border: 2px solid black;
     border-radius: 7px;
     -moz-border-radius: 7px;
@@ -474,7 +479,8 @@ span.search_filter input {
 }
 
 div.form_container {
-    background-color: #E5E5E5;
+    background-color: #e5e5e5; 
+    /*background-image: url("/images/slashwa.png");*/
     border: 2px solid black;
     display: table;
     width: 1196px;
@@ -528,4 +534,50 @@ div.form_check {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+
+
+/* AUTO COMPLETE STYLE */
+div.auto_complete {
+  width: 226px;
+  background: #fff;
+}
+div.auto_complete ul {
+  border:1px solid silver;
+  margin:0;
+  padding-bottom: 1px;
+  padding-left: 0;
+  width:100%;
+  list-style-type:none;
+  background-color: white;
+}
+div.auto_complete ul li {
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 2px;
+  padding:1px;
+  background-color: #DFEBFF;
+  display: table;
+  width: 222px;
+}
+div.auto_complete ul li.selected {
+  background-color: white;
+  font-weight: bold;
+}
+div.auto_complete ul strong.highlight {
+  color: #000;
+  margin:0;
+  padding:0;
+}
+
+div.auto_complete ul li span.result_text {
+  width: 150px;
+  float: left;
+  display: block;
+  margin-right: 3px;
+}
+
+div.auto_complete ul li span.informal {
+  display: inline;
 }

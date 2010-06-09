@@ -1,0 +1,16 @@
+<h2>Key People</h2>
+
+<%= form_for @project_leader, :html => { :remote => true } do |f| %>
+  <div class="field">
+    <%= f.hidden_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :industry_person_name, "Name" %>
+    <%= text_field_with_auto_complete :project_leader, :industry_person_name, { :class => 'fcs' }, { :url => industry_people_path(), :method => :get, :param_name => 'search' } %>
+  </div>
+  <div class="field">
+    <%= f.label :position %>
+    <%= f.text_field :position %>
+  </div>
+  <%= f.submit "Submit" %>
+<% end %>

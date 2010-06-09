@@ -96,6 +96,13 @@ document.observe('ajax:failure', function(event) {
   });
 });
 
+// Insert li.id into input after selecting item from auto_complete
+function insertResultId(element, value) {
+  var resultId = $('result_id');
+  if(resultId)
+    resultId.setAttribute('value', value.id);
+}
+
 function monthFilterPlatform(item, year, limit) {
   spinner(item.className, "Show");
   uncheckMonthFilterAll(item.className, true);
@@ -140,7 +147,7 @@ function getCheckedMonth(month, year, limit) {
       i = i + 1;
       check = true;
     }
-  })
+  });
   if (check == false) {
     params += getCheckedPlatformsYear(year)  + "&l=3";
   } else {
@@ -340,7 +347,7 @@ function tooltipAjax(e, element, id) {
 }
 
 function setTooltipPosition(element, e, id) {
-  var middle = screen.availWidth / 2;
+  var middle = window.screen.availWidth / 2;
   var x = e.screenX;
   var pos = 'left';
   if (x < middle) {
@@ -355,7 +362,7 @@ function setTooltipPosition(element, e, id) {
 }
 
 function fullTooltipGameInfo(e, element, id) {
-  var middle = screen.availWidth / 2;
+  var middle = window.screen.availWidth / 2;
   var x = e.screenX;
   var toolTip = 'topRight';
   var toolXOff = 15;

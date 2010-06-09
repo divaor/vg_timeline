@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
     @platforms = Platform.all
     @developers = Developer.order("name asc").all
     @publishers = Publisher.order("name asc").all
+    hsh = { 'key' => 'value', 'key2' => 'value2' }
+    print hsh['key']
     respond_to do |format|
       format.js { render 'pop_up' }
     end
@@ -25,10 +27,10 @@ class ApplicationController < ActionController::Base
   def search
     @results = []
     @search = params[:search]
-    @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(4)
-    @characters = Character.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
-    @developers = Developer.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
-    @publishers = Publisher.where("LOWER(name) LIKE ?", "%#{params[:search]}%").limit(4)
+    @games = search_box_results(:game, params[:search], :field => 'main_title')
+    @characters = search_box_results(:character, params[:search])
+    @developers = search_box_results(:developer, params[:search])
+    @publishers = search_box_results(:publisher, params[:search])
     @games.each { |g| @results << g }
     @characters.each { |c| @results << c }
     @developers.each { |d| @results << d }
@@ -39,14 +41,22 @@ class ApplicationController < ActionController::Base
   end
 
   def search_results
-    title = params[:game][:main_title].split(':')
-    title[1] = "" unless title[1]
-    @game = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", title[1].downcase.strip).first
-    unless @game
-      @game = Game.where("LOWER(sub_title) LIKE ?", "%#{title[0].downcase.strip}%").first
+    if params[:result_id] != 'none'
+      values = params[:result_id].split('_', 2)
+      model = values[0]
+      id = values[1]
+      @result = eval("#{model}.find(#{id})")
+    else
+      title = params[:result][:text].split(':')
+      title[1] = "" unless title[1]
+      @result = Game.where("LOWER(main_title) LIKE ? AND LOWER(sub_title) = ?", "%#{title[0].downcase.strip}%", title[1].downcase.strip).first
+      unless @result
+        @result = Game.where("LOWER(sub_title) LIKE ?", "%#{title[0].downcase.strip}%").first
+      end
+      model = 'game'
     end
-    if @game
-      redirect_to game_path(@game)
+    if @result
+      redirect_to eval("#{model.downcase}_path(@result)")
     else
       flash[:alert] = "Game not found."
       redirect_to year_path(Date.today.year)
@@ -140,5 +150,23 @@ class ApplicationController < ActionController::Base
       date = 1.days.since(date)
     end
     date
+  end
+
+  # Searches records of model that contain find in options[:field](default 'name')
+  def search_box_results(model, find, options = {})
+    options = { :field => 'name' }.merge(options)
+    model = model.to_s.camelize.constantize
+    field = options[:field]
+    result = []; master_result = []
+    result[0] = model.where("LOWER(#{field}) = ?", find.downcase).order("#{field} ASC").all
+    result[1] = model.where("LOWER(#{field}) LIKE ?", "#{find.downcase}%").order("#{field} ASC").all
+    result[2] = model.where("LOWER(#{field}) LIKE ?", "%#{find.downcase}").order("#{field} ASC").all
+    result[3] = model.where("LOWER(#{field}) LIKE ?", "%#{find.downcase}%").order("#{field} ASC").all
+    result.each do |r|
+      r.each do |r2|
+        master_result << r2 unless master_result.length >= 5 or master_result.include?(r2)
+      end
+    end
+    master_result
   end
 end

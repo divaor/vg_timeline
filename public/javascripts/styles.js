@@ -27,6 +27,14 @@ Prototip.Styles = {
     stem: { height: 12, width: 15 }
   },
 
+  'pop+': {
+    className: 'pop',
+    border: 1,
+    borderColor: '#9f9f9f',
+    radius: 0,
+    stem: { height: 12, width: 15 }
+  },
+
   'protoblue': {
     className: 'protoblue',
     border: 6,

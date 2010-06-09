@@ -65,7 +65,7 @@ class Game < ActiveRecord::Base
   end
 
   def result_display
-    full_title_colon_limit
+    "#{full_title_colon_limit} (#{platform.short_name.upcase})"
   end
 
   def result_picture
@@ -231,6 +231,25 @@ class Game < ActiveRecord::Base
       temp_features << Feature.find_or_create_by_description(description.strip) unless description.blank?
     end
     self.features = temp_features unless temp_features.empty?
+  end
+
+  def peripheral_names
+    per = []
+    if peripherals
+      for peripheral in peripherals
+        per << peripheral.name
+      end
+    end
+    per.split.join(", ")
+  end
+
+  def peripheral_names=(names)
+    per_name = names.split(",")
+    temp_per = []
+    for name in per_name
+      temp_per << Peripheral.find_or_create_by_name(name.strip) unless name.blank?
+    end
+    self.peripherals = temp_per unless temp_per.empty?
   end
 
   def specification_descriptions

@@ -38,10 +38,10 @@ module GamesHelper
       sub = game.sub_title.empty? ? "" : "sub"
 
       # Output
-      raw content_tag(:div, raw(table), { :class => "round #{sub}", :id => 'diff_platforms' })
+      raw content_tag(:div, raw(table), { :class => "shadow round #{sub}", :id => 'diff_platforms' })
     else
       # Output if game is not available for other platforms
-      raw "(#{pop_up "Add to another platform", new_game_path(:id_diff => game.id)})" if user_signed_in?
+      raw "#{pop_up "+", new_game_path(:id_diff => game.id), :tip => "Add another platform(s)"}" if user_signed_in?
     end
   end
 
@@ -59,7 +59,7 @@ module GamesHelper
       description += pop_up "Edit Description", '/edit?id=' + game.id.to_s + '&view=new_description&element_id=game_description&eval=description' if user_signed_in?
     else
       description = "No description has been added for this game. "
-      description += pop_up "Add Description", '/edit?id=' + game.id.to_s + '&view=new_description&element_id=game_description&eval=description' if user_signed_in?
+      description += pop_up "+", '/edit?id=' + game.id.to_s + '&view=new_description&element_id=game_description&eval=description', :tip => "Add description" if user_signed_in?
     end
     raw description
   end
@@ -75,7 +75,6 @@ module GamesHelper
         preq_int += tag(:br)
         preq_int += link_to(box_logo(game.prequel, :thumb, :tooltip => true), game_path(game.prequel))
       end
-      preq_int += pop_up "Add sequel", "/edit?id=#{game.id.to_s}&view=add_sequel&element_id=game_series&eval=series" if user_signed_in?
       preq_seq = content_tag(:div, raw(preq_int), :id => "prequel")
       if game.sequel
         seq_int += content_tag(:span, "Next")
@@ -84,6 +83,7 @@ module GamesHelper
       end
       preq_seq += content_tag(:div, raw(seq_int), :id => "sequel")
       series += content_tag(:div, raw(preq_seq), :id => "prequel_sequel_cont")
+      series += content_tag(:div, (pop_up "Add sequel", "/edit?id=#{game.id.to_s}&view=add_sequel&element_id=game_series&eval=series")) if user_signed_in?
       list = content_tag(:h5, "Full List:")
       list += games_list(game.series_list_by_full_title, :gm => game)
       series += content_tag(:div, raw(list), :id => "series_list")
@@ -126,7 +126,7 @@ module GamesHelper
       avg_score_container = content_tag(:div, raw(avg_score), { :id => "avg_score", :class => bg_color })
       out += content_tag(:div, raw(avg_score_container), :id => "avg_score_container")
     end
-    out += content_tag(:div, (pop_up_controller "+", 'new', 'scores', :game_id => game.id), :class => "scores_add") if user_signed_in?
+    out += content_tag(:div, (pop_up_controller "+", 'new', 'scores', :game_id => game.id, :tip => "Add score(s)"), :class => "scores_add") if user_signed_in?
     raw out
   end
 
@@ -140,7 +140,7 @@ module GamesHelper
         awards_content += content_tag(:div, award.description, :class => "award_description")
       end
     end
-    awards_content += content_tag(:div, (pop_up_controller "+", 'new', 'awards', :game_id => game.id), :class => "scores_add") if user_signed_in?
+    awards_content += content_tag(:div, (pop_up_controller "+", 'new', 'awards', :game_id => game.id, :tip => "Add award(s)"), :class => "scores_add") if user_signed_in?
     out += content_tag(:div, raw(awards_content), :id => "awards_content")
     raw out
   end
@@ -162,7 +162,7 @@ module GamesHelper
         types += ", " unless type == game.types.last
       end
     end
-    types += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_type&element_id=types&eval=types') if user_signed_in?
+    types += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_type&element_id=types&eval=types', :tip => "Add type(s)") if user_signed_in?
     types += tag(:br)
     out += content_tag(:div, raw(types), :class => "right_description")
     raw out
@@ -177,7 +177,7 @@ module GamesHelper
         genres += ", " unless genre == game.genres.last
       end
     end
-    genres += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_genre&element_id=genres&eval=genres') if user_signed_in?
+    genres += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_genre&element_id=genres&eval=genres', :tip => "Add genre(s)") if user_signed_in?
     genres += tag(:br)
     out += content_tag(:div, raw(genres), :class => "right_description")
     raw out
@@ -197,7 +197,7 @@ module GamesHelper
         local_players += "Vs"
       end
     end
-    local_players += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_players&element_id=players&eval=players') if user_signed_in?
+    local_players += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_players&element_id=players&eval=players', :tip => "Add local player(s)") if user_signed_in?
     local_players += tag(:br)
     out += content_tag(:div, raw(local_players), :class => "right_description")
     out += content_tag(:div, "Online:", :class => "right_label")
@@ -216,24 +216,24 @@ module GamesHelper
         online_players += "Vs"
       end
     end
-    online_players += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_players&element_id=players&eval=players') if user_signed_in?
+    online_players += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_players&element_id=players&eval=players', :tip => "Add online player(s)") if user_signed_in?
     online_players += tag(:br)
     out += content_tag(:div, raw(online_players), :class => "right_description")
     raw out
   end
 
   def key_people(game)
-    out = ''
+    key_people = ''
+    out = content_tag(:div, "Key People:", :class => "right_label")
     unless game.project_leaders.empty?
-      out += content_tag(:div, "Key People:", :class => "right_label")
-        unless game.project_leaders.empty?
-          for person in game.industry_people
-            key_people += person.name + ": "
-            key_people += person.position
-          end
-        end
-      out += content_tag(:div, raw(key_people), :class => "right_description")
+      for person in game.project_leaders
+        key_people += person.industry_person_name + ": "
+        key_people += person.position
+        key_people += ", " unless person == game.project_leaders.last
+      end
     end
+    key_people += (pop_up_controller "+", 'new', 'project_leaders', :game_id => game.id, :tip => "Add industry person") if user_signed_in?
+    out += content_tag(:div, raw(key_people), :class => "right_description")
     raw out
   end
 
@@ -245,7 +245,7 @@ module GamesHelper
         features += feature.description
       end
     end
-    features += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_features&element_id=features&eval=features') if user_signed_in?
+    features += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_features&element_id=features&eval=features', :tip => "Add feature(s)") if user_signed_in?
     features += tag(:br)
     out += content_tag(:div, raw(features), :class => "right_description")
     raw out
@@ -259,23 +259,24 @@ module GamesHelper
         specs += specification.description
       end
     end
-    specs += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_specs&element_id=specifications&eval=specs') if user_signed_in?
+    specs += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_specs&element_id=specifications&eval=specs', :tip => "Add spec(s)") if user_signed_in?
     specs += tag(:br)
     out += content_tag(:div, raw(specs), :class => "right_description")
     raw out
   end
 
   def peripherals(game)
-    out = ''
+    peripherals = ''
+    out = content_tag(:div, "Peripherals:", :class => "right_label")
     unless game.peripherals.empty?
-      out += content_tag(:div, "Compatible with:", :class => "right_label")
-        unless game.peripherals.empty?
-          for peripheral in game.peripherals
-            peripherals += peripheral.name
-          end
-        end
-      out += content_tag(:div, raw(peripherals), :class => "right_description")
+      for peripheral in game.peripherals
+        peripherals += peripheral.name
+        peripherals += ", " unless peripheral == game.peripherals.last
+      end
     end
+    peripherals += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_peripherals&element_id=peripherals&eval=peripherals', :tip => "Add peripheral(s)") if user_signed_in?
+    peripherals += tag(:br)
+    out += content_tag(:div, raw(peripherals), :class => "right_description")
     raw out
   end
 end

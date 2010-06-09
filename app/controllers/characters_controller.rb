@@ -25,6 +25,7 @@ class CharactersController < ApplicationController
     @view = params[:action]
     respond_to do |format|
       format.js { render 'pop_up' }
+      format.html
     end
   end
 

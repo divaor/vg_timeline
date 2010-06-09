@@ -1,10 +1,14 @@
 <ul>
   <% for result in @results %>
-    <li>
-      <%= result.result_display %>
-      (<%= result.class %>)
+    <li id="<%= "#{result.class}_#{result.id}" %>">
+      <span class="result_text">
+        <%= result.result_display %>
+        <span class="informal">
+          (<%= result.class %>)
+        </span>
+      </span>
       <% if result.respond_to?('result_picture') %>
-        <%= image_tag(result.result_picture) %>
+        <%= image_tag(result.result_picture, :alt => '') %>
       <% end %>
     </li>
   <% end %>
