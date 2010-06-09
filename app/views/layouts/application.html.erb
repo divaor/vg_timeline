@@ -32,7 +32,8 @@
           <span id="search_box">
             <%= hidden_field_tag :result_id, "none" %>
             <span id="main_search_box">
-              <%=raw text_field_with_auto_complete :result, :text, { :value => "Game, Publisher, Developer, Character", :onfocus => "searchText(this, 0, 'Game, Publisher, Developer, Character');", :onblur => "searchText(this, 1, 'Game, Publisher, Developer, Character');" }, { :url => search_path(), :method => :get, :param_name => 'search', :after_update_element => 'insertResultId', :skip_style => true } %>
+              <%=raw text_field_with_auto_complete :result, :text, { :value => "Game, Publisher, Developer, Character", :onfocus => "searchText(this, 0, 'Game, Publisher, Developer, Character');", :onblur => "searchText(this, 1, 'Game, Publisher, Developer, Character');", :onkeyup => "showClear('main_search_clear', this)" }, { :url => search_path(), :method => :get, :param_name => 'search', :after_update_element => 'insertResultId', :skip_style => true } %>
+              <span style="display:table-cell;width:15px;"><span id="main_search_clear" class="clear_text" style="display:none;"><%= link_to_function image_tag("clear.png", :size => "12x12"), "clearText('result_text', this);" %></span></span>
             </span>
             <%= submit_tag "Search" %>
           </span>

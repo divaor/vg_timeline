@@ -115,7 +115,10 @@
 
     <div id="platforms_general_filters">
       <div class="title_top_filter">
-        <span class="search_filter"><%= text_field_with_auto_complete :platform_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => platforms_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="search_filter">
+          <%= text_field_with_auto_complete :platform_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');", :onkeyup => "showClear('platform_filter_clear', this)" }, { :url => platforms_index_path(), :method => :get, :param_name => 'search_list' } %>
+          <span id="platform_filter_clear" class="clear_text" style="display:none;"><%= link_to_function image_tag("clear.png", :size => "12x12"), "clearText('platform_filter_name', this);" %></span>
+        </span>
         <span class="check_top_filter"><%= check_box_tag "y_plat_all", 1, true, :class => @year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
         <span id="spinner<%= @year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
       </div>
@@ -130,7 +133,10 @@
 
     <div id="publishers_general_filters" style="display:none">
       <div class="title_top_filter">
-        <span class="search_filter"><%= text_field_with_auto_complete :publisher_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => publishers_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="search_filter">
+          <%= text_field_with_auto_complete :publisher_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');", :onkeyup => "showClear('publisher_filter_clear', this)"  }, { :url => publishers_index_path(), :method => :get, :param_name => 'search_list' } %>
+          <span id="publisher_filter_clear" class="clear_text" style="display:none;"><%= link_to_function image_tag("clear.png", :size => "12x12"), "clearText('publisher_filter_name', this);" %></span>
+        </span>
         <span class="check_top_filter"><%= check_box_tag 'y_pub_all', 1, true, :class => 'p'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
         <span id="spinner<%= 'p'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
       </div>
@@ -145,7 +151,10 @@
 
     <div id="developers_general_filters" style="display:none">
       <div class="title_top_filter">
-        <span class="search_filter"><%= text_field_with_auto_complete :developer_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => developers_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="search_filter">
+          <%= text_field_with_auto_complete :developer_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');", :onkeyup => "showClear('developer_filter_clear', this)"  }, { :url => developers_index_path(), :method => :get, :param_name => 'search_list' } %>
+          <span id="developer_filter_clear" class="clear_text" style="display:none;"><%= link_to_function image_tag("clear.png", :size => "12x12"), "clearText('developer_filter_name', this);" %></span>
+        </span>
         <span class="check_top_filter"><%= check_box_tag 'y_dev_all', 1, true, :class => 'd'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
         <span id="spinner<%= 'd'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
       </div>
@@ -160,7 +169,10 @@
 
     <div id="genres_general_filters" style="display:none">
       <div class="title_top_filter">
-        <span class="search_filter"><%= text_field_with_auto_complete :genre_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => genres_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="search_filter">
+          <%= text_field_with_auto_complete :genre_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');", :onkeyup => "showClear('genre_filter_clear', this)"  }, { :url => genres_index_path(), :method => :get, :param_name => 'search_list' } %>
+          <span id="genre_filter_clear" class="clear_text" style="display:none;"><%= link_to_function image_tag("clear.png", :size => "12x12"), "clearText('genre_filter_name', this);" %></span>
+        </span>
         <span class="check_top_filter"><%= check_box_tag 'y_gen_all', 1, true, :class => 'n'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
         <span id="spinner<%= 'n'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
       </div>
@@ -175,7 +187,10 @@
 
     <div id="ratings_general_filters" style="display:none">
       <div class="title_top_filter">
-        <span class="search_filter"><%= text_field_with_auto_complete :rating_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => ratings_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="search_filter">
+          <%= text_field_with_auto_complete :rating_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');", :onkeyup => "showClear('rating_filter_clear', this)"  }, { :url => ratings_index_path(), :method => :get, :param_name => 'search_list' } %>
+          <span id="rating_filter_clear" class="clear_text" style="display:none;"><%= link_to_function image_tag("clear.png", :size => "12x12"), "clearText('rating_filter_name', this);" %></span>
+        </span>
         <span class="check_top_filter"><%= check_box_tag 'y_rat_all', 1, true, :class => 'r'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
         <span id="spinner<%= 'r'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
       </div>
