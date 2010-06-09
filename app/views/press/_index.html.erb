@@ -3,7 +3,7 @@
 <div class="inner_scroll">
   <%= form_tag '/press/edit_list', :remote => true do %>
     <%= hidden_field_tag :game_id, @game_id %>
-    <%= text_field_with_auto_complete :prs, :name, { :class => 'fcs' }, { :url => press_index_path(), :method => :get, :param_name => 'search_list' } %>
+    <%= text_field_tag :prs_name, '', :class => 'fcs' %>
     <div id="press_list">
       <%= press_list(@press) %>
     </div>

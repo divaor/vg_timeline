@@ -57,7 +57,7 @@ document.observe("ajax:complete", function(event) {
       focus.select();
     }
 
-    // Obser close button in pop up window
+    // Observe close button in pop up window
     var close = $('window_close');
     if(close) {
       close.observe('click', function() {
@@ -71,6 +71,21 @@ document.observe("ajax:complete", function(event) {
         });
         lev.removeClassName('focus');
         lev.update('');
+      });
+    }
+
+    // Observe press list change
+    var press_name = $('prs_name');
+    if(press_name) {
+      press_name.observe('keyup', function() {
+        new Ajax.Request('/press', {
+          method: 'get',
+          parameters: 'search_list=' + press_name.value,
+
+          onSuccess: function(response) {
+            $('press_list').update(response.responseText);
+          }
+        });
       });
     }
   }
