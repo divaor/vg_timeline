@@ -5,6 +5,13 @@ class PublishersController < ApplicationController
     @view = params[:action]
     if params[:search]
       @publishers = Publisher.where("LOWER(name) LIKE ?", "%#{params[:search].downcase}%").limit(10)
+    elsif params[:search_list]
+      @year = '2010'
+      @div = 'pub_filters'
+      @all = 'y_pub_all'
+      @extra = 'p'
+      items = items_year('publishers', @year)
+      @filtered_items = Publisher.where("id in (#{items}) and LOWER(name) LIKE ?", "%#{params[:search_list].downcase}%").order("name ASC")
     else
       @publishers = Publisher.order("name asc")
     end
@@ -13,6 +20,8 @@ class PublishersController < ApplicationController
       format.js {
         if params[:search]
           render 'suggestion'
+        elsif params[:search_list]
+          render 'games/refresh_filter'
         else
           render 'pop_up'
         end

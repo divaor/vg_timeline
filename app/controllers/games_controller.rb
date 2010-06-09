@@ -763,7 +763,7 @@ class GamesController < ApplicationController
       games = games.where("games.id = games_publishers.game_id and games_publishers.publisher_id = publishers.id and #{publisher_query}").includes(:publishers)
     end
     if not developer_ids.empty?
-      games = games.where("games.id = games_developers.game_id and games_developers.developer_id = developers.id and #{developer_query}").includes(:developers)
+      games = games.where("games.id = developers_games.game_id and developers_games.developer_id = developers.id and #{developer_query}").includes(:developers)
     end
     if not genre_ids.empty?
       games = games.where("games.id = games_genres.game_id and games_genres.genre_id = genres.id and #{genre_query}").includes(:genres)

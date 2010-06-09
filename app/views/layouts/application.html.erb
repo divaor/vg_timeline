@@ -30,7 +30,9 @@
         </div>
         <%= form_tag search_results_path, :method => :post do %>
           <span id="search_box">
-            <%= text_field_with_auto_complete :game, :main_title, { :size => 35 }, { :url => search_path(), :method => :get, :param_name => 'search' } %>
+            <span id="main_search_box">
+              <%= text_field_with_auto_complete :game, :main_title, { :value => "Game, Publisher, Developer, Character", :onfocus => "searchText(this, 0, 'Game, Publisher, Developer, Character');", :onblur => "searchText(this, 1, 'Game, Publisher, Developer, Character');" }, { :url => search_path(), :method => :get, :param_name => 'search' } %>
+            </span>
             <%= submit_tag "Search" %>
           </span>
         <% end %>

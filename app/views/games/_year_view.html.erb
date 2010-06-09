@@ -114,63 +114,78 @@
     </div>
 
     <div id="platforms_general_filters">
-      <span class="title_top_filter"><%= "Current Year" %></span>
-      <span id="spinner<%= @year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-      <span class="check_top_filter"><%= check_box_tag "y_plat_all", 1, true, :class => @year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-      <br />
-      <% @platforms_year.sort! { |a,b| a.name <=> b.name } %>
-      <% for platform in @platforms_year %>
-        <%= check_box_tag platform.id, 1, false, :class => @year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_plat_all')" %>
-        <%= platform.name %><br />
-      <% end %>
+      <div class="title_top_filter">
+        <span class="search_filter"><%= text_field_with_auto_complete :platform_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => platforms_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="check_top_filter"><%= check_box_tag "y_plat_all", 1, true, :class => @year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+        <span id="spinner<%= @year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      </div>
+      <div id="plat_filters" class="filters">
+        <% @platforms_year.sort! { |a,b| a.name <=> b.name } %>
+        <% for platform in @platforms_year %>
+          <%= check_box_tag platform.id, 1, false, :class => @year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_plat_all')" %>
+          <%= platform.name %><br />
+        <% end %>
+      </div>
     </div>
 
     <div id="publishers_general_filters" style="display:none">
-      <span class="title_top_filter"><%= "Current Year" %></span>
-      <span id="spinner<%= 'p'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-      <span class="check_top_filter"><%= check_box_tag 'y_pub_all', 1, true, :class => 'p'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-      <br />
-      <% @publishers_year.sort! { |a,b| a.name <=> b.name } %>
-      <% for publisher in @publishers_year %>
-        <%= check_box_tag 'p'+publisher.id.to_s, 1, false, :class => 'p'+@year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_pub_all')" %>
-        <%= publisher.name %><br />
-      <% end %>
+      <div class="title_top_filter">
+        <span class="search_filter"><%= text_field_with_auto_complete :publisher_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => publishers_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="check_top_filter"><%= check_box_tag 'y_pub_all', 1, true, :class => 'p'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+        <span id="spinner<%= 'p'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      </div>
+      <div id="pub_filters" class="filters">
+        <% @publishers_year.sort! { |a,b| a.name <=> b.name } %>
+        <% for publisher in @publishers_year %>
+          <%= check_box_tag 'p'+publisher.id.to_s, 1, false, :class => 'p'+@year.to_s, :onclick => "yearFilter(this, #{@year}, 'y_pub_all')" %>
+          <%= publisher.name %><br />
+        <% end %>
+      </div>
     </div>
 
     <div id="developers_general_filters" style="display:none">
-      <span class="title_top_filter"><%= "Current Year" %></span>
-      <span id="spinner<%= 'd'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-      <span class="check_top_filter"><%= check_box_tag 'y_dev_all', 1, true, :class => 'd'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-      <br />
-      <% @developers_year.sort! { |a,b| a.name <=> b.name } %>
-      <% for developer in @developers_year %>
-        <%= check_box_tag 'd'+developer.id.to_s, 1, false, :class => 'd'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_dev_all')" %>
-        <%= developer.name %><br />
-      <% end %>
+      <div class="title_top_filter">
+        <span class="search_filter"><%= text_field_with_auto_complete :developer_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => developers_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="check_top_filter"><%= check_box_tag 'y_dev_all', 1, true, :class => 'd'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+        <span id="spinner<%= 'd'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      </div>
+      <div id="dev_filters" class="filters">
+        <% @developers_year.sort! { |a,b| a.name <=> b.name } %>
+        <% for developer in @developers_year %>
+          <%= check_box_tag 'd'+developer.id.to_s, 1, false, :class => 'd'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_dev_all')" %>
+          <%= developer.name %><br />
+        <% end %>
+      </div>
     </div>
 
     <div id="genres_general_filters" style="display:none">
-      <span class="title_top_filter"><%= "Current Year" %></span>
-      <span id="spinner<%= 'n'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-      <span class="check_top_filter"><%= check_box_tag 'y_gen_all', 1, true, :class => 'n'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-      <br />
-      <% @genres.sort! { |a,b| a.name <=> b.name } %>
-      <% for genre in @genres %>
-        <%= check_box_tag 'n'+genre.id.to_s, 1, false, :class => 'n'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_gen_all')" %>
-        <%= genre.name %><br />
-      <% end %>
+      <div class="title_top_filter">
+        <span class="search_filter"><%= text_field_with_auto_complete :genre_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => genres_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="check_top_filter"><%= check_box_tag 'y_gen_all', 1, true, :class => 'n'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+        <span id="spinner<%= 'n'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      </div>
+      <div id="gen_filters" class="filters">
+        <% @genres.sort! { |a,b| a.name <=> b.name } %>
+        <% for genre in @genres %>
+          <%= check_box_tag 'n'+genre.id.to_s, 1, false, :class => 'n'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_gen_all')" %>
+          <%= genre.name %><br />
+        <% end %>
+      </div>
     </div>
 
     <div id="ratings_general_filters" style="display:none">
-      <span class="title_top_filter"><%= "Current Year" %></span>
-      <span id="spinner<%= 'r'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
-      <span class="check_top_filter"><%= check_box_tag 'y_rat_all', 1, true, :class => 'r'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
-      <br />
-      <% @ratings.sort! { |a,b| a.name <=> b.name } %>
-      <% for rating in @ratings %>
-        <%= check_box_tag 'r'+rating.id.to_s, 1, false, :class => 'r'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_rat_all')" %>
-        <%= rating.name %><br />
-      <% end %>
+      <div class="title_top_filter">
+        <span class="search_filter"><%= text_field_with_auto_complete :rating_filter, :name, { :class => 'fcs', :value => "Quick find", :onfocus => "searchText(this, 0, 'Quick find');", :onblur => "searchText(this, 1, 'Quick find');" }, { :url => ratings_index_path(), :method => :get, :param_name => 'search_list' } %></span>
+        <span class="check_top_filter"><%= check_box_tag 'y_rat_all', 1, true, :class => 'r'+@year.to_s, :onclick => "yearFilterAll(this, #{@year})" %>All</span>
+        <span id="spinner<%= 'r'+@year.to_s %>" class="spinner" style="display:none;"><img alt="Spinner" src="/images/spinner.gif" /></span>
+      </div>
+      <div id="rat_filters" class="filters">
+        <% @ratings.sort! { |a,b| a.name <=> b.name } %>
+        <% for rating in @ratings %>
+          <%= check_box_tag 'r'+rating.id.to_s, 1, false, :class => 'r'+@year.to_s,:onclick => "yearFilter(this, #{@year}, 'y_rat_all')" %>
+          <%= rating.name %><br />
+        <% end %>
+      </div>
     </div>
   <% end %>
 </div>

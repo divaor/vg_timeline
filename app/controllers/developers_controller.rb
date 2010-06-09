@@ -5,6 +5,13 @@ class DevelopersController < ApplicationController
     @view = params[:action]
     if params[:search]
       @developers = Developer.where("LOWER(name) LIKE ?", "%#{params[:search].downcase}%").limit(10)
+    elsif params[:search_list]
+      @year = '2010'
+      @div = 'dev_filters'
+      @all = 'y_dev_all'
+      @extra = 'd'
+      items = items_year('developers', @year)
+      @filtered_items = Developer.where("id in (#{items}) and LOWER(name) LIKE ?", "%#{params[:search_list].downcase}%").order("name ASC")
     else
       @developers = Developer.order("name asc")
     end
@@ -13,6 +20,8 @@ class DevelopersController < ApplicationController
       format.js {
         if params[:search]
           render 'suggestion'
+        elsif params[:search_list]
+          render 'games/refresh_filter'
         else
           render 'pop_up'
         end

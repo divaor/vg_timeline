@@ -1,0 +1,4 @@
+<% for item in @filtered_items %>
+  <%= check_box_tag @extra+item.id.to_s, 1, false, :class => @extra+@year.to_s, :onclick => "yearFilter(this, #{@year}, '#{@all}')" %>
+  <%= item.name %><br />
+<% end %>

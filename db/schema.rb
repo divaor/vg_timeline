@@ -184,8 +184,6 @@ ActiveRecord::Schema.define(:version => 20100529070838) do
     t.datetime "updated_at"
   end
 
-  add_index "levels", ["level"], :name => "level", :unique => true
-
   create_table "markets", :force => true do |t|
     t.string   "name",         :null => false
     t.string   "abbreviation", :null => false
@@ -194,9 +192,9 @@ ActiveRecord::Schema.define(:version => 20100529070838) do
   end
 
   create_table "mod_tables", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "name",       :limit => 150, :null => false
+    t.timestamp "created_at",                :null => false
+    t.timestamp "updated_at",                :null => false
   end
 
   create_table "modifications", :force => true do |t|
@@ -330,12 +328,6 @@ ActiveRecord::Schema.define(:version => 20100529070838) do
     t.datetime "updated_at"
   end
 
-  create_table "mod_tables", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "types", :force => true do |t|
     t.string   "name",       :null => false
     t.datetime "created_at"
@@ -363,10 +355,5 @@ ActiveRecord::Schema.define(:version => 20100529070838) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-  add_index "users", ["username"], :name => "Index_users_on_username", :unique => true
 
 end

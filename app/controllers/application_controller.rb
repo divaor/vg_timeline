@@ -55,6 +55,32 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def items_year(table, year)
+    games = Game.where('release_date >= ? and release_date <= ?', "#{year}-01-01", "#{year}-12-31")
+    items = []
+    if table == 'platforms'
+      for game in games
+        items << game.platform.id unless items.include?(game.platform.id)
+      end
+    end
+    if table == 'publishers'
+      for game in games
+        for pub in game.publishers
+          items << pub.id unless items.include?(pub.id)
+        end
+      end
+    end
+    if table == 'developers'
+      for game in games
+        for dev in game.developers
+          items << dev.id unless items.include?(dev.id)
+        end
+      end
+    end
+    items = items.join(",")
+    return items
+  end
+
   def create_log_entry(table, id, description, parameters)
     parameters = { :add => false, :mod => false, :remove => false }.merge(parameters)
     table = ModTable.where("name = ?", table).first

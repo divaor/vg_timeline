@@ -13,7 +13,7 @@
 //
 //// end of browsing detection
 
-Event.observe(window, 'load', function() {
+document.observe('dom:loaded', function() {
   var gameDisp = $('game_display')
   if(gameDisp) {
     // Set width to game display on browsers that make it thinner
@@ -485,6 +485,26 @@ function showHide(element) {
     element.update('Hide')
   } else {
     element.update('More')
+  }
+}
+
+function searchText(element, type, text) {
+  if (type == 0) {
+    if (element.value == text) {
+      element.value = "";
+      element.setStyle({
+        'color': 'black',
+        'fontStyle': 'normal'
+      });
+    }
+  } else {
+    if (element.value == "") {
+      element.setStyle({
+        'color': 'gray',
+        'fontStyle': 'italic'
+      });
+      element.value = text;
+    }
   }
 }
 

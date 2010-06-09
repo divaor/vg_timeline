@@ -102,6 +102,12 @@ div#nav {
     font-weight:bold;
 }
 
+span#main_search_box input {
+  width: 300px;
+  font-style: italic;
+  color: gray;
+}
+
 span#search_box {
     float: right;
     height: 25px;
@@ -388,7 +394,7 @@ div#ratings_general_filters {
     border: 1px solid black;
     padding: 3px 5px 5px;
     width: 20%;
-    overflow-y: scroll;
+    
 }
 
 div#first_filter_cat {
@@ -449,10 +455,22 @@ span.general_links {
     text-align: right;
 }
 
-span.title_top_filter {
-    font-weight:bold;
+div.title_top_filter {
+    margin-top: 2px;
     font-size: 14px;
-    padding-top: 13px;
+}
+
+div.filters {
+  margin-top: 5px;
+  overflow-y: scroll;
+  height: 122px;
+}
+
+span.search_filter input {
+  font-size: 12px;
+  color: gray;
+  font-style: italic;
+  width: 165px;
 }
 
 div.form_container {

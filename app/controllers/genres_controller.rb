@@ -1,4 +1,17 @@
 class GenresController < ApplicationController
+  def index
+    if params[:search_list]
+      @year = '2010'
+      @div = 'gen_filters'
+      @all = 'y_gen_all'
+      @extra = 'n'
+      @filtered_items = Genre.where("LOWER(name) LIKE ?", "%#{params[:search_list].downcase}%").order("name ASC")
+      respond_to do |format|
+        format.js { render 'games/refresh_filter' }
+      end
+    end
+  end
+
   def new
     @genre = Genre.new
     @game = Game.find(params[:game])

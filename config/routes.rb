@@ -25,6 +25,16 @@ VgTimeline::Application.routes.draw do |map|
 
   get "press/index"
 
+  get "platforms/index"
+
+  get "publishers/index"
+
+  get "developers/index"
+
+  get "genres/index"
+
+  get "ratings/index"
+
   get "series/index"
 
   get "seires/index"
