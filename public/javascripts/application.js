@@ -495,6 +495,12 @@ function showHide(element) {
   }
 }
 
+function clearText(textField, element) {
+  $(textField).value = '';
+  $(textField).focus();
+  element.hide();
+}
+
 function searchText(element, type, text) {
   if (type == 0) {
     if (element.value == text) {
@@ -512,6 +518,15 @@ function searchText(element, type, text) {
       });
       element.value = text;
     }
+  }
+}
+
+function showClear(clear, element) {
+  if (element.value != '') {
+    $(clear).show();
+  }
+  else {
+    $(clear).hide();
   }
 }
 

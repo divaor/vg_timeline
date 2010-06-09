@@ -104,7 +104,8 @@ div#nav {
 }
 
 span#main_search_box input {
-  width: 300px;
+  width: 280px;
+  padding-right: 20px;
   font-style: italic;
   color: gray;
 }
@@ -475,7 +476,8 @@ span.search_filter input {
   font-size: 12px;
   color: gray;
   font-style: italic;
-  width: 165px;
+  padding-right:20px;
+  width:135px;
 }
 
 div.form_container {
@@ -580,4 +582,11 @@ div.auto_complete ul li span.result_text {
 
 div.auto_complete ul li span.informal {
   display: inline;
+}
+
+span.clear_text  {
+  width: 15px;
+  left:-19px;
+  position:relative;
+  top:2px;
 }
