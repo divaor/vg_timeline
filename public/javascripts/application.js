@@ -35,7 +35,7 @@ document.observe("ajax:loading", function(event) {
   if(event.target.tagName.toLowerCase() != 'form') {
     var href = event.target.readAttribute('href');
     var lv = href.charAt(href.indexOf('lv=') + 3);
-    $('lev'+lv).update('<h4>Loading...</h4>');
+    $('lev'+lv).update('<img src="/images/loadingfaster.gif" alt="Loading" />');
     Effect.Appear('lev'+lv, {
       duration: 0.3
     });
@@ -44,7 +44,7 @@ document.observe("ajax:loading", function(event) {
       to: 0.3
     });
   } else {
-    $('lev1').update('<h4>Loading...</h4>');
+    $('lev1').update('<img src="/images/loadingfaster.gif" alt="Loading" />');
   }
 });
 
@@ -75,12 +75,12 @@ document.observe("ajax:complete", function(event) {
     }
 
     // Observe press list change
-    var press_name = $('prs_name');
-    if(press_name) {
-      press_name.observe('keyup', function() {
+    var pressName = $('prs_name');
+    if(pressName) {
+      pressName.observe('keyup', function() {
         new Ajax.Request('/press', {
           method: 'get',
-          parameters: 'search_list=' + press_name.value,
+          parameters: 'search_list=' + pressName.value,
 
           onSuccess: function(response) {
             $('press_list').update(response.responseText);
@@ -88,12 +88,47 @@ document.observe("ajax:complete", function(event) {
         });
       });
     }
+
+    // games/_new.html.erb
+    // Observe tentative date checked
+    var tentative = $('tentative');
+    if(tentative) {
+      tentative.observe('change', function() {
+        if(tentative.checked) {
+          $('tentative_release_date').show();
+          $('release_date').hide();
+        } else {
+          $('tentative_release_date').hide();
+          $('release_date').show();
+        }
+      });
+
+      var tentativeDetail = $$('#tentative_release_date span').first();
+      $('date_tentative_year').observe('change', function() {
+        tentativeDetail.show();
+      });
+
+      var tentativeMonth = $('date_tentative_month');
+      var tentativeValue = $('date_tentative_value');
+
+      tentativeMonth.observe('change', function() {
+        if(tentativeMonth.selectedIndex > 0) {
+          tentativeValue.selectedIndex = 0;
+        }
+      });
+
+      tentativeValue.observe('change', function() {
+        if(tentativeValue.selectedIndex > 0) {
+          tentativeMonth.selectedIndex = 0;
+        }
+      });
+    }
   }
 
   var char_pic = $('character_picture');
   if(char_pic) {
     char_pic.observe('change', function() {
-      $('new_characters_game').setAttribute('data-remote', '');
+      $('new_characters_game').setAttribute('data-remote', 'false');
     })
   }
 });

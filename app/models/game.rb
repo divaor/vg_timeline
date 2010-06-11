@@ -343,6 +343,44 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def tentative_release_date=(date)
+    if date[:year].empty?
+      r_d = Date.civil(Date.today.year.to_i + 1, -1, -1)
+    else
+      if date[:month].empty? and date[:value].empty?
+        r_d = Date.civil(date[:year].to_i, -1, -1)
+      elsif date[:value].empty?
+        r_d = Date.civil(date[:year].to_i, date[:month].to_i, -1)
+      else
+        if date[:value] == "First Half"
+          r_d = Date.civil(date[:year].to_i, 6, -1)
+        elsif date[:value] == "Second Half"
+          r_d = Date.civil(date[:year].to_i, -1, -1)
+        elsif date[:value] == "Q1"
+          r_d = Date.civil(date[:year].to_i, 3, -1)
+        elsif date[:value] == "Q2"
+          r_d = Date.civil(date[:year].to_i, 6, -1)
+        elsif date[:value] == "Q3"
+          r_d = Date.civil(date[:year].to_i, 9, -1)
+        elsif date[:value] == "Q4"
+          r_d = Date.civil(date[:year].to_i, -1, -1)
+        elsif date[:value] == "Spring"
+          r_d = Date.civil(date[:year].to_i, 3, 20)
+        elsif date[:value] == "Summer"
+          r_d = Date.civil(date[:year].to_i, 6, 20)
+        elsif date[:value] == "Fall"
+          r_d = Date.civil(date[:year].to_i, 9, 22)
+        elsif date[:value] == "Winter"
+          r_d = Date.civil(date[:year].to_i, 12, 20)
+        elsif date[:value] == "Holidays"
+          r_d = Date.civil(date[:year].to_i, 12, 24)
+        end
+      end
+    end
+    self.release_date = r_d
+    self.tentative_date = 1
+  end
+
   def make_boxart_path
     name = main_title
     name = "#{main_title} #{sub_title}" if sub_title

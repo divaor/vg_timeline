@@ -204,6 +204,9 @@ class GamesController < ApplicationController
           @game.different_platforms << game1 unless @game.different_platforms.exists?(game1) or game1 == @game
         end
       end
+      if params[:tentative] == '1'
+        @game.tentative_release_date = params[:date][:tentative]
+      end
       @developers = []; @publishers = []
       if @game.save
         @game.prequel.update_attribute(:sequel, @game) if @game.prequel
