@@ -204,7 +204,7 @@ class GamesController < ApplicationController
           @game.different_platforms << game1 unless @game.different_platforms.exists?(game1) or game1 == @game
         end
       end
-      if params[:tentative] == '1'
+      if @game.tentative_date
         @game.tentative_release_date = params[:date][:tentative]
       end
       @developers = []; @publishers = []
@@ -313,6 +313,9 @@ class GamesController < ApplicationController
       if params[:character]
         character = Character.find_by_name(params[:game][:character_name])
         character.update_attributes(params[:character])
+      end
+      if @game.tentative_date
+        @game.tentative_release_date = params[:date][:tentative]
       end
       add_flash = experience_user(5)
       flash[:notice] = "Game succesfully updated." + add_flash

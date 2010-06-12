@@ -550,8 +550,9 @@ div.form_check {
 
 /* AUTO COMPLETE STYLE */
 div.auto_complete {
-  width: 226px;
+  width: 298px;
   background: #fff;
+  z-index: 1;
 }
 div.auto_complete ul {
   border:1px solid silver;
@@ -569,7 +570,7 @@ div.auto_complete ul li {
   padding:1px;
   background-color: #DFEBFF;
   display: table;
-  width: 222px;
+  width: 298px;
 }
 div.auto_complete ul li.selected {
   background-color: white;
@@ -582,7 +583,7 @@ div.auto_complete ul strong.highlight {
 }
 
 div.auto_complete ul li span.result_text {
-  width: 150px;
+  width: 240px;
   float: left;
   display: block;
   margin-right: 3px;

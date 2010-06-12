@@ -40,7 +40,10 @@
         <!-- RELEASE DATE -->
         <tr>
           <td class="label">Release Date:</td>
-          <td><%= link_to @game.release_date, year_path(@game.r_y) %></td>
+          <td>
+            <%= link_to @game.release_date, year_path(@game.r_y) %>
+            <%= "(Tentative)" if @game.tentative_date %>
+          </td>
         </tr>
 
         <!-- DEVELOPER -->
@@ -75,6 +78,8 @@
         <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
       </div>
     </div>
+
+    <!-- <video src="http://people.opera.com/howcome/2007/video/A_New_Computer--small.ogg" controls="controls" autoplay="autoplay">Video Test</video> -->
 
     <!-- DESCRIPTION -->
     <div id="game_info_description">

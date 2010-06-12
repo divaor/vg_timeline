@@ -23,8 +23,8 @@
           <%= select_tag 'date[tentative[value]]', options_for_select([['Non-specific', ''], 'First Half', 'Second Half', 'Q1', 'Q2', 'Q3', 'Q4', 'Spring', 'Summer', 'Fall', 'Winter', 'Holidays']) %>
         </span>
       </div>
+      <%= f.check_box :tentative_date %> Tentative
     </div>
-    <%= check_box_tag :tentative %> Tentative
     <div class="field">
       <%= f.label :platform_name, "Platform" %><br />
       <%= text_field_with_auto_complete :game, :platform_name, { }, { :url => platforms_path(), :method => :get, :param_name => 'search' } %>

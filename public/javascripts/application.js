@@ -91,7 +91,7 @@ document.observe("ajax:complete", function(event) {
 
     // games/_new.html.erb
     // Observe tentative date checked
-    var tentative = $('tentative');
+    var tentative = $('game_tentative_date');
     if(tentative) {
       tentative.observe('change', function() {
         if(tentative.checked) {

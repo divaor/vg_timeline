@@ -378,7 +378,6 @@ class Game < ActiveRecord::Base
       end
     end
     self.release_date = r_d
-    self.tentative_date = 1
   end
 
   def make_boxart_path
