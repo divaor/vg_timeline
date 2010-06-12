@@ -120,7 +120,7 @@ class GamesController < ApplicationController
     @title = "Add New Game"
     if id_diff
       game_diff = Game.find(id_diff)
-      attributes = { :main_title => game_diff.main_title, :sub_title => game_diff.sub_title, :release_date => game_diff.release_date, :tentative_date => game_diff.tentative_date }
+      attributes = { :main_title => game_diff.main_title, :sub_title => game_diff.sub_title, :release_date => game_diff.release_date }
       @view = "new_lite"
       @diff_platform_id = game_diff.id
     elsif series_id
@@ -128,10 +128,7 @@ class GamesController < ApplicationController
       attributes = { :main_title => series.name, :series_id => series.id }
     end
     @game = attributes ? Game.new(attributes) : Game.new
-    if game_diff
-      @game.publisher_names = game_diff.publisher_names
-      @game.developer_names = game_diff.developer_names
-    end
+    @game.publisher_names = game_diff.publisher_names if game_diff
     @date = (@year && @month) ? Date.parse("#{@year}-#{@month}-01") : Date.today
     @platforms = Platform.all
     @markets = Market.all
@@ -203,12 +200,11 @@ class GamesController < ApplicationController
         @game.project_leaders = @game_diff.project_leaders
         @game.characters = @game_diff.characters
         @game.different_platforms << @game_diff
-        @game.tentative_date = @game_diff.tentative_date
         for game1 in @game_diff.different_platforms
           @game.different_platforms << game1 unless @game.different_platforms.exists?(game1) or game1 == @game
         end
       end
-      if @game.tentative_date == 1
+      if @game.tentative_date
         @game.tentative_release_date = params[:date][:tentative]
       end
       @developers = []; @publishers = []
@@ -318,7 +314,7 @@ class GamesController < ApplicationController
         character = Character.find_by_name(params[:game][:character_name])
         character.update_attributes(params[:character])
       end
-      if @game.tentative_date == 1
+      if @game.tentative_date
         @game.tentative_release_date = params[:date][:tentative]
       end
       add_flash = experience_user(5)
@@ -499,7 +495,6 @@ class GamesController < ApplicationController
       format.js
     end
   end
-
   def update_boxart
     @game = Game.find(params[:id])
     @game = update_attribute('boxart_dir' => params[:boxart_dir])
