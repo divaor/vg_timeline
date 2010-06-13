@@ -6,5 +6,11 @@
   <div class="field">
     <%= f.text_area :description, :rows => '10', :cols => '30', :class => 'fcs' %>
   </div>
+  <% unless @game.different_platforms.empty? %>
+    <div class="field">
+      <%= check_box_tag :update_diff_platforms, '1', true %>
+      Apply changes to this game in the other platforms?
+    </div>
+  <% end %>
   <%= f.submit "Submit" %>
 <% end %>

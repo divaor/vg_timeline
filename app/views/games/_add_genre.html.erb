@@ -8,6 +8,12 @@
       <%= check_box_tag "game[genre_ids][]", genre.id, @game.genres.include?(genre) %>
       <%= f.label :genre_ids, genre.name, :class => genre == @genres.first ? 'fcs' : '' %><br />
     <% end %>
+    <% unless @game.different_platforms.empty? %>
+      <div class="field">
+        <%= check_box_tag :update_diff_platforms, '1', true %>
+        Apply changes to this game in the other platforms?
+      </div>
+    <% end %>
     <%= f.submit "Submit" %>
   <% end %>
   <%= pop_up_controller "Add genre(s)", 'new', 'genres', :game_id => @game.id, :level => 2 %>

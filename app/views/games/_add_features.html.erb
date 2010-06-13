@@ -7,6 +7,12 @@
     <%= f.label :feature_descriptions %>
     <%= f.text_field :feature_descriptions, :class => 'fcs' %>
   </div>
+  <% unless @game.different_platforms.empty? %>
+    <div class="field">
+      <%= check_box_tag :update_diff_platforms, '1', true %>
+      Apply changes to this game in the other platforms?
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit "Submit" %>
   </div>

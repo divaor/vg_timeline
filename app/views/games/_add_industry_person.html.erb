@@ -6,5 +6,11 @@
   <div class="field">
     <%= f.text_field :key_person_names, { :class => 'fcs' }, { :url => industry_people_path(), :method => :get, :param_name => 'search' } %>
   </div>
+  <% unless @game.different_platforms.empty? %>
+    <div class="field">
+      <%= check_box_tag :update_diff_platforms, '1', true %>
+      Apply to all versions of game
+    </div>
+  <% end %>
   <%= f.submit "Submit" %>
 <% end %>

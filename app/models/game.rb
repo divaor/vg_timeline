@@ -377,7 +377,24 @@ class Game < ActiveRecord::Base
         end
       end
     end
-    self.release_date = r_d
+    self.update_attribute(:release_date, r_d)
+  end
+
+  def different_platforms_add=(game)
+    for gm in self.different_platforms
+      gm.different_platforms << game unless gm.different_platforms.exists?(game) or gm == game
+      game.different_platforms << gm unless game.different_platforms.exists?(gm) or game == gm
+    end
+    for game2 in game.different_platforms
+      game2.different_platforms << self unless game2.different_platforms.exists?(self) or game2 == self
+      self.different_platforms << game2 unless self.different_platforms.exists?(game2) or self == game2
+      for game3 in self.different_platforms
+        game2.different_platforms << game3 unless game2.different_platforms.exists?(game3) or game2 == game3
+        game3.different_platforms << game2 unless game3.different_platforms.exists?(game2) or game3 == game2
+      end
+    end
+    self.different_platforms << game unless self.different_platforms.exists?(game) or self == game
+    game.different_platforms << self unless game.different_platforms.exists?(self) or game == self
   end
 
   def make_boxart_path

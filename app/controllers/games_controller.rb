@@ -158,25 +158,12 @@ class GamesController < ApplicationController
     end
   end
 
-  def create # TODO have different platforms be assigned in model instead of controller
+  def create
     platform = Platform.find_by_name(params[:game][:platform_name])
     @game_exists = Game.where("main_title = ? and sub_title = ? and platform_id = ?", params[:game][:main_title], params[:game][:sub_title], platform.id).first if platform
     @game_diff = Game.find(params[:diff_platform_id]) if params[:diff_platform_id]
     if @game_exists and @game_diff
-      for game in @game_exists.different_platforms
-        game.different_platforms << @game_diff unless game.different_platforms.exists?(@game_diff) or game == @game_diff
-        @game_diff.different_platforms << game unless @game_diff.different_platforms.exists?(game) or @game_diff == game
-      end
-      for game2 in @game_diff.different_platforms
-        game2.different_platforms << @game_exists unless game2.different_platforms.exists?(@game_exists) or game2 == @game_exists
-        @game_exists.different_platforms << game2 unless @game_exists.different_platforms.exists?(game2) or @game_exists == game2
-        for game3 in @game_exists.different_platforms
-          game2.different_platforms << game3 unless game2.different_platforms.exists?(game3) or game2 == game3
-          game3.different_platforms << game2 unless game3.different_platforms.exists?(game2) or game3 == game2
-        end
-      end
-      @game_exists.different_platforms << @game_diff unless @game_exists.different_platforms.exists?(@game_diff) or @game_exists == @game_diff
-      @game_diff.different_platforms << @game_exists unless @game_diff.different_platforms.exists?(@game_exists) or @game_diff == @game_exists
+      @game_exists.different_platforms_add = @game_diff
       flash[:notice] = "Games linked succesfully."
       redirect_to game_path(@game_exists)
     elsif @game_exists and not @game_diff
@@ -284,6 +271,11 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     old_game_info = { :year => @game.r_y, :month => @game.r_m, :path => @game.make_boxart_path }
     if @game.update_attributes(params[:game]) # TODO if no params[:game] is passed it throws error
+      if params[:update_diff_platforms]
+        for game in @game.different_platforms
+          game.update_attributes(params[:game])
+        end
+      end
       if (params[:game][:prequel_name] or params[:game][:sequel_name]) and not @game.sequel and not @game.prequel
         unless params[:game][:sequel_name].empty?
           pre_seq = params[:game][:sequel_name]
@@ -313,13 +305,13 @@ class GamesController < ApplicationController
         create_log_entry('games', @game.id, "Modified #{@game.full_title_limit}", :mod => true)
         game.update_attribute('series_id', @game.series_id)
       end
+      if @game.tentative_date
+        @game.tentative_release_date = params[:date][:tentative]
+      end
       move_boxart(old_game_info, @game)
       if params[:character]
         character = Character.find_by_name(params[:game][:character_name])
         character.update_attributes(params[:character])
-      end
-      if @game.tentative_date == 1
-        @game.tentative_release_date = params[:date][:tentative]
       end
       add_flash = experience_user(5)
       flash[:notice] = "Game succesfully updated." + add_flash
