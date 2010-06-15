@@ -365,13 +365,13 @@ class Game < ActiveRecord::Base
         elsif date[:value] == "Q4"
           r_d = Date.civil(date[:year].to_i, -1, -1)
         elsif date[:value] == "Spring"
-          r_d = Date.civil(date[:year].to_i, 3, 20)
-        elsif date[:value] == "Summer"
           r_d = Date.civil(date[:year].to_i, 6, 20)
-        elsif date[:value] == "Fall"
+        elsif date[:value] == "Summer"
           r_d = Date.civil(date[:year].to_i, 9, 22)
-        elsif date[:value] == "Winter"
+        elsif date[:value] == "Fall"
           r_d = Date.civil(date[:year].to_i, 12, 20)
+        elsif date[:value] == "Winter"
+          r_d = Date.civil(date[:year].to_i, 3, 20)
         elsif date[:value] == "Holidays"
           r_d = Date.civil(date[:year].to_i, 12, 24)
         end

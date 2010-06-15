@@ -191,11 +191,12 @@ class GamesController < ApplicationController
         @game.characters = @game_diff.characters
         @game.different_platforms << @game_diff
         @game.tentative_date = @game_diff.tentative_date
+        @game.industry_people = @game_diff.industry_people
         for game1 in @game_diff.different_platforms
           @game.different_platforms << game1 unless @game.different_platforms.exists?(game1) or game1 == @game
         end
       end
-      if @game.tentative_date == 1
+      if @game.tentative_date
         @game.tentative_release_date = params[:date][:tentative]
       end
       @developers = []; @publishers = []
