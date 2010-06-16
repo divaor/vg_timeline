@@ -41,8 +41,11 @@
         <tr>
           <td class="label">Release Date:</td>
           <td>
-            <%= link_to @game.release_date, year_path(@game.r_y) %>
-            <%= "(Tentative)" if @game.tentative_date %>
+            <% if @game.tentative_date %>
+              <%= link_to @game.tentative_date_text, year_path(@game.r_y) %>
+            <% else %>
+              <%= link_to @game.release_date, year_path(@game.r_y) %>
+            <% end %>
           </td>
         </tr>
 

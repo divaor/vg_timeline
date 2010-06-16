@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100611045148) do
+ActiveRecord::Schema.define(:version => 20100615235303) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(:version => 20100611045148) do
     t.integer  "remake_id"
     t.boolean  "exclusive",               :default => false, :null => false
     t.boolean  "tentative_date",          :default => false, :null => false
+    t.string   "tentative_date_text"
   end
 
   create_table "games_genres", :id => false, :force => true do |t|

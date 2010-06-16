@@ -13,10 +13,10 @@
     </div>
     <div class="field">
       <%= f.label :release_date %>
-      <div id="release_date" style="display: block;">
+      <div id="release_date" style="display: <%= @game.tentative_date ? 'none' : 'block' %>;">
         <%= f.date_select :release_date, { :default => @date, :start_year => 1975, :end_year => last_year, :use_short_month => true } %>
       </div>
-      <div id="tentative_release_date" style="display: none;">
+      <div id="tentative_release_date" style="display: <%= @game.tentative_date ? 'block' : 'none' %>;">
         <%= select_year 0, :start_year => 2013, :end_year => 1975, :prompt => 'N/A', :field_name => 'tentative[year]' %> Year<br />
         <span style="display: none;">
           <%= select_month 0, :use_short_month => true, :field_name => 'tentative[month]', :prompt => 'Month' %>

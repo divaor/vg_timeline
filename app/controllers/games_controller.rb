@@ -198,6 +198,8 @@ class GamesController < ApplicationController
       end
       if @game.tentative_date
         @game.tentative_release_date = params[:date][:tentative]
+      else
+        @game.update_attribute(:tentative_date_text, "")
       end
       @developers = []; @publishers = []
       if @game.save
@@ -308,6 +310,8 @@ class GamesController < ApplicationController
       end
       if @game.tentative_date
         @game.tentative_release_date = params[:date][:tentative]
+      else
+        @game.update_attribute(:tentative_date_text, "")
       end
       move_boxart(old_game_info, @game)
       if params[:character]

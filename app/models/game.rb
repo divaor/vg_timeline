@@ -346,12 +346,16 @@ class Game < ActiveRecord::Base
   def tentative_release_date=(date)
     if date[:year].empty?
       r_d = Date.civil(Date.today.year.to_i + 1, -1, -1)
+      t_d_t = "TBD"
     else
       if date[:month].empty? and date[:value].empty?
         r_d = Date.civil(date[:year].to_i, -1, -1)
+        t_d_t = date[:year]
       elsif date[:value].empty?
         r_d = Date.civil(date[:year].to_i, date[:month].to_i, -1)
+        t_d_t = "#{r_d.strftime("%b")} #{date[:year]}"
       else
+        t_d_t = "#{date[:value]} #{date[:year]}"
         if date[:value] == "First Half"
           r_d = Date.civil(date[:year].to_i, 6, -1)
         elsif date[:value] == "Second Half"
@@ -377,7 +381,7 @@ class Game < ActiveRecord::Base
         end
       end
     end
-    self.update_attribute(:release_date, r_d)
+    self.update_attributes(:release_date => r_d, :tentative_date_text => t_d_t)
   end
 
   def different_platforms_add=(game)
