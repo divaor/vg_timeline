@@ -197,7 +197,7 @@ class GamesController < ApplicationController
         end
       end
       if @game.tentative_date
-        @game.tentative_release_date = params[:date][:tentative]
+        @game.tentative_release_date = params[:date][:tentative] if params[:date]
       else
         @game.update_attribute(:tentative_date_text, "")
       end
@@ -309,7 +309,7 @@ class GamesController < ApplicationController
         game.update_attribute('series_id', @game.series_id)
       end
       if @game.tentative_date
-        @game.tentative_release_date = params[:date][:tentative] if params[:date][:tentative]
+        @game.tentative_release_date = params[:date][:tentative] if params[:date]
       else
         @game.update_attribute(:tentative_date_text, "")
       end
