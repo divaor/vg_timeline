@@ -21,7 +21,7 @@
         <span style="display: none;">
           <%= select_month 0, :use_short_month => true, :field_name => 'tentative[month]', :prompt => 'Month' %>
           OR
-          <%= select_tag 'date[tentative[value]]', options_for_select([['Non-specific', ''], 'First Half', 'Second Half', 'Q1', 'Q2', 'Q3', 'Q4', 'Spring', 'Summer', 'Fall', 'Winter', 'Holidays']) %>
+          <%= select_tag 'date[tentative[value]]', options_for_select([['Non-specific', ''], 'First Half', 'Second Half', 'Q1', 'Q2', 'Q3', 'Q4', 'Spring', 'Summer', 'Fall', 'Winter', 'Holiday']) %>
         </span>
       </div>
       <%= f.check_box :tentative_date %> Tentative
