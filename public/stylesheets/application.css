@@ -589,10 +589,6 @@ div.auto_complete ul li span.result_text {
   margin-right: 3px;
 }
 
-div.auto_complete ul li span.informal {
-  display: inline;
-}
-
 span.clear_text  {
   width: 15px;
   left:-19px;
