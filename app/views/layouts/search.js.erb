@@ -2,10 +2,8 @@
   <% for result in @results %>
     <li id="<%= "#{result.class}_#{result.id}" %>">
       <span class="result_text">
-        <%= result.result_display %>
-        <span class="informal">
-          (<%= result.class %>)
-        </span>
+        <span class="select_show"><%= result.result_display %></span>
+        (<%= result.class %>)
       </span>
       <% if result.respond_to?('result_picture') %>
         <%= image_tag(result.result_picture, :alt => '') %>

@@ -41,11 +41,7 @@
         <tr>
           <td class="label">Release Date:</td>
           <td>
-            <% if @game.tentative_date %>
-              <%= link_to @game.tentative_date_text, year_path(@game.r_y) %>
-            <% else %>
-              <%= link_to @game.release_date, year_path(@game.r_y) %>
-            <% end %>
+            <%= link_to @game.release_display, year_path(@game.r_y) %>
           </td>
         </tr>
 
@@ -82,7 +78,10 @@
       </div>
     </div>
 
-    <!-- <video src="http://people.opera.com/howcome/2007/video/A_New_Computer--small.ogg" controls="controls" autoplay="autoplay">Video Test</video> -->
+    <!-- VIDEO TEST -->
+    <% unless @game.videos.empty? %>
+      <video src="http://s3.amazonaws.com/vg-timeline/videos/<%= @game.videos.last.file_name %>" controls="controls">Video Test</video>
+    <% end %>
 
     <!-- DESCRIPTION -->
     <div id="game_info_description">

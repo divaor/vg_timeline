@@ -30,6 +30,7 @@ class Game < ActiveRecord::Base
   has_many :project_leaders
   has_many :industry_people, :through => :project_leaders
   has_many :awards
+  has_many :videos
 
   validates :main_title, :release_date, :platform_id, :presence => true
   has_attached_file :boxart, :storage => :s3, :s3_credentials => "#{Rails.root}/config/s3.yml", :url => "/images/:release_year/:release_month/:style/:title", :styles => { :medium => "400x400>", :thumb => "120x120>", :mini => "50x50>" }, :path => "/images/:release_year/:release_month/:style/:title"
@@ -171,6 +172,14 @@ class Game < ActiveRecord::Base
   def same_file?(prev_file, new_file)
     return true if FileUtils.compare_file(prev_file, new_file)
     return false
+  end
+
+  def release_display
+    if tentative_date
+      tentative_date_text
+    else
+      release_date
+    end
   end
 
   def platform_name
@@ -346,7 +355,7 @@ class Game < ActiveRecord::Base
   def tentative_release_date=(date)
     if date[:year].empty?
       r_d = Date.civil(Date.today.year.to_i + 1, -1, -1)
-      t_d_t = "TBD"
+      t_d_t = "TBA"
     else
       if date[:month].empty? and date[:value].empty?
         r_d = Date.civil(date[:year].to_i, -1, -1)
