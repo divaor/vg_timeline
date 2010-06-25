@@ -4,184 +4,204 @@
   <!-- LEFT COLUMN -->
   <div id="left_column">
 
-    <!-- BOXART -->
-    <div id="boxart_medium_container">
-      <%= box_logo(@game, :medium) %>
-    </div>
+    <div id="left_column_content">
 
-    <!-- BASIC INFO & COMPLETION BAR -->
-    <div id="basic_info_container">
+      <!-- BOXART & INFO -->
+      <div class="margin_bottom">
 
-      <!-- NAME -->
-      <h3 class="game_show_title"><%= @game.main_title %></h3>
-      <% unless @game.sub_title.empty? %>
-        <h2 class="game_show_title"><%= @game.sub_title %></h2>
-      <% end %>
+        <!-- BOXART -->
+        <div id="boxart_medium_container">
+          <%= box_logo(@game, :medium) %>
+        </div>
 
+        <!-- BASIC INFO & COMPLETION BAR -->
+        <div id="basic_info_container">
 
-      <!-- PLATFORM, REL DATE, DEVELOPER, PUBLISHER AND ALSO ON -->
-      <table cellpadding="0">
-        
-        <!-- PLATFORM AND ALSO ON -->
-        <tr>
-          <td class="label">Platform:</td>
-          <td>
+          <!-- NAME -->
+          <h3 class="game_show_title"><%= @game.main_title %></h3>
+          <% unless @game.sub_title.empty? %>
+            <h2 class="game_show_title"><%= @game.sub_title %></h2>
+          <% end %>
 
-            <!-- PLATFORM -->
-            <%= link_to @game.platform.name, '#' %>
+          <!-- INFO & ALSO ON -->
+          <div id="info_also_on">
+
+            <!-- PLATFORM, REL DATE, DEVELOPER, PUBLISHER AND ALSO ON -->
+            <table class="game_info_table" cellpadding="0">
+
+              <!-- PLATFORM-->
+              <tr>
+                <td class="label">Platform:</td>
+                <td><%= link_to @game.platform.name, '#' %></td>
+              </tr>
+
+              <!-- RELEASE DATE -->
+              <tr>
+                <td class="label">Release Date:</td>
+                <td><%= link_to @game.release_display, year_path(@game.r_y) %></td>
+              </tr>
+
+              <!-- DEVELOPER -->
+              <tr>
+                <td class="label">Developed by:</td>
+                <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
+                  <% @game.developers.each do |d| %>
+                    <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
+                  <% end %>
+                </td>
+              </tr>
+
+              <!-- PUBLISHER -->
+              <tr>
+                <td class="label">Published by:</td>
+                <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
+                  <% @game.publishers.each do |p| %>
+                    <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
+                  <% end %>
+                </td>
+              </tr>
+            </table>
 
             <!-- ALSO ON -->
             <span id="diff_platforms_container">
               <%= also_on(@game) %>
             </span>
-          </td>
-        </tr>
+          </div>
 
-        <!-- RELEASE DATE -->
-        <tr>
-          <td class="label">Release Date:</td>
-          <td>
-            <%= link_to @game.release_display, year_path(@game.r_y) %>
-          </td>
-        </tr>
+          <!-- GAME INFO COMPLETION -->
+          <div id="game_info_completion">
+            <%= info_completion(@game) %>
+          </div>
 
-        <!-- DEVELOPER -->
-        <tr>
-          <td class="label">Developed by:</td>
-          <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
-            <% @game.developers.each do |d| %>
-              <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
-            <% end %>
-          </td>
-        </tr>
-
-        <!-- PUBLISHER -->
-        <tr>
-          <td class="label">Published by:</td>
-          <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
-            <% @game.publishers.each do |p| %>
-              <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
-            <% end %>
-          </td>
-        </tr>
-      </table>
-
-      <!-- GAME INFO COMPLETION -->
-      <div id="game_info_completion">
-        <%= info_completion(@game) %>
+          <!-- ADD & EDIT GAME LINKS -->
+          <div id="new_game">
+            <%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %>
+            <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
+          </div>
+        </div>
       </div>
 
-      <!-- ADD & EDIT GAME LINKS -->
-      <div id="new_game">
-        <%= pop_up "Add Game", new_game_path(:year => @year, :month => @m) if user_signed_in? %>
-        <%= pop_up "Edit game", '/edit?id=' + @game.id.to_s if user_signed_in? %>
+      <!-- VIDEO TEST -->
+      <% unless @game.videos.empty? %>
+        <video src="http://s3.amazonaws.com/vg-timeline/videos/<%= @game.videos.last.file_name %>" controls="controls">Video Test</video>
+      <% end %>
+
+      <!-- DESCRIPTION -->
+      <div id="game_info_description" class="margin_bottom">
+        <h4>Description</h4>
+        <div id="game_description">
+          <%= description(@game) %>
+        </div>
       </div>
-    </div>
 
-    <!-- VIDEO TEST -->
-    <% unless @game.videos.empty? %>
-      <video src="http://s3.amazonaws.com/vg-timeline/videos/<%= @game.videos.last.file_name %>" controls="controls">Video Test</video>
-    <% end %>
+      <!-- SERIES, CHARACTERS, SCORES & AWARDS -->
+      <div class="margin_bottom">
 
-    <!-- DESCRIPTION -->
-    <div id="game_info_description">
-      <h4>Description</h4>
-      <div id="game_description">
-        <%= description(@game) %>
-      </div>
-    </div>
-
-    <!-- SERIES -->
-    <div id="game_series" class="round shadow">
-      <%= series(@game) %>
-    </div>
-
-    <!-- CHARACTERS -->
-    <div id="game_info_characters" class="round shadow">
-
-      <!-- LIST -->
-      <div id="characters_list">
-        <h4>Characters</h4>
-        <%= pop_up "Edit", '/edit?id=' + @game.id.to_s + '&view=edit_characters' if user_signed_in? and not @game.characters.empty? %>
-
-        <h5>Playable:</h5>
-        <div id="characters_list_playable">
-          <%= characters_list(@characters['playable']) %>
+        <!-- SERIES -->
+        <div id="game_series" class="round shadow">
+          <%= series(@game) %>
         </div>
 
-        <h5>Non-playable:</h5>
-        <div id="characters_list_nonplayable">
-          <%= characters_list(@characters['nonplayable']) %>
+        <div id="scores_awards_container">
+
+          <!-- CHARACTERS -->
+          <div id="game_info_characters" class="round shadow margin_bottom">
+
+            <!-- LIST -->
+            <div id="characters_list">
+              <h4>Characters</h4>
+              <%= pop_up "Edit", '/edit?id=' + @game.id.to_s + '&view=edit_characters' if user_signed_in? and not @game.characters.empty? %>
+
+              <h5>Playable:</h5>
+              <div id="characters_list_playable">
+                <%= characters_list(@characters['playable']) %>
+              </div>
+
+              <h5>Non-playable:</h5>
+              <div id="characters_list_nonplayable">
+                <%= characters_list(@characters['nonplayable']) %>
+              </div>
+
+              <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id, :tip => "Add Character" if user_signed_in? %>
+            </div>
+          </div>
+
+          <!-- SCORES & AWARDS -->
+          <div id="game_info_scores" class="round shadow">
+
+          <!-- SCORES -->
+          <div id="scores_container">
+            <%= scores(@game) %>
+          </div>
+
+          <!-- AWARDS -->
+          <div id="award_container">
+            <%= awards(@game) %>
+          </div>
+
+          <%= pop_up_controller "Edit Press", 'index', 'press', :game_id => @game.id if user_signed_in? %>
         </div>
-
-        <%= pop_up_controller "+", 'new', 'characters_games', :game_id => @game.id, :tip => "Add Character" if user_signed_in? %>
-      </div>
-    </div>
-
-    <!-- SCORES & AWARDS -->
-    <div id="game_info_scores" class="round shadow">
-
-      <!-- SCORES -->
-      <div id="scores_container">
-        <%= scores(@game) %>
+        </div>
       </div>
 
-      <!-- AWARDS -->
-      <div id="award_container">
-        <%= awards(@game) %>
+      <!-- TAGS -->
+      <div id="tags">
+        <h4>Tags</h4>
+        <%= @game.tags.each { |t| t.name + ' ' } unless @game.tags.empty? %>
       </div>
-
-      <%= pop_up_controller "Edit Press", 'index', 'press', :game_id => @game.id if user_signed_in? %>
     </div>
   </div>
 
   <!-- RIGHT COLUMN -->
-  <div id="right_column" class="round shadow">
+  <div id="right_column">
 
-    <!-- RATING -->
-    <div id="rating">
-      <%= rating(@game) %>
-    </div>
+    <div id="right_column_content" class="round shadow">
 
-    <!-- TYPES -->
-    <div id="types">
-      <%= types(@game) %>
-    </div>
+      <!-- RATING -->
+      <div id="rating">
+        <%= rating(@game) %>
+      </div>
 
-    <!-- GENRES -->
-    <div id="genres">
-      <%= genres(@game) %>
-    </div>
+      <!-- TYPES -->
+      <div id="types">
+        <%= types(@game) %>
+      </div>
 
-    <!-- PLAYERS -->
-    <div id="players">
-      <%= players(@game) %>
-    </div>
+      <!-- GENRES -->
+      <div id="genres">
+        <%= genres(@game) %>
+      </div>
 
-    <!-- ACHIEVEMENTS -->
-    <div id="achievements">
-      <%= @game.achievements %>
-      <%# Take off when providing the add key people link%>
-    </div>
+      <!-- PLAYERS -->
+      <div id="players">
+        <%= players(@game) %>
+      </div>
 
-    <!-- KEY PEOPLE -->
-    <div id="key_people">
-      <%= key_people(@game) %>
-    </div>
+      <!-- ACHIEVEMENTS -->
+      <div id="achievements">
+        <%= @game.achievements %>
+        <%# Take off when providing the add key people link%>
+      </div>
 
-    <!-- FEATURES -->
-    <div id="features">
-      <%= features(@game) %>
-    </div>
+      <!-- KEY PEOPLE -->
+      <div id="key_people">
+        <%= key_people(@game) %>
+      </div>
 
-    <!-- SPECS -->
-    <div id="specifications">
-      <%= specs(@game) %>
-    </div>
+      <!-- FEATURES -->
+      <div id="features">
+        <%= features(@game) %>
+      </div>
 
-    <!-- PERIPHERALS -->
-    <div id="peripherals">
-      <%= peripherals(@game) %>
+      <!-- SPECS -->
+      <div id="specifications">
+        <%= specs(@game) %>
+      </div>
+
+      <!-- PERIPHERALS -->
+      <div id="peripherals">
+        <%= peripherals(@game) %>
+      </div>
     </div>
   </div>
 </div>

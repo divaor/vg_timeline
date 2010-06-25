@@ -16,15 +16,9 @@
 document.observe('dom:loaded', function() {
   var gameDisp = $('game_display')
   if(gameDisp) {
-    // Set width to game display on browsers that make it thinner
-    if (gameDisp.clientWidth < 1196)
-      gameDisp.setStyle({
-        'width': '100%'
-      });
-
     // Set height of right column in game info view
     var height = gameDisp.clientHeight
-    $('right_column').setStyle({
+    $('right_column_content').setStyle({
       'height': (height - 24)+'px'
     })
   }

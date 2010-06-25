@@ -34,11 +34,8 @@ module GamesHelper
       rows = content_tag(:tr, raw(platforms)) + content_tag(:tr, raw(add_link))
       table = content_tag(:table, raw(rows))
 
-      # If game has sub title
-      sub = game.sub_title.empty? ? "" : "sub"
-
       # Output
-      raw content_tag(:div, raw(table), { :class => "shadow round #{sub}", :id => 'diff_platforms' })
+      raw content_tag(:div, raw(table), { :class => "shadow round", :id => 'diff_platforms' })
     else
       # Output if game is not available for other platforms
       raw "#{pop_up "+", new_game_path(:id_diff => game.id), :tip => "Add another platform(s)"}" if user_signed_in?
@@ -185,7 +182,7 @@ module GamesHelper
 
   def players(game)
     local_players = ''; online_players = ''
-    out = content_tag(:div, "Local:", :class => "right_label")
+    local = content_tag(:div, "Local:", :class => "right_label")
     if game.local_players
       local_players += "#{game.local_players} Player(s)"
       local_players += ", " if game.local_multi_modes.coop or game.local_multi_modes.vs
@@ -199,8 +196,9 @@ module GamesHelper
     end
     local_players += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_players&element_id=players&eval=players', :tip => "Add local player(s)") if user_signed_in?
     local_players += tag(:br)
-    out += content_tag(:div, raw(local_players), :class => "right_description")
-    out += content_tag(:div, "Online:", :class => "right_label")
+    local += content_tag(:div, raw(local_players), :class => "right_description")
+    out = content_tag(:div, raw(local), :id => "local")
+    online = content_tag(:div, "Online:", :class => "right_label")
     if game.online_players
       if game.online_players > 0
         online_players += "#{game.online_players} Players"
@@ -218,7 +216,8 @@ module GamesHelper
     end
     online_players += (pop_up "+", '/edit?id=' + game.id.to_s + '&view=add_players&element_id=players&eval=players', :tip => "Add online player(s)") if user_signed_in?
     online_players += tag(:br)
-    out += content_tag(:div, raw(online_players), :class => "right_description")
+    online += content_tag(:div, raw(online_players), :class => "right_description")
+    out += content_tag(:div, raw(online), :id => "online")
     raw out
   end
 

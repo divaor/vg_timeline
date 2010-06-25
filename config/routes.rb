@@ -1,50 +1,28 @@
 VgTimeline::Application.routes.draw do |map|
+  get "users/home"
   get "project_leaders/new"
-
   get "project_leaders/create"
-
   get "industry_people/index"
-
   get "peripherals/index"
-
   get "characters_games/new"
-
   get "characters_games/create"
-
   get "characters/new"
-
   get "characters/create"
-
   get "genres/new"
-
   get "genres/create"
-
   get "types/new"
-
   get "types/create"
-
   get "awards/new"
-
   get "awards/create"
-
   get "scores/new"
-
   get "scores/create"
-
   get "press/index"
-
   get "platforms/index"
-
   get "publishers/index"
-
   get "developers/index"
-
   get "genres/index"
-
   get "ratings/index"
-
   get "series/index"
-
   get "seires/index"
 
   devise_for :users
@@ -64,6 +42,7 @@ VgTimeline::Application.routes.draw do |map|
   match "/games/add_to_games" => "games#add_to_games"
   match "/press/edit_list" => "press#edit_list"
   match "/search(/:search)" => "application#search", :as => :search
+  match "/users/home" => "users#home", :as => :home
   #  match "application" => "games#index"
   root :to => "games#index"
   #  end

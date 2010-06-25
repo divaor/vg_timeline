@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100618053653) do
+ActiveRecord::Schema.define(:version => 20100625021351) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name",       :null => false
@@ -144,6 +144,11 @@ ActiveRecord::Schema.define(:version => 20100618053653) do
   create_table "games_specifications", :id => false, :force => true do |t|
     t.integer "game_id"
     t.integer "specification_id"
+  end
+
+  create_table "games_tags", :id => false, :force => true do |t|
+    t.integer "game_id"
+    t.integer "tag_id"
   end
 
   create_table "games_types", :id => false, :force => true do |t|
@@ -345,6 +350,12 @@ ActiveRecord::Schema.define(:version => 20100618053653) do
     t.datetime "updated_at"
   end
 
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "types", :force => true do |t|
     t.string   "name",       :null => false
     t.datetime "created_at"
@@ -379,8 +390,8 @@ ActiveRecord::Schema.define(:version => 20100618053653) do
   add_index "users", ["username"], :name => "Index_users_on_username", :unique => true
 
   create_table "videos", :force => true do |t|
-    t.string   "file_name"
-    t.integer  "game_id"
+    t.string   "file_name",  :null => false
+    t.integer  "game_id",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

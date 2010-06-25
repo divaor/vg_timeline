@@ -540,48 +540,47 @@ div.tooltip_text {
 
 /* GAME INFO VIEW */
 
-#left_column, #right_column,
-#boxart_medium_container,
-#basic_info_container {
-    /*border: 1px solid black;*/
-}
-
 #game_display {
     background-color: #e5e5e5;
-    /*background-image: url("/images/slashwa.png");*/
     border: 2px solid black;
-    display: table;
-    width: 1196px;
     margin: 0 auto;
-    height: 100%;
 }
 
 /* Columns */
 
 #left_column {
     border-right: 0px solid black;
-    width: 75%;
-    float: left;
     clear: both;
+    display: table-cell;
+    width: 80%;
+}
+
+div#left_column_content {
+  margin-bottom: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 #right_column {
-    background-color: white;
-    display: block;
-    float: right;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 55px;
-    margin-left: 10px;
-    padding: 2px;
-    width: 200px;
+    display: table-cell;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 30px;
+    padding-top: 10px;
+    vertical-align: top;
+}
+
+div#right_column_content {
+  background-color: white;
+  padding: 7px;
+  width: 220px;
 }
 
 #right_column img {
-    display: block;
-    padding-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #left_column, #right_column {
@@ -589,39 +588,37 @@ div.tooltip_text {
 }
 
 .right_label {
-    float: left;
-    width: 75px;
-    font-weight: bold;
-    padding-left: 10px;
+  display: table-cell;
+  font-weight: bold;
+  width: 90px;
 }
 
 .right_description {
-    float: left;
-    width: 110px;
-    padding-right: 5px;
+  display: table-cell;
 }
 
 .right_description a {
     text-decoration: none;
 }
 
+.margin_bottom {
+  margin-bottom: 15px;
+}
+
 /* Boxart */
 
 #boxart_medium_container {
-    float: left;
-    padding: 5px;
-    text-align: center;
-    width: 24%;
+  display: table-cell;
+  text-align: center;
+  width: 245px;
 }
 
 /* Game Info */
 
 #basic_info_container {
-    padding: 7px 8px 10px 10px;
-    width: 72%; /*40%;*/
-    float: left;
-    font-size: 13px;
-    position: relative;
+  display: table-cell;
+  font-size: 13px;
+  vertical-align: top;
 }
 
 .game_show_title {
@@ -634,32 +631,37 @@ h2.game_show_title {
     font-size: 1.2em;
 }
 
+div#info_also_on {
+  margin-bottom: 20px;
+}
+
+table.game_info_table {
+  display: table-cell;
+  vertical-align: top;
+  width: 350px;
+}
+
 td.label {
-    font-weight: bold;
-    padding-right: 10px;
-    width: 110px;
-    vertical-align: top;
+  font-weight: bold;
+  padding-right: 10px;
+  vertical-align: top;
+  width: 110px;
 }
 
 td.lab_info {
     width: 250px;
 }
 
-#diff_platforms{
-    position: absolute;
-    left: 59%;
-    top: 0;
-    margin-top: 38px;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 250px;
-    border: 0px solid gray;
-    background-color: #D1D6DF;
-    font-size: 10px;
+span#diff_platforms_container {
+  display: table-cell;
 }
 
-#diff_platforms.sub {
-    margin-top: 63px;
+#diff_platforms{
+  background-color: #D1D6DF;
+  border: 0px solid gray;
+  font-size: 10px;
+  padding: 10px;
+  width: 250px;
 }
 
 td.subtitle {
@@ -679,23 +681,16 @@ div#new_game {
 
 /* Completion */
 
-#game_info_completion {
-  float: left;
-  width: 40%;
-  padding-top: 30px;
-}
-
 #completion_label {
-    float: left;
+  display: block;
 }
 
 div#completion_bar {
+  background-color: white;
+  float: left;
+  height: 10px;
   margin-top: 4px;
   width: 200px;
-  background-color: white;
-  text-align: center;
-  height: 10px;
-  float: left;
 }
 
 div#completion_filled {
@@ -712,36 +707,28 @@ span#completion_text {
 /* Characters */
 
 #game_info_characters {
-    float: right;
-    padding: 10px 14px 10px 13px;
-    margin-right: 11px;
-    margin-bottom: 11px;
-    width: 45%;
-    background-color: #D1D6DF;
-    border: 0px solid gray;
+  background-color: #D1D6DF;
+  border: 0px solid gray;
+  padding: 10px 14px 10px 13px;
 }
 
 
 /* Description */
 
 #game_info_description {
-  clear: both;
-  padding: 10px 14px 10px 13px;
   text-align: justify;
-  width: 97%;
-  float: left;
 }
 
 /* Series */
 
 #game_series {
-    margin-left: 11px;
-    margin-bottom: 11px;
-    float: left;
-    padding: 10px 14px 10px 13px;
-    width: 45%;
-    background-color: #D1D6DF;
-    border: 0px solid gray;
+  background-color: #D1D6DF;
+  border: 0px solid gray;
+  display: inline-block;
+  margin-right: 10px;
+  padding: 10px 14px 10px 13px;
+  vertical-align: top;
+  width: 47%;
 }
 
 span.showing {
@@ -774,17 +761,19 @@ span.showing {
   font-weight: bold;
 }
 
+/* Scores & Awards */
+
+div#scores_awards_container {
+  display: inline-block;
+  width: 47%;
+}
+
 /* Scores */
 
 #game_info_scores {
-  margin-left: 11px;
-  margin-right: 11px;
-  margin-bottom: 11px;
-  float: right;
-  padding: 10px 14px 10px 13px;
-  width: 45%;
   background-color: #D1D6DF;
   border: 0px solid gray;
+  padding: 10px 14px 10px 13px;
 }
 
 #scores_container {
@@ -820,8 +809,6 @@ span.showing {
 
 .scores_add {
     padding-left: 10px;
-    float: left;
-    width: 60%;
 }
 
 .bg_color_red {

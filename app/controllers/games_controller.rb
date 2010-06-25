@@ -29,6 +29,7 @@ class GamesController < ApplicationController
         @genres = Genre.all
         @ratings = Rating.all
       end
+      puts env['PATH_INFO'] + 'asdf'
     end
   end
 
