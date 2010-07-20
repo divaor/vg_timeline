@@ -7,7 +7,7 @@
       <meta property="og:title" content="<%= fb_meta_title %>" />
       <meta property="og:type" content="game" />
       <meta property="og:site_name" content="VG Timeline" />
-      <meta property="og:url" content="<%= url_for %>" />
+      <meta property="og:url" content="<%= url_for :only_path => false %>" />
       <meta property="fb:admins" content="10361836973" />
       <meta property="og:image" content="<%= @game.boxart.url(:tiny) %>" />
     <% end %>
