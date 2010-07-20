@@ -68,7 +68,7 @@
             </span>
           </div>
 
-          <fb:like layout="button_count" width="250"></fb:like>
+          <fb:like href="<%= url_for(:only_path => false) %> " layout="button_count" width="250"></fb:like>
 
           <!-- GAME INFO COMPLETION -->
           <% if @game.completion < 100 %>
