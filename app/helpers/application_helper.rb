@@ -8,7 +8,7 @@ module ApplicationHelper
 
   def fb_meta_title
     base_title = "VG Timeline"
-    return "#{@game.full_title_colon} (#{@game.r_y})" if @game
+    return @fb_title if @fb_title
     return base_title
   end
 

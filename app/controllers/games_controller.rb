@@ -104,6 +104,7 @@ class GamesController < ApplicationController
     @characters = @game.get_characters_type
     @series_games = @game.series_list_by_full_title
     @title = @game.full_title_limit
+    @fb_title = "#{@game.full_title_colon} (#{@game.platform_name})"
   end
 
   def new
