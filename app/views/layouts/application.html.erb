@@ -3,9 +3,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><%= title %></title>
-    <meta property="og:title" content="<%= fb_meta_title %>" />
-    <meta property="og:type" content="game" />
-    <meta property="og:site_name" content="VG Timeline" />
+    <% if current_page?(:controller => 'games', :action => 'show') %>
+      <meta property="og:title" content="<%= fb_meta_title %>" />
+      <meta property="og:type" content="game" />
+      <meta property="og:site_name" content="VG Timeline" />
+      <meta property="og:url" content="<%= url_for %>" />
+      <meta property="fb:admins" content="10361836973" />
+      <meta property="og:image" content="<%= @game.boxart.url(:tiny) %>" />
+    <% end %>
     <%= render 'layouts/includes' %>
   </head>
   <body>
