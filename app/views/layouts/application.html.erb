@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><%= title %></title>
-    <% if current_page?(:controller => 'games', :action => 'show') %>
+    <% if @game %>
       <meta property="og:title" content="<%= fb_meta_title %>" />
       <meta property="og:type" content="game" />
       <meta property="og:site_name" content="VG Timeline" />
