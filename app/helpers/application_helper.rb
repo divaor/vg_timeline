@@ -6,6 +6,12 @@ module ApplicationHelper
     return base_title
   end
 
+  def fb_meta_title
+    base_title = "VG Timeline"
+    return "#{@game.full_title_colon} (#{@game.r_y})" if @game
+    return base_title
+  end
+
   def pop_up(text, path, options = { :level => 1 })
     options[:level] = 1 if options[:level].to_i < 1 or options[:level].to_i > 4
     #    path = "#{path}&lv=#{options[:level]}"

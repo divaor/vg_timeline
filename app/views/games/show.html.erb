@@ -68,10 +68,14 @@
             </span>
           </div>
 
+          <fb:like layout="button_count" width="250"></fb:like>
+
           <!-- GAME INFO COMPLETION -->
-          <div id="game_info_completion">
-            <%= info_completion(@game) %>
-          </div>
+          <% if @game.completion < 100 %>
+            <div id="game_info_completion">
+              <%= info_completion(@game) %>
+            </div>
+          <% end %>
 
           <!-- ADD & EDIT GAME LINKS -->
           <div id="new_game">

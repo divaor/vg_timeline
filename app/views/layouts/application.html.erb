@@ -3,6 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><%= title %></title>
+    <meta property="og:title" content="<%= fb_meta_title %>" />
+    <meta property="og:type" content="game" />
+    <meta property="og:site_name" content="VG Timeline" />
     <%= render 'layouts/includes' %>
   </head>
   <body>
@@ -53,5 +56,18 @@
     <div id="trans3" class="fade_back" style="display: none;"></div>
     <div id="lev4" class="pop_up" style="display: none;"></div>
     <div id="trans4" class="fade_back" style="display: none;"></div>
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({appId: '133273490042740', status: true, cookie: true,
+                 xfbml: true});
+      };
+      (function() {
+        var e = document.createElement('script'); e.async = true;
+        e.src = document.location.protocol +
+          '//connect.facebook.net/en_US/all.js';
+        document.getElementById('fb-root').appendChild(e);
+      }());
+    </script>
   </body>
 </html>
