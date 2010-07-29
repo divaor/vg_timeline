@@ -2,6 +2,9 @@ class GamesController < ApplicationController
   #caches_page :index
 
   Limit = 0
+  YP = /[0-9]{4}/ #Year Pattern
+  MP = /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/ #Month Pattern
+  TP = /\b(First Half|Second Half|Q1|Q2|Q3|Q4|Spring|Summer|Fall|Winter|Holiday)\b/ #Date Text Pattern
 
   def index
     if params[:search]
@@ -122,9 +125,29 @@ class GamesController < ApplicationController
     @title = "Add New Game"
     if id_diff
       game_diff = Game.find(id_diff)
-      attributes = { :main_title => game_diff.main_title, :sub_title => game_diff.sub_title, :release_date => game_diff.release_date, :tentative_date => game_diff.tentative_date }
+      attributes = { :main_title => game_diff.main_title,
+        :sub_title => game_diff.sub_title,
+        :release_date => game_diff.release_date,
+        :tentative_date => game_diff.tentative_date,
+        :tentative_date_text => game_diff.tentative_date_text
+      }
       @view = "new_lite"
       @diff_platform_id = game_diff.id
+      @t_y = 0 #tentative year
+      @t_m = 0 #tentative month
+      @t_t = 0 #tentative text
+      @tentative_text_show = false
+      t_d = game_diff.tentative_date_text
+      if game_diff.tentative_date and not t_d.empty?
+        if t_d.index(YP) == 0 #Tentative date text is only year
+          @t_y = t_d[YP]
+        elsif not t_d.index(YP).nil? #Tentative date test is something and year
+          @t_y = t_d[YP]
+          @t_m = t_d[MP] if t_d[MP]
+          @t_t = t_d[TP] if t_d[TP]
+          @tentative_text_show = true
+        end
+      end
     elsif series_id
       series = Series.find(series_id)
       attributes = { :main_title => series.name, :series_id => series.id }
@@ -257,6 +280,21 @@ class GamesController < ApplicationController
     @title = "Edit Game"
     @game = Game.find(id)
     @date = @game.release_date
+    @t_y = 0 #tentative year
+    @t_m = 0 #tentative month
+    @t_t = 0 #tentative text
+    @tentative_text_show = false
+    t_d = @game.tentative_date_text
+    if @game.tentative_date and not t_d.empty?
+      if t_d.index(YP) == 0 #Tentative date text is only year
+        @t_y = t_d[YP]
+      elsif not t_d.index(YP).nil? #Tentative date test is something and year
+        @t_y = t_d[YP]
+        @t_m = t_d[MP] if t_d[MP]
+        @t_t = t_d[TP] if t_d[TP]
+        @tentative_text_show = true
+      end
+    end
     @markets = Market.all
     rating_system = RatingSystem.where("market_id = ?", @markets.first.id).first
     @ratings = Rating.where("rating_system_id = ?", rating_system.id).order("name asc")

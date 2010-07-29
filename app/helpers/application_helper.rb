@@ -6,6 +6,19 @@ module ApplicationHelper
     return base_title
   end
 
+  def meta_description
+    if @game and not @game.new_record?
+      unless @game.description.nil?
+        @game.description
+      else
+        @game.full_title_colon
+      end
+    else
+      return @meta_description if @meta_description
+      return 'VG Timeline'
+    end
+  end
+
   def fb_meta_title
     base_title = "VG Timeline"
     return @fb_title if @fb_title

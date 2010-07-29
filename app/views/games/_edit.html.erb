@@ -17,11 +17,11 @@
         <%= f.date_select :release_date, { :default => @date, :start_year => 1975, :end_year => last_year, :use_short_month => true } %>
       </div>
       <div id="tentative_release_date" style="display: <%= @game.tentative_date ? 'block' : 'none' %>;">
-        <%= select_year 0, :start_year => 2013, :end_year => 1975, :prompt => 'N/A', :field_name => 'tentative[year]' %> Year<br />
-        <span style="display: none;">
-          <%= select_month 0, :use_short_month => true, :field_name => 'tentative[month]', :prompt => 'Month' %>
+        <%= select_year @t_y.to_i, :start_year => 2013, :end_year => 1975, :prompt => 'N/A', :field_name => 'tentative[year]' %> Year<br />
+        <span style="display: <%= @tentative_text_show ? 'block' : 'none' %>;">
+          <%= select_month @t_m != 0 ? Date.strptime(@t_m, '%b') : @t_m, :use_short_month => true, :field_name => 'tentative[month]', :prompt => 'Month' %>
           OR
-          <%= select_tag 'date[tentative[value]]', options_for_select([['Non-specific', ''], 'First Half', 'Second Half', 'Q1', 'Q2', 'Q3', 'Q4', 'Spring', 'Summer', 'Fall', 'Winter', 'Holiday']) %>
+          <%= select_tag 'date[tentative[value]]', options_for_select([['Non-specific', ''], 'First Half', 'Second Half', 'Q1', 'Q2', 'Q3', 'Q4', 'Spring', 'Summer', 'Fall', 'Winter', 'Holiday'], @t_t) %>
         </span>
       </div>
       <%= f.check_box :tentative_date %> Tentative

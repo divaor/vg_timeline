@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><%= title %></title>
-    <% if @game %>
+    <% if @game and not @game.new_record? %>
       <meta property="og:title" content="<%= fb_meta_title %>" />
       <meta property="og:type" content="game" />
       <meta property="og:site_name" content="VG Timeline" />
@@ -12,6 +12,7 @@
       <meta property="fb:app_id" content="133273490042740" />
       <meta property="og:image" content="<%= @game.boxart.url(:tiny) %>" />
     <% end %>
+    <meta name="description" content="<%= meta_description %>" />
     <%= render 'layouts/includes' %>
   </head>
   <body>
