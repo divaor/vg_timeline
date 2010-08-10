@@ -6,7 +6,7 @@ class ScoresController < ApplicationController
     @game = Game.find(params[:game])
     @score.game = @game
     respond_to do |format|
-      format.js { render 'pop_up' }
+      format.js { render 'games/pop_up' }
     end
   end
 

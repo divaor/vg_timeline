@@ -6,7 +6,7 @@ class CharactersGamesController < ApplicationController
     @view = params[:action]
     @characters_game.game_id = params[:game]
     respond_to do |format|
-      format.js { render 'pop_up' }
+      format.js { render 'games/pop_up' }
     end
   end
 

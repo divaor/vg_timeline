@@ -23,7 +23,7 @@ class PublishersController < ApplicationController
         elsif params[:search_list]
           render 'games/refresh_filter'
         else
-          render 'pop_up'
+          render 'games/pop_up'
         end
       }
       format.html {

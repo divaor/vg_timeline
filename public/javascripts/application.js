@@ -1,18 +1,6 @@
-//// Browser detection
-//
-//var nAgt = navigator.userAgent;
-//var browserName  = navigator.appName;
-//var verOffset;
-//
-//if ((verOffset=nAgt.indexOf("Opera"))!=-1)
-//   document.write('<link rel=”stylesheet” href=”/stylesopera.css” type=”text/css”>')
-//else if ((verOffset=nAgt.indexOf("Chrome"))!=-1)
-//   document.write('<link rel=”stylesheet” href=”/styleschrome.css” type=”text/css”>')
-//else if ((verOffset=nAgt.indexOf("Firefox"))!=-1)
-//   document.write('<link rel=”stylesheet” href=”/stylesff.css” type=”text/css”>')
-//
-//// end of browsing detection
+var popId;
 
+// Runs when DOM is loaded
 document.observe('dom:loaded', function() {
   var gameDisp = $('game_display')
   if(gameDisp) {
@@ -22,7 +10,26 @@ document.observe('dom:loaded', function() {
       'height': (height - 24)+'px'
     })
   }
+
+  // Observe click on clear text image
+  $$('.clear_text').invoke('observe', 'click', 'clearText("result_text", this)'); // TODO test
+
+  observeFormSubmits();
 });
+
+// Observe form submits
+function observeFormSubmits() {
+  $$('form').each(function(form) {
+    form.stopObserving();
+    form.observe('submit', function() {
+      checkForFiles(this);
+    });
+  });
+}
+
+
+
+// Ajax request
 
 // Ajax request loading
 document.observe("ajax:loading", function(event) {
@@ -40,33 +47,21 @@ document.observe("ajax:loading", function(event) {
   } else {
     $('lev1').update('<img src="/images/loadingfaster.gif" alt="Loading" />');
   }
+
+  // Stop observing all close
+  if(popId && parseInt(event.target.id) == popId) {
+    var close = $('window_close'+popId);
+    if(close) {
+      close.stopObserving();
+    }
+  }
 });
 
 // Ajax request complete
 document.observe("ajax:complete", function(event) {
-  if(event.target.tagName.toLowerCase() != 'form') {
-    var focus = $$('.focus .fcs').first();
-    if(focus) {
-      focus.focus();
-      focus.select();
-    }
 
-    // Observe close button in pop up window
-    var close = $('window_close');
-    if(close) {
-      close.observe('click', function() {
-        var lev = close.ancestors()[1];
-        var trans = $('trans' + lev.readAttribute('id').charAt(3));
-        new Effect.Fade(lev, {
-          duration: 0.3
-        });
-        new Effect.Fade(trans, {
-          duration: 0.3
-        });
-        lev.removeClassName('focus');
-        lev.update('');
-      });
-    }
+  // Target is not a form
+  if(event.target.tagName.toLowerCase() != 'form') {
 
     // Observe press list change
     var pressName = $('prs_name');
@@ -119,13 +114,64 @@ document.observe("ajax:complete", function(event) {
     }
   }
 
-  var char_pic = $('character_picture');
-  if(char_pic) {
-    char_pic.observe('change', function() {
-      $('new_characters_game').setAttribute('data-remote', 'false');
-    })
+  // Focus first element of form
+  popId = parseInt(event.target.id);
+  var popForm = $$('#lev'+popId+' form').first();
+
+  if(popForm) {
+    popForm.focusFirstElement();
   }
+
+  // Observe close button in pop up window
+  var close = $('window_close'+popId);
+  if(close) {
+    close.stopObserving();
+    close.observe('click', function() {
+      var lev = close.ancestors()[1];
+      var trans = $('trans' + lev.readAttribute('id').charAt(3));
+      new Effect.Fade(lev, {
+        duration: 0.3
+      });
+      new Effect.Fade(trans, {
+        duration: 0.3
+      });
+      lev.removeClassName('focus');
+      lev.update('');
+    });
+  }
+
+  observeFormSubmits();
 });
+
+// Check if form has files
+function checkForFiles(form) {
+  var hasFiles = false;
+  form.getElements().each(function(element) {
+    if(element.type == 'file') {
+      if($F(element).length > 0)
+        hasFiles = true;
+    }
+  });
+  if(hasFiles) {
+    if(formIsRemote(form))
+      removeRemoteCall(form);
+    return true;
+  } else
+    return false;
+}
+
+// Check if form is remote
+function formIsRemote(form) {
+  if(form.readAttribute('data-remote') == 'true')
+    return true;
+  else
+    return false;
+}
+
+// Make element (form, a) non-remote
+function removeRemoteCall(element) {
+  element.setAttribute('data-remote', 'false');
+}
 
 // Ajax request failure
 document.observe('ajax:failure', function(event) {
@@ -140,7 +186,7 @@ document.observe('ajax:failure', function(event) {
   });
 });
 
-// Insert li.id into input after selecting item from auto_complete
+// Insert li.id into input after selecting item from auto_complete in search input
 function insertResultId(element, value) {
   var resultId = $('result_id');
   if(resultId)

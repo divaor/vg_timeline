@@ -18,7 +18,7 @@ class GenresController < ApplicationController
     @view = 'new'
     @level = params[:lv]
     respond_to do |format|
-      format.js { render 'pop_up' }
+      format.js { render 'games/pop_up' }
     end
   end
 
