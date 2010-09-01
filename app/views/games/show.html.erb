@@ -32,7 +32,10 @@
               <!-- PLATFORM-->
               <tr>
                 <td class="label">Platform:</td>
-                <td><%= link_to @game.platform.name, '#' %></td>
+                <td class="platform">
+                  <%= "Exclusively on " if @game.exclusive %>
+                  <%= link_to @game.platform.name, '#' %>
+                </td>
               </tr>
 
               <!-- RELEASE DATE -->
@@ -63,7 +66,7 @@
             </table>
 
             <!-- ALSO ON -->
-            <span id="diff_platforms_container">
+            <span id="diff_platforms_container" data-gameid="<%= @game.id %>">
               <%= also_on(@game) %>
             </span>
           </div>

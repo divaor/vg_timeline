@@ -1,7 +1,7 @@
 <div id="year_filter">
   <span class="year_display"><%= @year %></span>
   <span class="view_month">
-    <%= link_to_function 'View Stats', {}, :onmouseover => "showStats(this, $('year_stats'));" %>
+    <%= link_to 'View Stats', '#', :id => 'view_stats' %>
   </span>
 <%#*<span class="view_month">%>
 <%#= check_box_tag "year_show_all"+@year.to_s, 1, false, :class => @year.to_s, :onclick => "yearShowAll(this, 0)"  %>

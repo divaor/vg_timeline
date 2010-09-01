@@ -2,18 +2,74 @@ var popId;
 
 // Runs when DOM is loaded
 document.observe('dom:loaded', function() {
+
+  // Game Info View
   var gameDisp = $('game_display')
   if(gameDisp) {
     // Set height of right column in game info view
     var height = gameDisp.clientHeight
     $('right_column_content').setStyle({
       'height': (height - 24)+'px'
-    })
+    });
+
+    var exclusive = $$('#diff_platforms_container .exclusive_on_platform').first();
+    if(exclusive) {
+      exclusive.observe('click', function(click) {
+        // TODO get game id
+        var id = $('diff_platforms_container').readAttribute('data-gameid');
+        var link = this;
+        new Ajax.Request('/games/' + id + '/exclusive', {
+          method: 'get',
+          onSuccess: function() {
+            $$('#info_also_on .game_info_table .platform').first().insert({
+              top: "Exclusively on "
+            });
+            link.hide();
+          }
+        });
+        click.stop();
+      });
+    }
   }
 
-  // Observe click on clear text image
-  $$('.clear_text').invoke('observe', 'click', 'clearText("result_text", this)'); // TODO test
+  // Search box
+  var resultText = $('result_text');
+  if(resultText) {
+    var clearTextMain = $('clear_text_main_search');
+    var legend = 'Game, Publisher, Developer, Character';
 
+    resultText.observe('blur', function() {
+      // Legend to be displayed when no text is entered
+      searchText(this, 1, legend);
+    });
+
+    resultText.observe('keyup', function() {
+      showClear(clearTextMain, this);
+    });
+
+    resultText.observe('focus', function() {
+      searchText(this, 0, legend);
+    });
+
+    // Observe click on clear text image
+    clearTextMain.observe('click', function(click) {
+      clearText(resultText, this); // TODO finish
+      click.stop();
+    });
+  }
+
+  var viewStats = $('view_stats');
+  if(viewStats) {
+    viewStats.observe('click', function(click) {
+      click.stop();
+    });
+
+    viewStats.observe('mouseover', function() {
+      showStats(this, $('year_stats'));
+    });
+  }
+
+  // Observe form submits to check for remote calls
   observeFormSubmits();
 });
 
@@ -588,9 +644,13 @@ function showHide(element) {
 function clearText(textField, element) {
   $(textField).value = '';
   $(textField).focus();
-  element.hide();
+  $(element).hide();
 }
 
+// Change font to black and style to normal when writing in search box
+// DOM Element element - text field element
+// int type - 1 to change to gray and italic, 0 for black and normal
+// string text - text to display when not selected
 function searchText(element, type, text) {
   if (type == 0) {
     if (element.value == text) {
@@ -612,7 +672,7 @@ function searchText(element, type, text) {
 }
 
 function showClear(clear, element) {
-  if (element.value != '') {
+  if ($F(element) != '') {
     $(clear).show();
   }
   else {

@@ -43,6 +43,7 @@ VgTimeline::Application.routes.draw do |map|
   match "/press/edit_list" => "press#edit_list"
   match "/search(/:search)" => "application#search", :as => :search
   match "/users/home" => "users#home", :as => :home
+  match "/games/:id/exclusive" => "games#exclusive"
   #  match "application" => "games#index"
   root :to => "games#index"
   #  end

@@ -189,6 +189,7 @@ class GamesController < ApplicationController
     @game_diff = Game.find(params[:diff_platform_id]) if params[:diff_platform_id]
     if @game_exists and @game_diff
       @game_exists.different_platforms_add = @game_diff
+      @game_exists.update_attribute(:exclusive, false)
       flash[:notice] = "Games linked succesfully."
       redirect_to game_path(@game_exists)
     elsif @game_exists and not @game_diff
@@ -217,6 +218,7 @@ class GamesController < ApplicationController
         @game.different_platforms << @game_diff
         @game.tentative_date = @game_diff.tentative_date
         @game.industry_people = @game_diff.industry_people
+        @game.exclusive = false
         for game1 in @game_diff.different_platforms
           @game.different_platforms << game1 unless @game.different_platforms.exists?(game1) or game1 == @game
         end
@@ -233,6 +235,7 @@ class GamesController < ApplicationController
         create_log_entry('games', @game.id, "Added game #{@game.full_title_limit}", :add => true)
         if @game_diff
           @game_diff.different_platforms << @game
+          @game_diff.update_attribute(:exclusive, false)
           for game4 in @game_diff.different_platforms
             game4.different_platforms << @game unless (game4.different_platforms.exists?(@game) or game4 == @game)
           end
@@ -519,6 +522,12 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def exclusive
+    game = Game.find(params[:id])
+    game.update_attribute("exclusive", 1)
+    render :nothing => true
   end
 
   def close_info_window

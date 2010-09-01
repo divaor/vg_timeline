@@ -36,9 +36,13 @@ module GamesHelper
 
       # Output
       raw content_tag(:div, raw(table), { :class => "shadow round", :id => 'diff_platforms' })
-    else
+    else game.exclusive
       # Output if game is not available for other platforms
-      raw "#{pop_up "+", new_game_path(:id_diff => game.id), :tip => "Add another platform(s)"}" if user_signed_in?
+      if user_signed_in?
+        output = "#{pop_up "+", new_game_path(:id_diff => game.id), :tip => "Add another platform(s)"}"
+        output += " #{pop_up "Exclusive on #{game.platform.short_name.upcase}?", edit_game_path(game.id), :class => "exclusive_on_platform"}" unless game.exclusive
+        raw output
+      end
     end
   end
 

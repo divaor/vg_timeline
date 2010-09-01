@@ -1,12 +1,3 @@
-GIT
-  remote: http://github.com/isaac/paperclip.git
-  revision: 61ffb1c
-  branch: rails3
-  specs:
-    paperclip (2.3.2.beta3)
-      activerecord
-      activesupport
-
 GEM
   remote: http://gemcutter.org/
   specs:
@@ -67,6 +58,9 @@ GEM
     mongrel_experimental (1.1)
       mongrel (= 1.1)
     mysql (2.8.1)
+    paperclip (2.3.3)
+      activerecord
+      activesupport
     pg (0.9.0)
     polyglot (0.3.1)
     rack (1.1.0)
@@ -110,6 +104,6 @@ DEPENDENCIES
   gravtastic
   mongrel_experimental
   mysql
-  paperclip!
+  paperclip
   pg
   rails (= 3.0.0.beta3)

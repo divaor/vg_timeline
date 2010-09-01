@@ -32,7 +32,7 @@ module ApplicationHelper
       path =  path.slice(1, path.length)
     end
     path = path.slice(path.rindex("/") + 1, path.length) if path.rindex("/")
-    link_to text, { :action => path.index("?") ? path.slice(0, path.index("?")) : path, :lv => path.index("?") ? "#{options[:level]}&#{path.slice(path.index("?") + 1, path.length)}" : options[:level] }, :remote => true, :id => "#{options[:level]}level", :onmouseover => options[:tip] ? "new Tip(this, '#{options[:tip]}', { style: 'pop+' });" : ""
+    link_to text, { :action => path.index("?") ? path.slice(0, path.index("?")) : path, :lv => path.index("?") ? "#{options[:level]}&#{path.slice(path.index("?") + 1, path.length)}" : options[:level] }, :remote => true, :id => "#{options[:level]}level", :class => options[:class] || '', :onmouseover => options[:tip] ? "new Tip(this, '#{options[:tip]}', { style: 'pop+' });" : ""
   end
 
   def pop_up_controller(text, path, controller, options = {})
