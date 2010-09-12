@@ -7,7 +7,7 @@
     <div id="left_column_content">
 
       <!-- BOXART & INFO -->
-      <div class="margin_bottom">
+      <div id="box_info_cont" class="margin_bottom">
 
         <!-- BOXART -->
         <div id="boxart_medium_container">
@@ -27,48 +27,50 @@
           <div id="info_also_on">
 
             <!-- PLATFORM, REL DATE, DEVELOPER, PUBLISHER AND ALSO ON -->
-            <table class="game_info_table" cellpadding="0">
+            <div id="game_info_cont">
+              <table class="game_info_table" cellpadding="0">
 
-              <!-- PLATFORM-->
-              <tr>
-                <td class="label">Platform:</td>
-                <td class="platform">
-                  <%= "Exclusively on " if @game.exclusive %>
-                  <%= link_to @game.platform.name, '#' %>
-                </td>
-              </tr>
+                <!-- PLATFORM-->
+                <tr>
+                  <td class="label">Platform:</td>
+                  <td class="info">
+                    <%= "Exclusively on " if @game.exclusive %>
+                    <%= link_to @game.platform.name, '#' %>
+                  </td>
+                </tr>
 
-              <!-- RELEASE DATE -->
-              <tr>
-                <td class="label">Release Date:</td>
-                <td><%= link_to @game.release_display, year_path(@game.r_y) %></td>
-              </tr>
+                <!-- RELEASE DATE -->
+                <tr>
+                  <td class="label">Release Date:</td>
+                  <td class="info"><%= link_to @game.release_display, year_path(@game.r_y) %></td>
+                </tr>
 
-              <!-- DEVELOPER -->
-              <tr>
-                <td class="label">Developed by:</td>
-                <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
-                  <% @game.developers.each do |d| %>
-                    <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
-                  <% end %>
-                </td>
-              </tr>
+                <!-- DEVELOPER -->
+                <tr>
+                  <td class="label">Developed by:</td>
+                  <td class="info<%= @game.different_platforms.empty? ? "" : " lab_info" %>">
+                    <% @game.developers.each do |d| %>
+                      <%= link_to(d.name, developer_path(d)) + (d == @game.developers.last ? "" : ", ") %>
+                    <% end %>
+                  </td>
+                </tr>
 
-              <!-- PUBLISHER -->
-              <tr>
-                <td class="label">Published by:</td>
-                <td <%= @game.different_platforms.empty? ? "" : " class=lab_info" %>>
-                  <% @game.publishers.each do |p| %>
-                    <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
-                  <% end %>
-                </td>
-              </tr>
-            </table>
+                <!-- PUBLISHER -->
+                <tr>
+                  <td class="label">Published by:</td>
+                  <td class="info<%= @game.different_platforms.empty? ? "" : " lab_info" %>">
+                    <% @game.publishers.each do |p| %>
+                      <%= link_to(p.name, publisher_path(p)) + (p == @game.publishers.last ? "" : ", ") %>
+                    <% end %>
+                  </td>
+                </tr>
+              </table>
+            </div>
 
             <!-- ALSO ON -->
-            <span id="diff_platforms_container" data-gameid="<%= @game.id %>">
+            <div id="diff_platforms_cont" data-gameid="<%= @game.id %>">
               <%= also_on(@game) %>
-            </span>
+            </div>
           </div>
 
           <fb:like href="<%= url_for(:only_path => false) %> " layout="button_count" width="250"></fb:like>
@@ -102,11 +104,14 @@
       </div>
 
       <!-- SERIES, CHARACTERS, SCORES & AWARDS -->
-      <div class="margin_bottom">
+      <div id="series_scores_cont" class="margin_bottom">
 
         <!-- SERIES -->
-        <div id="game_series" class="round shadow">
-          <%= series(@game) %>
+        <div id="game_series_container">
+          
+          <div id="game_series" class="round shadow">
+            <%= series(@game) %>
+          </div>
         </div>
 
         <div id="scores_awards_container">

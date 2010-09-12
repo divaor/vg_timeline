@@ -540,41 +540,33 @@ div.tooltip_text {
 
 /* GAME INFO VIEW */
 
-#game_display {
+div#game_display {
     background-color: #e5e5e5;
     border: 2px solid black;
-    margin: 0 auto;
+    overflow: auto;
 }
 
 /* Columns */
 
-#left_column {
+div#left_column {
     border-right: 0px solid black;
-    clear: both;
-    display: table-cell;
-    width: 80%;
+    float: left;
+    width: 75%;
 }
 
 div#left_column_content {
-  margin-bottom: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 10px;
+  margin: 10px;
 }
 
-#right_column {
-    display: table-cell;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 30px;
-    padding-top: 10px;
-    vertical-align: top;
+div#right_column {
+  float: left;
+  width: 25%;
 }
 
 div#right_column_content {
   background-color: white;
+  margin: 6px 20px 6px 6px;
   padding: 7px;
-  width: 220px;
 }
 
 #right_column img {
@@ -605,20 +597,27 @@ div#right_column_content {
   margin-bottom: 15px;
 }
 
+/* Boxart & Info Container */
+
+div#box_info_cont {
+  overflow: auto;
+  width: 100%;
+}
+
 /* Boxart */
 
-#boxart_medium_container {
-  display: table-cell;
+div#boxart_medium_container {
+  float: left;
   text-align: center;
-  width: 245px;
+  width: 30%;
 }
 
 /* Game Info */
 
-#basic_info_container {
-  display: table-cell;
+div#basic_info_container {
+  float: left;
   font-size: 13px;
-  vertical-align: top;
+  width: 70%;
 }
 
 .game_show_title {
@@ -632,36 +631,40 @@ h2.game_show_title {
 }
 
 div#info_also_on {
-  margin-bottom: 20px;
+  overflow: auto;
 }
 
-table.game_info_table {
-  display: table-cell;
-  vertical-align: top;
-  width: 350px;
+div#game_info_cont {
+  float: left;
+  width: 55%;
 }
 
-td.label {
+div#game_info_cont td.label {
   font-weight: bold;
   padding-right: 10px;
   vertical-align: top;
-  width: 110px;
+  width: 35%;
 }
 
-td.lab_info {
+div#game_info_cont td.info {
+  width: 65%;
+}
+
+/*td.lab_info {
     width: 250px;
-}
+}*/
 
-span#diff_platforms_container {
-  display: table-cell;
+div#diff_platforms_cont {
+  float: left;
+  width: 45%;
 }
 
 #diff_platforms{
   background-color: #D1D6DF;
   border: 0px solid gray;
   font-size: 10px;
+  margin: 6px;
   padding: 10px;
-  width: 250px;
 }
 
 td.subtitle {
@@ -719,16 +722,24 @@ span#completion_text {
   text-align: justify;
 }
 
+/* Series, Characters, Scores Container */
+
+div#series_scores_cont {
+  overflow: auto;
+  padding: 6px;
+}
+
 /* Series */
 
-#game_series {
+div#game_series_container {
+  float: left;
+  width: 49%;
+}
+
+div#game_series {
   background-color: #D1D6DF;
-  border: 0px solid gray;
-  display: inline-block;
-  margin-right: 10px;
+  overflow: auto;
   padding: 10px 14px 10px 13px;
-  vertical-align: top;
-  width: 47%;
 }
 
 span.showing {
@@ -764,8 +775,8 @@ span.showing {
 /* Scores & Awards */
 
 div#scores_awards_container {
-  display: inline-block;
-  width: 47%;
+  float: right;
+  width: 49%;
 }
 
 /* Scores */

@@ -12,11 +12,11 @@ document.observe('dom:loaded', function() {
       'height': (height - 24)+'px'
     });
 
-    var exclusive = $$('#diff_platforms_container .exclusive_on_platform').first();
+    var exclusive = $$('#diff_platforms_cont .exclusive_on_platform').first();
     if(exclusive) {
       exclusive.observe('click', function(click) {
         // TODO get game id
-        var id = $('diff_platforms_container').readAttribute('data-gameid');
+        var id = $('diff_platforms_cont').readAttribute('data-gameid');
         var link = this;
         new Ajax.Request('/games/' + id + '/exclusive', {
           method: 'get',

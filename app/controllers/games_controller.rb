@@ -6,38 +6,65 @@ class GamesController < ApplicationController
   MP = /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/ #Month Pattern
   TP = /\b(First Half|Second Half|Q1|Q2|Q3|Q4|Spring|Summer|Fall|Winter|Holiday)\b/ #Date Text Pattern
 
+  # Home Page
   def index
+
+    # Gets called when looking for a game title in an auto_complete form
     if params[:search]
+
+      # Looks for game with params[:search]
       @games = Game.where("LOWER(main_title) LIKE ? OR LOWER(sub_title) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").limit(14)
       @search = params[:search]
+
+      # Responds to JavaScript
       respond_to do |format|
         format.js
       end
+
+    # Gets called in the year view
     else
+
+      # Makes game for use in view
       @game = Game.new
+      # Defaults to current year if none is specified
       @year = params[:year] ? params[:year].to_i : Date.today.year
+      # Makes year the complementary title of view
       @title = @year
-      @id = params[:game_id] if params[:game_id]
+      
+      # @id = params[:game_id] if params[:game_id] TODO unused?
+
+      # Calculate last and first year shown in years bar
       @enter_year = true
+      # Find games for given year
       @games = Game.where('release_date >= ? and release_date <= ?', "#{@year}-01-01", "#{@year}-12-31").order("release_date asc, hits desc, main_title asc").all
+      # Statistics for given year
       @stats = get_stats(@games)
+      # All the platforms
       @platforms = Platform.order("name asc")
+      # All the publishers
       @publishers = Publisher.order("name asc")
+      # All the developers
       @developers = Developer.order("name asc")
-      if not @games.empty?
+      # Check to see if there are games for given year
+      unless @games.empty?
+        # Give fotmat to @games array, as well as getting additional info
         games = make_games_array(@games, Limit, true)
         @months = games['games']
         @platforms_month = games['platforms']
         @platforms_year = games['platforms_year']
+        # All the genres
         @genres = Genre.all
+        # All the ratings
         @ratings = Rating.all
       end
-      puts env['PATH_INFO'] + 'asdf'
     end
   end
 
+  # The view for a given month
   def month_view
+    # Get the year
     @year = params[:year] ? params[:year].to_i : Date.today.year
+    # Get the month and append a '0' at the beginning
     @month = params[:month] ? params[:month] : Date.today.month
     @month = "0"+@month.to_s if @month.length == 1
     @real_month = @month
@@ -556,14 +583,28 @@ class GamesController < ApplicationController
 
   private
 
+  # Generate stats for array of Games given
+  #
+  # games => array, can be the result of Game.where
+  #
+  # returns a Hash, 'Total' is an array containing "Games" and number of games,
+  # 'Platforms' is an array of platform names and total of games of each platform,
+  # 'Publishers' is an array of publisher names and total of games of each publisher,
+  # 'Developers' is an array of developer names and total of games of each developer,
+  # 'Genres' is an array of genres and total of games of each genre,
+  # 'Ratings' is an array of ratings and a total of games of each rating
   def get_stats(games)
-    stats = {"Total" => {"Games", games.length}, "Platforms" => {}, "Publishers" => {}, "Developers" => {}, "Genres" => {}, "Ratings" => {}}
+    stats = { "Total" => { "Games", games.length }, "Platforms" => {}, "Publishers" => {}, "Developers" => {}, "Genres" => {}, "Ratings" => {} }
     for game in games
+
+      # Count games by platform
       if stats["Platforms"][game.platform.name]
         stats["Platforms"][game.platform.name] += 1
       else
         stats["Platforms"][game.platform.name] = 1
       end
+
+      # Count games by developer
       for dev in game.developers
         if stats["Developers"][dev.name]
           stats["Developers"][dev.name] += 1
@@ -571,6 +612,8 @@ class GamesController < ApplicationController
           stats["Developers"][dev.name] = 1
         end
       end
+
+      # Count games by publisher
       for pub in game.publishers
         if stats["Publishers"][pub.name]
           stats["Publishers"][pub.name] += 1
@@ -578,6 +621,8 @@ class GamesController < ApplicationController
           stats["Publishers"][pub.name] = 1
         end
       end
+
+      # Count games by genre
       for gen in game.genres
         if stats["Genres"][gen.name]
           stats["Genres"][gen.name] += 1
@@ -585,6 +630,8 @@ class GamesController < ApplicationController
           stats["Genres"][gen.name] = 1
         end
       end
+
+      # Count games by rating
       if game.rating
         if stats["Ratings"][game.rating.name]
           stats["Ratings"][game.rating.name] += 1
@@ -593,12 +640,16 @@ class GamesController < ApplicationController
         end
       end
     end
+
+    # Sort results
     stats["Total"] = stats["Total"].sort {|a,b| b[1]<=>a[1]}
     stats["Publishers"] = stats["Publishers"].sort {|a,b| b[1]<=>a[1]}
     stats["Developers"] = stats["Developers"].sort {|a,b| b[1]<=>a[1]}
     stats["Platforms"] = stats["Platforms"].sort {|a,b| b[1]<=>a[1]}
     stats["Genres"] = stats["Genres"].sort {|a,b| b[1]<=>a[1]}
     stats["Ratings"] = stats["Ratings"].sort {|a,b| b[1]<=>a[1]}
+
+    # Return hash of results
     stats
   end
 
