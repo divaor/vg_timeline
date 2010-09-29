@@ -1,47 +1,57 @@
-#year_display {
-    clear:both;
-    padding-bottom:7px;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
-    background-color: #e5e5e5; 
-    /*background-image: url("/images/slashwa.png");*/
+/* YEAR VIEW */
+
+div#year_display {
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  background-color: #e5e5e5;
 }
 
-#year_text {
-    text-align: center;
-    border-top: 2px solid black;
-    padding: 5px 0px 5px 0px;
-    height:25px;
+
+/* Years Navigation Bar */
+div#year_display .year_text {
+  border-top: 2px solid black;
+  padding: 3px 0;
+  overflow: auto;
 }
 
-#year_text span a {
-
+div#year_display .next_year,
+div#year_display .previous_year {
+  margin-top: 2px;
+  text-align: center;
+  width: 3%;
 }
 
-#year_text span.left_arrow_year {
-    float:left;
-    padding-left: 10px;
-    padding-top: 5px;
+div#year_display .next_year {
+  float: left;
 }
 
-#year_text span.right_arrow_year {
-    float:right;
-    padding-right: 10px;
-    padding-top: 5px;
+div#year_display .previous_year {
+  float: right;
 }
 
-#year_text span.no_link {
-    opacity: 0.5;
+div#year_nav_slider {
+  float: left;
+  overflow: hidden;
+  width: 94%;
 }
 
-#year_text span.current_year {
-    padding-top:0;
-    position:relative;
-    bottom:0%;
-    top:5%;
-    font-size:20px;
+div#year_nav_slider ul {
+  list-style: none;
+  margin: 0;
+  overflow: auto;
+  padding: 0;
+  width: 300%;
 }
+
+div#year_nav_slider li {
+  float: left;
+}
+
+
+
+
+
 
 #pop_new_game {
     background-color: white;

@@ -1,63 +1,26 @@
-<% if @enter_year %>
-  <% if @year < (last_year - 19) %>
-    <% @lshown = @year + 19 %>
-  <% else %>
-    <% @lshown = last_year - 1 %>
-  <% end %>
-<% end %>
-<% i = @lshown; %>
-<% if (i - 19) >= 1975 then first_year = (i - 19) else first_year = 1975 end %>
-<% if (i + 1 == last_year) %>
-    <span class="left_arrow_year no_link"><%= (image_tag "go-first.png", :size => "18x18", :alt => "|<") %></span>
-    <span class="left_arrow_year no_link"><%= (image_tag "go-next.png", :size => "16x16", :alt => "<") %></span>
-<% else %>
-    <span class="left_arrow_year"><%= link_to((image_tag "go-first.png", :size => "18x18", :alt => "|<"), {:action=> 'change_year', :to => last_year, :year => @year}, :remote => true) %></span>
-    <span class="left_arrow_year"><%= link_to((image_tag "go-next.png", :size => "16x16", :alt => "<"), {:action=> 'change_year', :to => @lshown + 5, :year => @year}, :remote => true) %></span>
-<% end %>
+<!-- previous years -->
+<div class="next_year">
+  <%= image_tag 'go-next.png', :size => "16x16", :alt => "<", :class => "next" %>
+</div>
 
-<% while i >= first_year %>
-  <% if i == first_year %>
-    <% if i == @year %>
-      <% if @enter_year %>
-        <span class="current_year"><%= i %></span>
-      <% else %>
-        <span id="year_effect" class="current_year" style="display:none"><%= i %></span>
-      <% end %>
-    <% else %>
-      <% if @enter_year %>
-        <span><%= link_to i, year_path(i) %></span>
-      <% else %>
-        <span id="year_effect" style="display:none"><%= link_to i, year_path(i) %></span>
-      <% end %>
-    <% end %>
-  <% elsif i == @lshown %>
-    <% if i == @year %>
-      <% if @enter_year %>
-        <span class="current_year"><%= i %></span> -
-      <% else %>
-        <span id="year_effect2" class="current_year" style="display:none"><%= i %></span> -
-      <% end %>
-    <% else %>
-      <% if @enter_year %>
-        <span><%= link_to i, year_path(i) %></span> -
-      <% else %>
-        <span id="year_effect2" style="display:none"><%= link_to i, year_path(i) %></span> -
+<!-- years -->
+<div id="year_nav_slider">
+  <ul>
+    <% year = 2012 %>
+    <% while year >= 1975 %>
+      <% selected = @year == year %>
+      <li class="year<%= " selected" if selected %>">
+        <%= link_to_unless selected, year, year_path(year) %>
+        <% year -= 1 %>
+      </li>
+      <% unless year < 1975 %>
+        <li>&nbsp;-&nbsp;</li>
       <% end %>
     <% end %>
-  <% else %>
-    <% if i == @year %>
-      <span class="current_year"><%= i %></span> - 
-    <% else %>
-      <span><%= link_to i, year_path(i) %> - </span>
-    <% end %>
-  <% end %>
-      <%# link_to i, { :action => 'other_year', :year => i }, :remote => true, :onclick => "window.location.hash='/#{i}'" %>
-  <% i -= 1 %>
-<% end %>
-<% if first_year == 1975 %>
-      <span class="right_arrow_year no_link"><%= (image_tag "go-last.png", :size => "18x18", :alt => ">|") %></span>
-      <span class="right_arrow_year no_link"><%= (image_tag "go-prev.png", :size => "16x16", :alt => ">") %></span>
-<% else %>
-      <span class="right_arrow_year"><%= link_to((image_tag "go-last.png", :size => "18x18", :alt => ">|"), {:action=> 'change_year', :to => first_year, :year => @year}, :remote => true) %></span>
-      <span class="right_arrow_year"><%= link_to((image_tag "go-prev.png", :size => "16x16", :alt => ">"), {:action=> 'change_year', :to => @lshown - 5, :year => @year}, :remote => true) %></span>
-<% end %>
+  </ul>
+</div>
+
+<!-- next years -->
+<div class="previous_year">
+  <%= image_tag 'go-prev.png', :size => "16x16", :alt => ">", :class => "previous" %>
+</div>

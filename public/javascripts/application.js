@@ -1,7 +1,75 @@
 var popId;
 
+
+
+
+// Global variables for slideContainer
+
+// Holds the position of the left edge of the list
+var leftEdge;
+// Holds the position of the right edge of the list
+var rightEdge;
+
+function slideContainer(direction, elemWidth, event) {
+  // The distance to move in pixels
+  var moveDistance = 500;
+
+  // Check the position of the list to see if it's on the edge
+  if(((rightEdge >= elemWidth) && (direction == "right")) || ((leftEdge <= 0) && (direction == "left"))) {
+    // It's on the edge and trying to move, stop the event
+    event.stop();
+  } else {
+    // Difference between the container and what is hidden of the list
+    var difference = direction == "right" ? elemWidth - rightEdge : leftEdge;
+    // Distance to move if difference is less than move distance
+    var move = (difference < moveDistance) ? difference : moveDistance;
+    // Set edges values
+    leftEdge = direction == "right" ? leftEdge + move : leftEdge - move;
+    rightEdge = direction == "right" ? rightEdge + move : rightEdge - move;
+    // Move effect
+    new Effect.Move($$("#year_nav_slider ul").first(), {
+      x: direction == "right" ? -move : move,
+      y: 0
+    });
+  }
+}
+
 // Runs when DOM is loaded
 document.observe('dom:loaded', function() {
+  // Application layout
+
+
+  // Years navigation list
+
+  // Holds the width of the years navigation bar
+  var yearsListWidth = 0;
+  // Calculates the width of the years list
+  $$('#year_nav_slider li').each(function(year) {
+    yearsListWidth += year.getWidth();
+  });
+  // Holds the width of the years navigation container
+  var yearsNavContWidth = $('year_nav_slider').getWidth();
+  // Observe when sliding right
+  $$(".year_text .previous_year").first().observe('click', function(click) {
+    slideContainer("right", yearsListWidth, click);
+  });
+
+  leftEdge = 0;
+  rightEdge = yearsNavContWidth;
+
+  // Observe when sliding left
+  $$(".year_text .next_year").first().observe('click', function(click) {
+    slideContainer("left", yearsListWidth, click);
+  });
+
+
+
+
+
+  // Year view
+  if($('year_display')) {
+    // TODO javascripts for year display
+  }
 
   // Game Info View
   var gameDisp = $('game_display')
