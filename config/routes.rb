@@ -1,4 +1,4 @@
-VgTimeline::Application.routes.draw do |map|
+VgTimeline::Application.routes.draw do
   get "users/home"
   get "project_leaders/new"
   get "project_leaders/create"

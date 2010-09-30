@@ -37,10 +37,13 @@ div#year_nav_slider {
 }
 
 div#year_nav_slider ul {
+  left: 0;
   list-style: none;
   margin: 0;
   overflow: auto;
   padding: 0;
+  position: relative;
+  top: 0;
   width: 300%;
 }
 
